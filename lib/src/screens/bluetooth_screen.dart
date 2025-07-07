@@ -37,7 +37,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void toHome() {
-    print("Navigate to hoem");
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
