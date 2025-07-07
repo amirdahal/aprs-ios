@@ -1,9 +1,13 @@
 import 'package:aprs/src/helpers/bluetooth_scanner.dart';
+import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/screens/home_screen.dart';
+import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/scan_indicator.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:radio/radio.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -14,16 +18,53 @@ class BluetoothScreen extends StatefulWidget {
 
 class _BluetoothScreenState extends State<BluetoothScreen> {
   bool isScanning = false;
+  bool isConnecting = false;
   BluetoothScanner scanner = BluetoothScanner();
+  List<BluetoothDevice> _devices = [];
 
   Future<void> _startScan() async {
     setState(() {
       isScanning = true;
     });
 
-    List<BluetoothDevice> devices = await scanner.scan();
+    _devices = await scanner.scan();
     if (kDebugMode) {
-      print(devices);
+      print(_devices);
+    }
+    setState(() {
+      isScanning = false;
+    });
+  }
+
+  void toHome() {
+    print("Navigate to hoem");
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
+
+  Future<void> _connect(BluetoothDevice device) async {
+    setState(() {
+      isConnecting = true;
+    });
+    RadioExtract.radio = Radio(device);
+    try {
+      await RadioExtract.radio.connect();
+      if (kDebugMode) {
+        print("Connection to radio successful");
+      }
+      RadioExtract.radio.addEventHandler(radioEventsHandler);
+
+      toHome();
+    } on Exception catch (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    } finally {
+      setState(() {
+        isConnecting = false;
+      });
     }
   }
 
@@ -36,30 +77,56 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isScanning
+      appBar: AppBar(
+        title: Text(
+          "Radio",
+          style: TextTheme.of(
+            context,
+          ).headlineLarge?.copyWith(color: Colors.white),
+        ),
+      ),
+      body: isScanning || isConnecting
           ? Center(
-              child: LoadingIndicator(icon: Icons.bluetooth_searching_outlined),
+              child: LoadingIndicator(
+                icon: isScanning
+                    ? Icons.bluetooth_searching_outlined
+                    : Icons.bluetooth_audio_sharp,
+              ),
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(child: Text("Bluetooth screen")),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  },
-                  child: Text("Switch to main screen"),
-                ),
-              ],
+          : _devices.isNotEmpty
+          ? ListView.builder(
+              itemCount: _devices.length,
+              itemBuilder: (context, index) {
+                var device = _devices[index];
+                return ListTile(
+                  title: Text(device.advName),
+                  subtitle: Text(device.remoteId.str),
+                  trailing: Button.primary(
+                    label: "Connect",
+                    onPressed: () => _connect(device),
+                  ),
+                );
+              },
+            )
+          : Center(
+              child: Column(
+                children: [
+                  Text(
+                    "No devices found",
+                    style: TextTheme.of(context).bodyLarge,
+                  ),
+                  Button.icon(
+                    icon: Icons.bluetooth_searching_outlined,
+                    onPressed: _startScan,
+                  ),
+                ],
+              ),
             ),
-      floatingActionButton: isScanning
+      floatingActionButton: isScanning || isConnecting
           ? null
           : FloatingActionButton(
               onPressed: _startScan,
-              child: Icon(Icons.bluetooth_searching),
+              child: Icon(Icons.bluetooth_searching_outlined),
             ),
     );
   }

@@ -12,13 +12,15 @@ class BluetoothScanner {
 
     await FlutterBluePlus.startScan(
       timeout: const Duration(seconds: 10),
-      withServices: [Guid("00001100-d102-11e1-9b23-00025b00a5a5")],
+      // withServices: [Guid("00001100-d102-11e1-9b23-00025b00a5a5")],
     );
 
     final subscription = FlutterBluePlus.scanResults.listen((results) {
       for (var result in results) {
-        if (!devices.any((d) => d.id == result.device.id)) {
-          devices.add(result.device);
+        if (!devices.any((d) => d.remoteId == result.device.remoteId)) {
+          if (result.device.remoteId.str.startsWith("38:D2")) {
+            devices.add(result.device);
+          }
         }
       }
     });

@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: greenTheme,
+      debugShowCheckedModeBanner: false,
       home: const BluetoothScreen(),
     );
   }
