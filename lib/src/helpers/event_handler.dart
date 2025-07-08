@@ -2,7 +2,21 @@ import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
 
-ValueNotifier<Status?> statusNotifier = ValueNotifier(null);
+enum AppEvents {
+  newMessage,
+  newBeacon,
+  statusChange,
+  radioSettingChanged,
+  aprsSettingChanged,
+}
+
+ValueNotifier<Status> statusChangeNotifier = ValueNotifier(
+  RadioExtract.radio.status,
+);
+
+ValueNotifier<RadioSetting> settingChangeNotifier = ValueNotifier(
+  RadioExtract.radio.radioSetting,
+);
 
 void radioEventsHandler(RadioEvents eventType, dynamic data) {
   switch (eventType) {
@@ -19,6 +33,10 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
     case RadioEvents.weatherReport:
       throw UnimplementedError();
     case RadioEvents.radioSettingChanged:
+      Future.delayed(const Duration(seconds: 2), () {
+        settingChangeNotifier.value = RadioExtract.radio.radioSetting;
+      });
+      // CustomEvents.instance.dispatchEvent(AppEvents.radioSettingChanged);
       if (kDebugMode) {
         print(
           "Radio setting updated: ${RadioExtract.radio.radioSetting.toMap()}",
@@ -34,7 +52,8 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
       break;
     case RadioEvents.radioStatusChanged:
       Status st = data;
-      statusNotifier.value = st;
+      statusChangeNotifier.value = st;
+      // CustomEvents.instance.dispatchEvent(AppEvents.statusChange, value: st);
       if (kDebugMode) {
         print("Radio status changed: ${st.toMap()}");
       }

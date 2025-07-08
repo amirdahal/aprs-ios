@@ -71,7 +71,7 @@ final ThemeData greenTheme = ThemeData(
   // TextField / Input
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Colors.green.withOpacity(0.05),
+    fillColor: Colors.green.shade500,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: const BorderSide(color: Colors.green),
@@ -82,7 +82,7 @@ final ThemeData greenTheme = ThemeData(
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: Colors.green.withOpacity(0.6)),
+      borderSide: BorderSide(color: Colors.green.shade600),
     ),
     labelStyle: const TextStyle(color: Colors.green),
     floatingLabelStyle: const TextStyle(
@@ -93,3 +93,11 @@ final ThemeData greenTheme = ThemeData(
     suffixIconColor: Colors.green,
   ),
 );
+
+InputDecoration inputDecoration(String labelText) {
+  return InputDecoration(
+    labelText: labelText,
+    errorStyle: TextStyle(color: Colors.redAccent),
+    border: const OutlineInputBorder(),
+  );
+}

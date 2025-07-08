@@ -1,13 +1,13 @@
-import 'package:aprs/src/helpers/bluetooth_scanner.dart';
-import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/features/bluetooth/repository/bluetooth_scanner.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/screens/home_screen.dart';
 import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/scan_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:radio/radio.dart';
+
+import '../../home_screen.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -53,7 +53,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       if (kDebugMode) {
         print("Connection to radio successful");
       }
-      RadioExtract.radio.addEventHandler(radioEventsHandler);
+      // RadioExtract.radio.addEventHandler(radioEventsHandler);
 
       toHome();
     } on Exception catch (error) {

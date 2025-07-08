@@ -1,9 +1,27 @@
+import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/widgets/drawer.dart';
+import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  void addEventHandler() async {
+    await RadioExtract.radio.addEventHandler(radioEventsHandler);
+  }
+
+  @override
+  void initState() {
+    if (mounted) {
+      addEventHandler();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
-      drawer: ChannelDrawer(),
+      drawer: ChannelScreen(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
