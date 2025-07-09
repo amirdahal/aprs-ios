@@ -24,13 +24,18 @@ dependencies:
   path: ^1.9.1
   sqlite3_flutter_libs: ^0.5.34
   location: ^8.0.1
-  intl: ^0.20.2
+#  intl: ^0.20.2
   string_validator: ^1.2.0
+  sqfentity_gen: ^2.5.0
+  sqfentity: ^2.5.0
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  build_runner: ^2.4.0
+
 
 flutter:
   uses-material-design: true
