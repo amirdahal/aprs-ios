@@ -8,7 +8,6 @@ class DropDown extends StatelessWidget {
   final List<String> options;
   final String selectedValue;
   final String label;
-
   const DropDown({
     super.key,
     required this.onChanged,
@@ -21,9 +20,10 @@ class DropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      decoration: inputDecoration(label),
+      decoration: inputDecoration(
+        label,
+      ).copyWith(fillColor: Colors.transparent),
       dropdownColor: Colors.white,
-      // menuMaxHeight: 30,
       value: selectedValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       items: options.map((val) {

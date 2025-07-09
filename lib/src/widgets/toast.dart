@@ -37,3 +37,25 @@ void showToast({
     ],
   );
 }
+
+void showSnackBar({
+  required BuildContext context,
+  required String content,
+  bool error = false,
+  String? actionLabel,
+  VoidCallback? action,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      content: Text(content),
+      backgroundColor: error ? Colors.red : Theme.of(context).primaryColor,
+      duration: const Duration(seconds: 5),
+      action: SnackBarAction(
+        textColor: Colors.white,
+        label: actionLabel ?? '',
+        onPressed: action ?? () {},
+      ),
+    ),
+  );
+}

@@ -48,7 +48,7 @@ final ThemeData greenTheme = ThemeData(
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return Colors.green;
+        return Colors.white;
       }
       return Colors.grey;
     }),
@@ -63,6 +63,7 @@ final ThemeData greenTheme = ThemeData(
   // Checkbox
   checkboxTheme: CheckboxThemeData(
     fillColor: WidgetStateProperty.all(Colors.green),
+    checkColor: WidgetStatePropertyAll(Colors.white),
   ),
 
   // Radio
@@ -71,7 +72,7 @@ final ThemeData greenTheme = ThemeData(
   // TextField / Input
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Colors.green.shade500,
+    fillColor: Colors.transparent,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: const BorderSide(color: Colors.green),

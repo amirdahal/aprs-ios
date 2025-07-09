@@ -1,17 +1,18 @@
 import 'package:aprs/src/features/map/screens/map_screen.dart';
+import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeLayout extends StatefulWidget {
+  const HomeLayout({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeLayout> createState() => _HomeLayoutState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeLayoutState extends State<HomeLayout> {
   void addEventHandler() async {
     await RadioExtract.radio.addEventHandler(radioEventsHandler);
   }
@@ -28,17 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 60,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingLayout()),
+              );
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
       ),
       drawer: ChannelScreen(),
       body: MapScreen(),

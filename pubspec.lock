@@ -509,7 +509,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "3d572bf7ae301c97821152e524e0a1bb11e4907c"
+      resolved-ref: f738379c55c4c1b22f7c656be0758604e65333b4
       url: "https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git"
     source: git
     version: "1.0.0"

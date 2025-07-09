@@ -7,7 +7,7 @@ import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:radio/radio.dart';
 
-import '../../home_screen.dart';
+import '../../home_layout.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -39,7 +39,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   void toHome() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => HomeLayout()),
     );
   }
 
