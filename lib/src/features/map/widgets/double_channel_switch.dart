@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 
@@ -30,6 +31,11 @@ class DoubleChannelSwitch extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: statusChangeNotifier,
       builder: (context, status, child) {
+        if (kDebugMode) {
+          print("------------------------------------------------");
+          print("New status received in map channel switch: ${status.toMap()}");
+          print("------------------------------------------------");
+        }
         if (status.doubleChannel == ChannelType.OFF) {
           return const Placeholder();
         }
@@ -78,7 +84,7 @@ class DoubleChannelSwitch extends StatelessWidget {
                         Icons.arrow_downward_sharp,
                         color:
                             status.currChId == chanA.channelId && status.isInRx
-                            ? Colors.white
+                            ? Colors.red
                             : Colors.grey,
                       ),
                       Text(
@@ -94,7 +100,7 @@ class DoubleChannelSwitch extends StatelessWidget {
                         Icons.arrow_upward_sharp,
                         color:
                             status.currChId == chanA.channelId && status.isInTx
-                            ? Colors.white
+                            ? Colors.red
                             : Colors.grey,
                       ),
                     ],
@@ -136,7 +142,7 @@ class DoubleChannelSwitch extends StatelessWidget {
                         Icons.arrow_downward_sharp,
                         color:
                             status.currChId == chanB.channelId && status.isInRx
-                            ? Colors.white
+                            ? Colors.red
                             : Colors.grey,
                       ),
                       Text(
@@ -152,7 +158,7 @@ class DoubleChannelSwitch extends StatelessWidget {
                         Icons.arrow_upward_sharp,
                         color:
                             status.currChId == chanB.channelId && status.isInTx
-                            ? Colors.white
+                            ? Colors.red
                             : Colors.grey,
                       ),
                     ],
