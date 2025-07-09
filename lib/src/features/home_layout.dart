@@ -6,6 +6,8 @@ import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'message/screens/chat_list_screen.dart';
+
 class HomeLayout extends StatefulWidget {
   const HomeLayout({super.key});
 
@@ -31,6 +33,15 @@ class _HomeLayoutState extends State<HomeLayout> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatListScreen()),
+              );
+            },
+            icon: Icon(Icons.messenger_outline),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
