@@ -1,4 +1,5 @@
 import 'package:aprs/src/features/settings/aprs_setting/screens/aprs_setting_screen.dart';
+import 'package:aprs/src/features/settings/drr_setting/screens/drr_setting_screen.dart';
 import 'package:aprs/src/features/settings/radio_setting/screens/radio_setting_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,11 @@ class _SettingLayoutState extends State<SettingLayout> {
   NavigationDestinationLabelBehavior labelBehavior =
       NavigationDestinationLabelBehavior.alwaysShow;
 
-  final _pages = [RadioSettingScreen(), AprsSettingScreen()];
+  final _pages = [
+    RadioSettingScreen(),
+    AprsSettingScreen(),
+    DrrSettingScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,10 @@ class _SettingLayoutState extends State<SettingLayout> {
           NavigationDestination(
             icon: Icon(Icons.share_location),
             label: 'APRS',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.warehouse_outlined),
+            label: 'DRR',
           ),
         ],
       ),

@@ -101,6 +101,15 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
   }
 
   @override
+  void dispose() {
+    _callsignController.dispose();
+    _ssidController.dispose();
+    _messageController.dispose();
+    _intervalController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Aprs Settings")),
