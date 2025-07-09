@@ -99,6 +99,9 @@ InputDecoration inputDecoration(String labelText) {
   return InputDecoration(
     labelText: labelText,
     errorStyle: TextStyle(color: Colors.redAccent),
+    errorBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red),
+    ),
     border: const OutlineInputBorder(),
   );
 }

@@ -23,6 +23,10 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
     text: '30',
   );
 
+  final TextEditingController _commentController = TextEditingController(
+    text: '',
+  );
+
   final List<String> _locationShareIntervalOptions = [
     "1",
     "5",
@@ -102,10 +106,30 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              DropDown(
-                onChanged: (val) {
-                  _sendIntervalController.text = val!;
+              TextFormField(
+                controller: _commentController,
+                enabled: _drrEnabled,
+                decoration: inputDecoration('Comment'),
+                maxLength: 50,
+                validator: (value) {
+                  if (!_drrEnabled) {
+                    return null;
+                  }
+
+                  if (value == null || value.isEmpty) {
+                    return 'Comment is required';
+                  }
+
+                  return null;
                 },
+              ),
+              const SizedBox(height: 20),
+              DropDown(
+                onChanged: _drrEnabled
+                    ? (val) {
+                        _sendIntervalController.text = val!;
+                      }
+                    : null,
                 options: _locationShareIntervalOptions,
                 selectedValue: _sendIntervalController.text,
                 label: 'Location share interval (minutes)',

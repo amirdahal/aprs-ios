@@ -27,19 +27,35 @@ class _SettingLayoutState extends State<SettingLayout> {
       bottomNavigationBar: NavigationBar(
         labelBehavior: labelBehavior,
         selectedIndex: currentPageIndex,
+
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        destinations: const <Widget>[
-          NavigationDestination(icon: Icon(Icons.radio), label: 'Radio'),
+        destinations: <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.radio),
+            selectedIcon: Icon(
+              Icons.radio,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'Radio',
+          ),
           NavigationDestination(
             icon: Icon(Icons.share_location),
+            selectedIcon: Icon(
+              Icons.share_location,
+              color: Theme.of(context).primaryColor,
+            ),
             label: 'APRS',
           ),
           NavigationDestination(
             icon: Icon(Icons.warehouse_outlined),
+            selectedIcon: Icon(
+              Icons.warehouse_outlined,
+              color: Theme.of(context).primaryColor,
+            ),
             label: 'DRR',
           ),
         ],
