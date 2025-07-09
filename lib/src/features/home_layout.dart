@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
@@ -38,6 +39,17 @@ class _HomeLayoutState extends State<HomeLayout> {
               );
             },
             icon: Icon(Icons.settings),
+            tooltip: 'Settings',
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AprsLogScreen()),
+              );
+            },
+            icon: Icon(Icons.list_alt),
+            tooltip: 'Aprs logs',
           ),
         ],
       ),
