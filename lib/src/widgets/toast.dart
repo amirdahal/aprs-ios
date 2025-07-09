@@ -47,8 +47,11 @@ void showSnackBar({
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      content: Text(content),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      content: Text(
+        content,
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      ),
       backgroundColor: error ? Colors.red : Theme.of(context).primaryColor,
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
