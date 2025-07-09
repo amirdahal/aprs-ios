@@ -1,0 +1,260 @@
+import 'dart:io';
+import 'package:aprs/src/features/map/repository/map_provider.dart'
+    show MBTilesImageProvider;
+import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
+import 'package:aprs/src/features/map/widgets/my_location.dart';
+import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:mbtiles/mbtiles.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  final mapController = MapController();
+  final Future<MbTiles> _mbtilesFuture;
+  _MapScreenState() : _mbtilesFuture = _loadMBTiles();
+
+  double currentZoom = 7;
+  final double maxZoom = 12;
+  final double minZoom = 6;
+
+  bool showMyPosition = false;
+
+  static Future<MbTiles> _loadMBTiles() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final mbtilesPath = path.join(appDir.path, "phhi.omm.mbtiles");
+
+    // Check if file exists
+    if (!File(mbtilesPath).existsSync()) {
+      throw Exception('MBTiles file not found at $mbtilesPath');
+    }
+
+    return MbTiles(mbtilesPath: mbtilesPath);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+        future: _mbtilesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final mbtiles = snapshot.data!;
+
+          final mapBounds = LatLngBounds(
+            const LatLng(
+              4.924031591010858,
+              116.46453531263894,
+            ), // Southwest (min lat, min lon)
+            const LatLng(
+              21.610332617571654,
+              127.21775507708352,
+            ), // Northeast (max lat, max lon)
+          );
+          return FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              maxZoom: maxZoom,
+              minZoom: minZoom,
+              initialZoom: currentZoom,
+              // initialCameraFit: CameraFit.bounds(bounds: mapBounds),
+              initialCenter: const LatLng(
+                12.151274550622965,
+                122.36676560910182,
+              ),
+              // cameraConstraint: CameraConstraint.containCenter(
+              //   bounds: mapBounds,
+              // ),
+              interactionOptions: const InteractionOptions(
+                // enableMultiFingerGestureRace: true,
+                flags: InteractiveFlag.drag | InteractiveFlag.flingAnimation,
+              ),
+              // onMapReady: () {
+              //   // mapController.move(mapController.camera.center, currentZoom);
+              // },
+            ),
+            children: [
+              TileLayer(
+                tileProvider: MBTilesImageProvider(mbtiles),
+                tileBounds: mapBounds,
+                tileDimension: 256,
+                tileDisplay: const TileDisplay.fadeIn(),
+              ),
+              ValueListenableBuilder(
+                valueListenable: aprsPositionPackets,
+                builder: (context, value, child) {
+                  //   final List<Map<String, dynamic>> points =
+                  //       filterUniqueByFromAttribute(value);
+
+                  return MarkerLayer(
+                    markers: [
+                      for (var pos in value)
+                        Marker(
+                          point: LatLng(pos.latitude, pos.longitude),
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(pos.source),
+                                    content: SingleChildScrollView(
+                                      // Better than ListView for small content
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.location_on,
+                                            ),
+                                            title: Text(
+                                              '${pos.latitude.toStringAsFixed(6)}, '
+                                              '${pos.longitude.toStringAsFixed(6)}',
+                                            ),
+                                            subtitle: const Text("Position"),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.comment_bank_outlined,
+                                            ),
+                                            title: Text(pos.comment),
+                                            subtitle: const Text("Comment"),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.timelapse,
+                                            ),
+                                            title: Text(
+                                              formatTimestamp(
+                                                pos.timestamp,
+                                              ), // Format the timestamp
+                                            ),
+                                            subtitle: const Text("Last seen"),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.perm_identity_rounded,
+                                            ),
+                                            title: Text(
+                                              "${pos.symbolTable}${pos.symbol}",
+                                            ),
+                                            subtitle: const Text("Symbol"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Icon(
+                              Icons.location_on,
+                              size: 30,
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+              DoubleChannelSwitch(),
+              if (showMyPosition) MyLocation(mapController: mapController),
+              Positioned(
+                bottom: 50,
+                right: 15,
+                child: Column(
+                  children: [
+                    IconButton.filled(
+                      onPressed: () {
+                        setState(() {
+                          if (currentZoom < maxZoom) {
+                            currentZoom = currentZoom + 1;
+                            mapController.move(
+                              mapController.camera.center,
+                              currentZoom,
+                            );
+                          }
+                        });
+                      },
+                      tooltip: 'Zoom in',
+                      icon: const Icon(Icons.zoom_in),
+                    ),
+                    IconButton.filled(
+                      onPressed: () {
+                        if (currentZoom > minZoom) {
+                          currentZoom = currentZoom - 1;
+                          mapController.move(
+                            mapController.camera.center,
+                            currentZoom,
+                          );
+                        }
+                      },
+                      tooltip: 'Zoom out',
+                      icon: const Icon(Icons.zoom_out),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 150,
+                right: 15,
+                child: IconButton.filled(
+                  onPressed: () {
+                    setState(() {
+                      showMyPosition = !showMyPosition;
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                      showMyPosition ? Colors.green : Colors.red,
+                    ),
+                  ),
+                  icon: Icon(
+                    showMyPosition
+                        ? Icons.location_on_outlined
+                        : Icons.location_off_outlined,
+                  ),
+                  enableFeedback: true,
+                  tooltip: showMyPosition
+                      ? 'Hide my position'
+                      : 'Show my position',
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

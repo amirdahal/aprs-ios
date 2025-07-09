@@ -17,6 +17,14 @@ dependencies:
   permission_handler: ^12.0.1
   custom_events: ^0.0.5
   toastification: ^1.0.0
+  mbtiles: ^0.4.2
+  path_provider: ^2.1.5
+  latlong2: ^0.9.1
+  flutter_map: ^8.1.1
+  path: ^1.9.1
+  sqlite3_flutter_libs: ^0.5.34
+  location: ^8.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +33,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/phhi.omm.mbtiles

@@ -26,4 +26,33 @@ class ChannelRepository {
 
     await RadioExtract.radio.setRadioSettings(newSetting);
   }
+
+  static Future<void> updateRadioSettings({
+    required bool scan,
+    required int doubleChannel,
+    required bool powerSavingMode,
+    required int squelchLevel,
+    required bool audioRelay,
+  }) async {
+    RadioSetting newSetting = RadioExtract.radio.radioSetting.copyWith();
+    newSetting.squelchLevel = squelchLevel;
+    newSetting.doubleChannel = doubleChannel;
+    newSetting.powerSavingMode = powerSavingMode;
+    newSetting.scan = scan;
+
+    if (newSetting.autoRelayEn != audioRelay) {
+      newSetting.autoRelayEn = audioRelay;
+
+      if (audioRelay) {
+        newSetting.channelA = 28;
+        newSetting.channelB = 29;
+        newSetting.doubleChannel = 1;
+      } else {
+        newSetting.channelA = 27;
+        newSetting.channelB = 29;
+        newSetting.doubleChannel = 1;
+      }
+    }
+    await RadioExtract.radio.setRadioSettings(newSetting);
+  }
 }

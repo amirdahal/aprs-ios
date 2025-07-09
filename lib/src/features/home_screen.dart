@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60,
         leading: Builder(
           builder: (context) {
             return IconButton(
@@ -39,20 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       drawer: ChannelScreen(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(RadioExtract.radio.deviceInfo.toMap().toString()),
-              Text(RadioExtract.radio.radioSetting.toMap().toString()),
-              Text(RadioExtract.radio.aprsSetting.toMap().toString()),
-              for (var channel in RadioExtract.radio.channels)
-                Text(channel.toMap().toString()),
-            ],
-          ),
-        ),
-      ),
+      body: MapScreen(),
     );
   }
 }

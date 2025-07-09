@@ -10,6 +10,8 @@ enum AppEvents {
   aprsSettingChanged,
 }
 
+ValueNotifier<List<PositionPacket>> aprsPositionPackets = ValueNotifier([]);
+
 ValueNotifier<Status> statusChangeNotifier = ValueNotifier(
   RadioExtract.radio.status,
 );
@@ -22,6 +24,9 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
   switch (eventType) {
     case RadioEvents.newBeacon:
       PositionPacket packet = data;
+      var packets = aprsPositionPackets.value.toList();
+      packets.add(data);
+      aprsPositionPackets.value = packets;
       if (kDebugMode) {
         print("New beacon: ${packet.toMap()}");
       }
