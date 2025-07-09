@@ -35,7 +35,6 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
         Navigator.pop(context);
       },
     );
-    // Navigator.pop(context);
   }
 
   Future<void> _updateRadioSetting() async {
@@ -46,6 +45,9 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     newSetting.squelchLevel = squelchLevel;
     newSetting.autoRelayEn = audioRelay;
     await RadioExtract.radio.setRadioSettings(newSetting);
+    setState(() {
+      editingEnabled = false;
+    });
     close();
   }
 
@@ -91,7 +93,6 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
               title: DropDown(
                 onChanged: editingEnabled
                     ? (val) {
-                        print('$val ${_doubleChanOptions[val]}');
                         setState(() {
                           doubleChannel = _doubleChanOptions[val]!;
                         });
