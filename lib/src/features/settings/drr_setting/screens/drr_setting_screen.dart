@@ -111,14 +111,8 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
                 label: 'Location share interval (minutes)',
               ),
               const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Button.outlined(label: 'Test connection', onPressed: () {}),
-                  const SizedBox(width: 10),
-                  Button.primary(label: 'Save setting', onPressed: _submit),
-                ],
-              ),
+
+              Button.primary(label: 'Test & Save setting', onPressed: _submit),
             ],
           ),
         ),
