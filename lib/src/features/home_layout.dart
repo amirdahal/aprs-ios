@@ -1,6 +1,7 @@
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
 import 'package:aprs/src/features/channel/screens/channel_main_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
+import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
 import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
@@ -29,6 +30,11 @@ class _HomeLayoutState extends State<HomeLayout> {
     setState(() {
       unreadChatCount = count;
     });
+  }
+
+  void drrInit() async {
+    DrrRepository.seedDrr();
+    DrrRepository.startDrr();
   }
 
   dynamic listener;

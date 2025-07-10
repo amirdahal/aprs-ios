@@ -1,4 +1,6 @@
+import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
 import 'package:aprs/src/helpers/theme.dart';
+import 'package:aprs/src/model/model.dart';
 import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/dropdown.dart' show DropDown;
 import 'package:aprs/src/widgets/toast.dart';
@@ -13,6 +15,7 @@ class DrrSettingScreen extends StatefulWidget {
 }
 
 class _DrrSettingScreenState extends State<DrrSettingScreen> {
+  late DrrStore _drrStore;
   final _formKey = GlobalKey<FormState>();
 
   bool _drrEnabled = false;
@@ -39,7 +42,7 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
   ];
 
   Future<bool> testConnection() async {
-    return false;
+    return true;
   }
 
   void showMessage(String content, bool error) {
@@ -56,10 +59,31 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
       if (!isValid) {
         showMessage('Could not validate configuration', true);
       } else {
-        showMessage('Configuration is valid', false);
-        // TODO: save drr setting to database
+        _drrStore.interval = int.parse(_sendIntervalController.text.trim());
+        _drrStore.uuid = _drrUuidController.text.trim();
+        _drrStore.comment = _commentController.text.trim();
+        _drrStore.sendMyPosition = _drrEnabled;
+
+        DrrRepository.setDrrConfig(_drrStore);
+        showMessage('Drr configuration saved', false);
       }
     }
+  }
+
+  void fetchDrr() async {
+    var drr = (await DrrRepository.getDrrConfig())!;
+    _drrStore = drr;
+    setState(() {
+      _drrEnabled = drr.sendMyPosition!;
+      _drrUuidController.text = drr.uuid!;
+      _commentController.text = drr.comment!;
+      _sendIntervalController.text = drr.interval.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -136,7 +160,7 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
               ),
               const SizedBox(height: 50),
 
-              Button.primary(label: 'Test & Save setting', onPressed: _submit),
+              Button.primary(label: 'Save setting', onPressed: _submit),
             ],
           ),
         ),
