@@ -30,10 +30,10 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     showSnackBar(
       context: context,
       content: 'Radio setting updated.',
-      actionLabel: 'Close',
-      action: () {
-        Navigator.pop(context);
-      },
+      // actionLabel: 'Close',
+      // action: () {
+      //   Navigator.pop(context);
+      // },
     );
   }
 
@@ -48,6 +48,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     setState(() {
       editingEnabled = false;
     });
+    RadioExtract.radio.radioSetting = newSetting;
     close();
   }
 
@@ -59,6 +60,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
       squelchLevel = currentSetting.squelchLevel;
       audioRelay = currentSetting.autoRelayEn;
       doubleChannel = currentSetting.doubleChannel;
+      sliderPreview = squelchLevel;
     });
   }
 

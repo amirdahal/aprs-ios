@@ -53,7 +53,8 @@ void showSnackBar({
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       ),
       backgroundColor: error ? Colors.red : Theme.of(context).primaryColor,
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 2),
+      showCloseIcon: true,
       action: SnackBarAction(
         textColor: Colors.white,
         label: actionLabel ?? '',

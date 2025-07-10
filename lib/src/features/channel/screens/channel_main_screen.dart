@@ -1,29 +1,28 @@
-import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/widgets/channel_tile.dart';
+import 'package:aprs/src/helpers/radio_extract.dart' show RadioExtract;
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 
-class ChannelScreen extends StatefulWidget {
-  const ChannelScreen({super.key});
+class ChannelMainScreen extends StatefulWidget {
+  const ChannelMainScreen({super.key});
 
   @override
-  State<ChannelScreen> createState() => _ChannelScreenState();
+  State<ChannelMainScreen> createState() => _ChannelMainScreenState();
 }
 
-class _ChannelScreenState extends State<ChannelScreen> {
+class _ChannelMainScreenState extends State<ChannelMainScreen> {
   final List<RfChannel> _channels = RadioExtract.radio.channels;
   final RadioSetting _radioSetting = RadioExtract.radio.radioSetting;
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.of(context).size.width / 1.2,
-      child: MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
+    return Scaffold(
+      appBar: AppBar(title: Text('Channels')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+            crossAxisCount: 5,
           ),
           itemCount: _channels.length,
           itemBuilder: (BuildContext context, int index) {

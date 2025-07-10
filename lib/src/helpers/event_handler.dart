@@ -40,15 +40,7 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
     case RadioEvents.weatherReport:
       throw UnimplementedError();
     case RadioEvents.radioSettingChanged:
-      Future.delayed(const Duration(seconds: 2), () {
-        settingChangeNotifier.value = RadioExtract.radio.radioSetting;
-      });
-      // CustomEvents.instance.dispatchEvent(AppEvents.radioSettingChanged);
-      if (kDebugMode) {
-        print(
-          "Radio setting updated: ${RadioExtract.radio.radioSetting.toMap()}",
-        );
-      }
+      settingChangeNotifier.value = data;
       break;
     case RadioEvents.aprsSettingChanged:
       if (kDebugMode) {
@@ -60,10 +52,6 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
     case RadioEvents.radioStatusChanged:
       Status st = data;
       statusChangeNotifier.value = st;
-      // CustomEvents.instance.dispatchEvent(AppEvents.statusChange, value: st);
-      if (kDebugMode) {
-        print("Radio status changed: ${st.toMap()}");
-      }
       break;
   }
 }
