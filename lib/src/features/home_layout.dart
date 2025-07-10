@@ -1,6 +1,7 @@
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
 import 'package:aprs/src/features/channel/screens/channel_main_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
+import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
 import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
 import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
@@ -32,6 +33,10 @@ class _HomeLayoutState extends State<HomeLayout> {
     });
   }
 
+  void seedPassword() async {
+    await AppSettingRepository.seedPassword();
+  }
+
   void drrInit() async {
     await DrrRepository.seedDrr();
     DrrRepository.startDrr();
@@ -52,6 +57,8 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   void initState() {
     if (mounted) {
+      seedPassword();
+      drrInit();
       addEventHandler();
       addChatListener();
     }

@@ -1,6 +1,7 @@
+import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
+import 'package:aprs/src/model/model.dart' show PasswordStore;
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
-
-import '../../../helpers/theme.dart';
 
 class PasswordScreen extends StatefulWidget {
   final Future Function()? onValidate;
@@ -34,19 +35,19 @@ class _PasswordScreenState extends State<PasswordScreen> {
     }
   }
 
-  // PasswordStore? password;
-  //
-  // Future<void> loadPassword() async {
-  //   List<PasswordStore> passwords = await PasswordStore().select().toList();
-  //   if (passwords.isNotEmpty) {
-  //     password = passwords.first;
-  //   }
-  // }
+  PasswordStore? password;
+
+  Future<void> loadPassword() async {
+    List<PasswordStore> passwords = await PasswordStore().select().toList();
+    if (passwords.isNotEmpty) {
+      password = passwords.first;
+    }
+  }
 
   @override
   void initState() {
     if (mounted) {
-      // loadPassword();
+      loadPassword();
     }
     super.initState();
   }
@@ -86,21 +87,23 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Enter a valid password';
                   }
-                  // if (password == null) {
-                  if (value != "123456") {
-                    return "Enter a valid password";
+                  if (password == null) {
+                    if (value != "123456") {
+                      return "Enter a valid password";
+                    }
+                  } else {
+                    final input = Crypt.sha256(
+                      value,
+                      rounds: 10,
+                      salt: "myRadioApp",
+                    );
+                    bool isMatch =
+                        password?.password.toString() == input.toString();
+                    if (!isMatch) {
+                      return 'Incorrect password';
+                    }
                   }
-                  // }
-                  // else {
-                  //   final input =
-                  //   Crypt.sha256(value, rounds: 10, salt: "myRadioApp");
-                  //   bool isMatch =
-                  //       password?.password.toString() == input.toString();
-                  //   if (!isMatch) {
-                  //     return 'Incorrect password';
-                  //   }
-                  // }
-                  // showToast(context, "Valid password");
+
                   return null;
                 },
               ),

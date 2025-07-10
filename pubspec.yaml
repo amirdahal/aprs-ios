@@ -29,6 +29,7 @@ dependencies:
   sqfentity_gen: ^2.5.0
   sqfentity: ^2.5.0
   http: ^1.4.0
+  crypt: ^4.3.1
 
 dev_dependencies:
   flutter_test:
