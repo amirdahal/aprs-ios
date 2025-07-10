@@ -4,6 +4,8 @@ import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:aprs/src/model/model.dart';
 import 'package:flutter/material.dart';
 
+import 'message.dart';
+
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
 
@@ -21,10 +23,30 @@ class _ChatListScreenState extends State<ChatListScreen> {
     });
   }
 
+  dynamic listener;
+
+  void addListener() {
+    loadChats();
+    listener = (dynamic value) => loadChats();
+    MessageRepository.appEvent.addEventListener(
+      MyEvents.newChatEvent,
+      listener,
+    );
+  }
+
   @override
   void initState() {
-    loadChats();
+    addListener();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    MessageRepository.appEvent.removeEventListener(
+      MyEvents.newChatEvent,
+      listener: listener,
+    );
+    super.dispose();
   }
 
   @override
@@ -49,14 +71,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
         itemBuilder: (context, index) {
           return ListTile(
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => MessageScreen(
-              //       currentChat: _chats[index],
-              //     ),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MessageScreen(currentChat: _chats[index]),
+                ),
+              );
             },
             tileColor: _chats[index].seen!
                 ? Colors.transparent

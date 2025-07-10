@@ -109,6 +109,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
             )
           : Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "No devices found",

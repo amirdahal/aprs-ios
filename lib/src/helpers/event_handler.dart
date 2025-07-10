@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/message/repository/message.repository.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
@@ -32,6 +33,7 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
       }
     case RadioEvents.newMessage:
       MessagePacket packet = data;
+      MessageRepository.addMessage(packet);
       if (kDebugMode) {
         print("New message: ${packet.toMap()}");
       }

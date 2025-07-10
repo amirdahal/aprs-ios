@@ -2,8 +2,13 @@ import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/model/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
+import 'package:custom_events/custom_events.dart';
+
+enum MyEvents { newMessageEvent, newChatEvent, drrSettingChangedEvent }
 
 class MessageRepository {
+  static CustomEvents appEvent = CustomEvents.instance;
+
   static Future<void> addChat(
     String callsign,
     String lastMessage, {
@@ -23,7 +28,7 @@ class MessageRepository {
         int? res = await ChatStore(
           callsign: callsign,
           lastMessage: lastMessage,
-          seen: seen,
+          seen: false,
           time: DateTime.timestamp(),
         ).saveOrThrow();
         if (kDebugMode) {
@@ -44,6 +49,8 @@ class MessageRepository {
         print("Error chat save: $e");
       }
     }
+    appEvent.dispatchEvent(MyEvents.newChatEvent, value: callsign);
+    appEvent.dispatchEvent(MyEvents.newMessageEvent, value: callsign);
   }
 
   static Future<void> addMessage(MessagePacket message) async {
@@ -88,7 +95,7 @@ class MessageRepository {
     return await ChatStore().select().orderByDesc('time').toList();
   }
 
-  Future<List<MessageStore>> loadMessages(ChatStore currentChat) async {
+  static Future<List<MessageStore>> loadMessages(ChatStore currentChat) async {
     List<MessageStore> messages = await MessageStore()
         .select()
         .sender
@@ -104,7 +111,7 @@ class MessageRepository {
     ChatStore? ct = await ChatStore().getById(chat.id);
     ct?.seen = true;
     await ct?.save();
-    // appEvent.dispatchEvent(MyEvents.newChatEvent, value: chat.callsign);
+    appEvent.dispatchEvent(MyEvents.newChatEvent, value: chat.callsign);
     // await loadChats();
   }
 }
