@@ -111,13 +111,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "No devices found",
-                    style: TextTheme.of(context).bodyLarge,
-                  ),
                   Button.icon(
                     icon: Icons.bluetooth_searching_outlined,
                     onPressed: _startScan,
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    "No devices found",
+                    style: TextTheme.of(context).headlineSmall,
                   ),
                 ],
               ),

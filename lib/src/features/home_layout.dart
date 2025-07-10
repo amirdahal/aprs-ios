@@ -6,6 +6,7 @@ import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'message/repository/message.repository.dart';
 import 'message/screens/chat_list_screen.dart';
 
 class HomeLayout extends StatefulWidget {
@@ -16,16 +17,47 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
+  int unreadChatCount = 0;
+
   void addEventHandler() async {
     await RadioExtract.radio.addEventHandler(radioEventsHandler);
+  }
+
+  void getChatCount() async {
+    int count = await MessageRepository.getUnreadChatCount();
+    setState(() {
+      unreadChatCount = count;
+    });
+  }
+
+  dynamic listener;
+
+  void addChatListener() {
+    getChatCount();
+    listener = (dynamic value) => getChatCount();
+
+    MessageRepository.appEvent.addEventListener(
+      MyEvents.newChatEvent,
+      listener,
+    );
   }
 
   @override
   void initState() {
     if (mounted) {
       addEventHandler();
+      addChatListener();
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    MessageRepository.appEvent.removeEventListener(
+      MyEvents.newChatEvent,
+      listener: listener,
+    );
+    super.dispose();
   }
 
   @override
@@ -40,17 +72,16 @@ class _HomeLayoutState extends State<HomeLayout> {
                 MaterialPageRoute(builder: (context) => ChatListScreen()),
               );
             },
-            icon: Icon(Icons.messenger_outline),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingLayout()),
-              );
-            },
-            icon: Icon(Icons.settings),
-            tooltip: 'Settings',
+            icon: Badge(
+              label: Text(
+                unreadChatCount > 0 ? unreadChatCount.toString() : '',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              backgroundColor: unreadChatCount > 0
+                  ? Colors.redAccent
+                  : Colors.transparent,
+              child: Icon(Icons.message),
+            ),
           ),
           IconButton(
             onPressed: () {
@@ -61,6 +92,16 @@ class _HomeLayoutState extends State<HomeLayout> {
             },
             icon: Icon(Icons.list_alt),
             tooltip: 'Aprs logs',
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingLayout()),
+              );
+            },
+            icon: Icon(Icons.settings),
+            tooltip: 'Settings',
           ),
         ],
       ),

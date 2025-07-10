@@ -95,6 +95,10 @@ class MessageRepository {
     return await ChatStore().select().orderByDesc('time').toList();
   }
 
+  static Future<int> getUnreadChatCount() async {
+    return await ChatStore().select().seen.equals(false).toCount();
+  }
+
   static Future<List<MessageStore>> loadMessages(ChatStore currentChat) async {
     List<MessageStore> messages = await MessageStore()
         .select()
