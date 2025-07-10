@@ -25,14 +25,17 @@ class DrrRepository {
     appEvent.dispatchEvent(MyEvents.drrSettingChangedEvent, value: drrStore);
   }
 
-  static void seedDrr() async {
-    await DrrStore(
-      id: 1,
-      sendMyPosition: false,
-      comment: '',
-      interval: 30,
-      uuid: '',
-    ).save();
+  static Future<void> seedDrr() async {
+    int drrCount = await DrrStore().select().toCount();
+    if (drrCount < 1) {
+      await DrrStore(
+        id: 1,
+        sendMyPosition: false,
+        comment: '',
+        interval: 30,
+        uuid: '',
+      ).save();
+    }
   }
 
   static void startDrr() async {

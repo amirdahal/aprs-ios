@@ -33,7 +33,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   }
 
   void drrInit() async {
-    DrrRepository.seedDrr();
+    await DrrRepository.seedDrr();
     DrrRepository.startDrr();
   }
 
