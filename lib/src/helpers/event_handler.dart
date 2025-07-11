@@ -13,11 +13,11 @@ enum AppEvents {
 
 ValueNotifier<List<PositionPacket>> aprsPositionPackets = ValueNotifier([]);
 
-ValueNotifier<Status> statusChangeNotifier = ValueNotifier(
+ValueNotifier<Status> statusChangeNotifier = ValueNotifier<Status>(
   RadioExtract.radio.status,
 );
 
-ValueNotifier<RadioSetting> settingChangeNotifier = ValueNotifier(
+ValueNotifier<RadioSetting> settingChangeNotifier = ValueNotifier<RadioSetting>(
   RadioExtract.radio.radioSetting,
 );
 
@@ -40,7 +40,11 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
     case RadioEvents.weatherReport:
       throw UnimplementedError();
     case RadioEvents.radioSettingChanged:
-      settingChangeNotifier.value = data;
+      RadioSetting setting = data;
+      if (kDebugMode) {
+        print("Setting changed event in app: ${setting.toMap()}");
+      }
+      settingChangeNotifier.value = setting;
       break;
     case RadioEvents.aprsSettingChanged:
       if (kDebugMode) {

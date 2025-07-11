@@ -27,14 +27,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
   bool editingEnabled = false;
 
   void close() {
-    showSnackBar(
-      context: context,
-      content: 'Radio setting updated.',
-      // actionLabel: 'Close',
-      // action: () {
-      //   Navigator.pop(context);
-      // },
-    );
+    showSnackBar(context: context, content: 'Radio setting updated.');
   }
 
   Future<void> _updateRadioSetting() async {
@@ -44,11 +37,12 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     newSetting.powerSavingMode = powerSavingMode;
     newSetting.squelchLevel = squelchLevel;
     newSetting.autoRelayEn = audioRelay;
+    print("updating to: ${newSetting.toMap()}");
     await RadioExtract.radio.setRadioSettings(newSetting);
     setState(() {
       editingEnabled = false;
     });
-    RadioExtract.radio.radioSetting = newSetting;
+    // RadioExtract.radio.radioSetting = newSetting;
     close();
   }
 
