@@ -29,7 +29,6 @@ class DrrRepository {
     int drrCount = await DrrStore().select().toCount();
     if (drrCount < 1) {
       await DrrStore(
-        id: 1,
         sendMyPosition: false,
         comment: '',
         interval: 30,
@@ -40,10 +39,12 @@ class DrrRepository {
 
   static void startDrr() async {
     Timer? intervalTimer;
-    CustomEvents appEvent = CustomEvents.instance;
     Location location = await determinePosition();
 
     appEvent.addEventListener(MyEvents.drrSettingChangedEvent, (DrrStore drr) {
+      if (kDebugMode) {
+        print("Drr config change event received");
+      }
       intervalTimer?.cancel();
       if (drr.sendMyPosition!) {
         intervalTimer = Timer.periodic(Duration(minutes: drr.interval!), (

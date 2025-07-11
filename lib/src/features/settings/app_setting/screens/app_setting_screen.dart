@@ -1,5 +1,6 @@
 import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
 import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
+import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
@@ -26,11 +27,28 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     );
   }
 
+  void _submit() async {
+    if (_formKey.currentState!.validate()) {
+      if (_passwordController.text.trim().isNotEmpty) {
+        bool res = await AppSettingRepository.createPassword(
+          _passwordController.text.trim(),
+        );
+        if (res) {
+          _passwordController.clear();
+          showMessage('Password updated');
+        } else {
+          showMessage('Password update failed', error: true);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('App Setting')),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
             Form(
@@ -47,23 +65,10 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                   }
                   return null;
                 },
-                onFieldSubmitted: (value) async {
-                  if (_formKey.currentState!.validate()) {
-                    if (_passwordController.text.trim().isNotEmpty) {
-                      bool res = await AppSettingRepository.createPassword(
-                        _passwordController.text.trim(),
-                      );
-                      if (res) {
-                        _passwordController.clear();
-                        showMessage('Password updated');
-                      } else {
-                        showMessage('Password update failed', error: true);
-                      }
-                    }
-                  }
-                },
               ),
             ),
+            const SizedBox(height: 20),
+            Button.primary(label: 'Save ', onPressed: _submit),
           ],
         ),
       ),

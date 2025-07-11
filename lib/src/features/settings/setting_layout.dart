@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/settings/app_setting/screens/app_setting_screen.dart';
 import 'package:aprs/src/features/settings/aprs_setting/screens/aprs_setting_screen.dart';
 import 'package:aprs/src/features/settings/drr_setting/screens/drr_setting_screen.dart';
 import 'package:aprs/src/features/settings/radio_setting/screens/radio_setting_screen.dart';
@@ -19,6 +20,7 @@ class _SettingLayoutState extends State<SettingLayout> {
     RadioSettingScreen(),
     AprsSettingScreen(),
     DrrSettingScreen(),
+    AppSettingScreen(),
   ];
 
   @override
@@ -57,6 +59,14 @@ class _SettingLayoutState extends State<SettingLayout> {
               color: Theme.of(context).primaryColor,
             ),
             label: 'DRR',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.app_settings_alt),
+            selectedIcon: Icon(
+              Icons.app_settings_alt,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'APP',
           ),
         ],
       ),

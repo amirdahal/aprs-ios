@@ -15,7 +15,7 @@ class DrrSettingScreen extends StatefulWidget {
 }
 
 class _DrrSettingScreenState extends State<DrrSettingScreen> {
-  late DrrStore _drrStore;
+  DrrStore? _drrStore;
   final _formKey = GlobalKey<FormState>();
 
   bool _drrEnabled = false;
@@ -59,30 +59,42 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
       if (!isValid) {
         showMessage('Could not validate configuration', true);
       } else {
-        _drrStore.interval = int.parse(_sendIntervalController.text.trim());
-        _drrStore.uuid = _drrUuidController.text.trim();
-        _drrStore.comment = _commentController.text.trim();
-        _drrStore.sendMyPosition = _drrEnabled;
-
-        DrrRepository.setDrrConfig(_drrStore);
+        if (_drrStore != null) {
+          _drrStore?.interval = int.parse(_sendIntervalController.text.trim());
+          _drrStore?.uuid = _drrUuidController.text.trim();
+          _drrStore?.comment = _commentController.text.trim();
+          _drrStore?.sendMyPosition = _drrEnabled;
+        } else {
+          _drrStore = DrrStore(
+            uuid: _drrUuidController.text.trim(),
+            interval: int.parse(_sendIntervalController.text.trim()),
+            comment: _commentController.text.trim(),
+            sendMyPosition: _drrEnabled,
+          );
+        }
+        DrrRepository.setDrrConfig(_drrStore!);
         showMessage('Drr configuration saved', false);
       }
     }
   }
 
   void fetchDrr() async {
-    var drr = (await DrrRepository.getDrrConfig())!;
-    _drrStore = drr;
-    setState(() {
-      _drrEnabled = drr.sendMyPosition!;
-      _drrUuidController.text = drr.uuid!;
-      _commentController.text = drr.comment!;
-      _sendIntervalController.text = drr.interval.toString();
-    });
+    var drr = await DrrRepository.getDrrConfig();
+    print(drr?.toMap());
+    if (drr != null) {
+      _drrStore = drr;
+      setState(() {
+        _drrEnabled = drr.sendMyPosition!;
+        _drrUuidController.text = drr.uuid!;
+        _commentController.text = drr.comment!;
+        _sendIntervalController.text = drr.interval.toString();
+      });
+    }
   }
 
   @override
   void initState() {
+    fetchDrr();
     super.initState();
   }
 

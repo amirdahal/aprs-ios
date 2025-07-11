@@ -28,7 +28,7 @@ class AppSettingRepository {
     int passwordCount = await PasswordStore().select().toCount();
     if (passwordCount < 1) {
       final input = Crypt.sha256("123456", rounds: 10, salt: "myRadioApp");
-      await PasswordStore(id: 1, password: input.toString()).saveOrThrow();
+      await PasswordStore(password: input.toString()).saveOrThrow();
     }
   }
 }
