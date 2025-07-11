@@ -1,5 +1,4 @@
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
-import 'package:aprs/src/features/channel/screens/channel_main_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
 import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
@@ -97,16 +96,16 @@ class _HomeLayoutState extends State<HomeLayout> {
               child: Icon(Icons.message),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChannelMainScreen()),
-              );
-            },
-            icon: Icon(Icons.radio),
-            tooltip: 'Channels',
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => ChannelMainScreen()),
+          //     );
+          //   },
+          //   icon: Icon(Icons.radio),
+          //   tooltip: 'Channels',
+          // ),
           IconButton(
             onPressed: () {
               Navigator.push(
