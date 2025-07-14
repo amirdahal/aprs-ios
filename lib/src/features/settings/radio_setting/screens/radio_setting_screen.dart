@@ -1,4 +1,5 @@
 import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
+import 'package:aprs/src/features/settings/repository/setting.repository.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/dropdown.dart';
@@ -26,8 +27,8 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
 
   bool editingEnabled = false;
 
-  void close() {
-    showSnackBar(context: context, content: 'Radio setting updated.');
+  void close({String content = 'Radio setting updated.'}) {
+    showSnackBar(context: context, content: content);
   }
 
   Future<void> _updateRadioSetting() async {
@@ -37,7 +38,6 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     newSetting.powerSavingMode = powerSavingMode;
     newSetting.squelchLevel = squelchLevel;
     newSetting.autoRelayEn = audioRelay;
-    print("updating to: ${newSetting.toMap()}");
     await RadioExtract.radio.setRadioSettings(newSetting);
     setState(() {
       editingEnabled = false;
@@ -173,6 +173,26 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                       }
                     },
                   ),
+            const SizedBox(height: 20),
+            if (!editingEnabled)
+              Button.primary(
+                label: 'Use default setting',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PasswordScreen(
+                        actionDescription: 'Validate to use default settings',
+                        onValidate: () async {
+                          await SettingRepository.setDefault();
+                          close(
+                            content: 'Radio configured with default settings',
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),
