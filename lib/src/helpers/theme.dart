@@ -54,7 +54,13 @@ final ThemeData greenTheme = ThemeData(
     }),
     trackColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.grey.shade300;
+        }
         return Colors.green.shade500;
+      }
+      if (states.contains(WidgetState.disabled)) {
+        return Colors.grey.shade300;
       }
       return Colors.grey.shade300;
     }),
