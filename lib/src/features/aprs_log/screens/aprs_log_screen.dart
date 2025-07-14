@@ -1,53 +1,95 @@
+import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
+import 'package:aprs/src/features/aprs_log/repository/utils.dart';
+import 'package:aprs/src/features/aprs_log/screens/callsign_history.screen.dart';
+import 'package:aprs/src/features/aprs_log/widgets/packet-tile.widget.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/model/model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class AprsLogScreen extends StatelessWidget {
+class AprsLogScreen extends StatefulWidget {
   const AprsLogScreen({super.key});
+
+  @override
+  State<AprsLogScreen> createState() => _AprsLogScreenState();
+}
+
+class _AprsLogScreenState extends State<AprsLogScreen> {
+  bool live = true;
+  List<BeaconStore> _storedPositions = [];
+
+  Future<void> getLogs() async {
+    _storedPositions = await AprsLogRepository.getUniquePackets();
+    setState(() {});
+    if (kDebugMode) {
+      print(_storedPositions);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Aprs Logs')),
-      body: ValueListenableBuilder(
-        valueListenable: aprsPositionPackets,
-        builder: (context, value, child) {
-          return ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              var packet = value[index];
-              return ListTile(
-                title: Row(
-                  children: [
-                    Text(packet.source),
-                    Icon(Icons.arrow_right_alt_outlined, color: Colors.grey),
-                    Text(packet.destination),
-                  ],
-                ),
-                subtitle: Row(
-                  children: [
-                    Text(
-                      'Latitude: ',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Text(packet.latitude.toStringAsFixed(3)),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Longitude: ',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Text(packet.longitude.toStringAsFixed(3)),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Comment: ',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Text(packet.comment),
-                  ],
-                ),
-              );
-            },
-          );
+      body: live
+          ? ValueListenableBuilder(
+              valueListenable: aprsPositionPackets,
+              builder: (context, value, child) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    var packet = value[index];
+                    return PacketTile(packet: packet);
+                  },
+                );
+              },
+            )
+          : ListView.builder(
+              itemCount: _storedPositions.length,
+              itemBuilder: (context, index) {
+                var packet = beaconStoreToPositionPacket(
+                  _storedPositions[index],
+                );
+                return PacketTile(
+                  packet: packet,
+                  trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CallsignPositionTrackerScreen(
+                            callsign: packet.source,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.history),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          setState(() {
+            live = !live;
+          });
+          if (!live) {
+            await getLogs();
+          }
         },
+        label: Row(
+          children: [
+            Text(live ? 'History' : "Live"),
+            const SizedBox(width: 5),
+            Icon(
+              live ? Icons.location_history_outlined : Icons.location_on_sharp,
+            ),
+          ],
+        ),
       ),
     );
   }

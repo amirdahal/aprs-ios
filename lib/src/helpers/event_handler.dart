@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
 import 'package:aprs/src/features/message/repository/message.repository.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:flutter/foundation.dart';
@@ -28,6 +29,7 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
       var packets = aprsPositionPackets.value.toList();
       packets.add(data);
       aprsPositionPackets.value = packets;
+      AprsLogRepository.savePacket(packet);
       if (kDebugMode) {
         print("New beacon: ${packet.toMap()}");
       }

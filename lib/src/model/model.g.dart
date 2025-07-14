@@ -36,8 +36,8 @@ class TableBeaconStore extends SqfEntityTableBase {
       SqfEntityFieldBase('source', DbType.text),
       SqfEntityFieldBase('destination', DbType.text),
       SqfEntityFieldBase('path', DbType.text),
-      SqfEntityFieldBase('latitude', DbType.numeric),
-      SqfEntityFieldBase('longitude', DbType.numeric),
+      SqfEntityFieldBase('latitude', DbType.real),
+      SqfEntityFieldBase('longitude', DbType.real),
       SqfEntityFieldBase('symbolTable', DbType.text),
       SqfEntityFieldBase('symbol', DbType.text),
       SqfEntityFieldBase('comment', DbType.text),
@@ -269,10 +269,10 @@ class BeaconStore extends TableBase {
       path = o['path'].toString();
     }
     if (o['latitude'] != null) {
-      latitude = int.tryParse(o['latitude'].toString());
+      latitude = double.tryParse(o['latitude'].toString());
     }
     if (o['longitude'] != null) {
-      longitude = int.tryParse(o['longitude'].toString());
+      longitude = double.tryParse(o['longitude'].toString());
     }
     if (o['symbolTable'] != null) {
       symbolTable = o['symbolTable'].toString();
@@ -298,8 +298,8 @@ class BeaconStore extends TableBase {
   String? source;
   String? destination;
   String? path;
-  int? latitude;
-  int? longitude;
+  double? latitude;
+  double? longitude;
   String? symbolTable;
   String? symbol;
   String? comment;
@@ -916,12 +916,12 @@ class BeaconStoreFilterBuilder extends ConjunctionBase {
 
   BeaconStoreField? _latitude;
   BeaconStoreField get latitude {
-    return _latitude = _setField(_latitude, 'latitude', DbType.numeric);
+    return _latitude = _setField(_latitude, 'latitude', DbType.real);
   }
 
   BeaconStoreField? _longitude;
   BeaconStoreField get longitude {
-    return _longitude = _setField(_longitude, 'longitude', DbType.numeric);
+    return _longitude = _setField(_longitude, 'longitude', DbType.real);
   }
 
   BeaconStoreField? _symbolTable;
@@ -1194,14 +1194,14 @@ class BeaconStoreFields {
 
   static TableField? _fLatitude;
   static TableField get latitude {
-    return _fLatitude = _fLatitude ??
-        SqlSyntax.setField(_fLatitude, 'latitude', DbType.numeric);
+    return _fLatitude =
+        _fLatitude ?? SqlSyntax.setField(_fLatitude, 'latitude', DbType.real);
   }
 
   static TableField? _fLongitude;
   static TableField get longitude {
     return _fLongitude = _fLongitude ??
-        SqlSyntax.setField(_fLongitude, 'longitude', DbType.numeric);
+        SqlSyntax.setField(_fLongitude, 'longitude', DbType.real);
   }
 
   static TableField? _fSymbolTable;
