@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
@@ -6,6 +8,7 @@ import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
+import 'package:aprs/src/widgets/battery_level.widget.dart';
 import 'package:flutter/material.dart';
 
 import 'message/repository/message.repository.dart';
@@ -20,6 +23,7 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   int unreadChatCount = 0;
+  int? _batteryLevel;
 
   void addEventHandler() async {
     await RadioExtract.radio.addEventHandler(radioEventsHandler);
@@ -53,6 +57,16 @@ class _HomeLayoutState extends State<HomeLayout> {
     );
   }
 
+  Future<void> _getBatteryLevel() async {
+    _batteryLevel = await RadioExtract.radio.batteryLevelAsPercentage();
+    setState(() {});
+  }
+
+  void updateBatteryLevel() {
+    Future.delayed(const Duration(seconds: 5), _getBatteryLevel);
+    Timer.periodic(const Duration(minutes: 2), (timer) => _getBatteryLevel);
+  }
+
   @override
   void initState() {
     if (mounted) {
@@ -60,6 +74,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       drrInit();
       addEventHandler();
       addChatListener();
+      updateBatteryLevel();
     }
     super.initState();
   }
@@ -78,6 +93,8 @@ class _HomeLayoutState extends State<HomeLayout> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          if (_batteryLevel != null)
+            BatteryIndicator(batteryLevel: _batteryLevel!),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -96,16 +113,6 @@ class _HomeLayoutState extends State<HomeLayout> {
               child: Icon(Icons.local_post_office_outlined),
             ),
           ),
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => ChannelMainScreen()),
-          //     );
-          //   },
-          //   icon: Icon(Icons.radio),
-          //   tooltip: 'Channels',
-          // ),
           IconButton(
             onPressed: () {
               Navigator.push(
