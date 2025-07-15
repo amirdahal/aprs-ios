@@ -6,6 +6,7 @@ import 'package:aprs/src/features/settings/app_setting/repository/app_setting.re
 import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
 import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:aprs/src/widgets/battery_level.widget.dart';
@@ -43,7 +44,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   void drrInit() async {
     await DrrRepository.seedDrr();
-    DrrRepository.startDrr();
+    if (enablePositionSharing) DrrRepository.startDrr();
   }
 
   dynamic listener;
@@ -91,11 +92,21 @@ class _HomeLayoutState extends State<HomeLayout> {
     super.dispose();
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(connectedDeviceName),
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          icon: Icon(Icons.menu),
+          tooltip: 'Channels',
+        ),
         actions: [
           if (_batteryLevel != null)
             BatteryIndicator(batteryLevel: _batteryLevel!),

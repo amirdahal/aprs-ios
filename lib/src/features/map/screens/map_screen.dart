@@ -4,6 +4,7 @@ import 'package:aprs/src/features/map/repository/map_provider.dart'
 import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
 import 'package:aprs/src/features/map/widgets/my_location.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -189,34 +190,36 @@ class _MapScreenState extends State<MapScreen> {
                 },
               ),
               DoubleChannelSwitch(),
-              if (showMyPosition) MyLocation(mapController: mapController),
+              if (showMyPosition && enablePositionSharing)
+                MyLocation(mapController: mapController),
               Positioned(
                 right: 30,
                 bottom: 70,
                 child: Column(
                   spacing: 10,
                   children: [
-                    IconButton.filled(
-                      onPressed: () {
-                        setState(() {
-                          showMyPosition = !showMyPosition;
-                        });
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          showMyPosition ? Colors.green : Colors.red,
+                    if (enablePositionSharing)
+                      IconButton.filled(
+                        onPressed: () {
+                          setState(() {
+                            showMyPosition = !showMyPosition;
+                          });
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            showMyPosition ? Colors.green : Colors.red,
+                          ),
                         ),
+                        icon: Icon(
+                          showMyPosition
+                              ? Icons.location_on_outlined
+                              : Icons.location_off_outlined,
+                        ),
+                        enableFeedback: true,
+                        tooltip: showMyPosition
+                            ? 'Hide my position'
+                            : 'Show my position',
                       ),
-                      icon: Icon(
-                        showMyPosition
-                            ? Icons.location_on_outlined
-                            : Icons.location_off_outlined,
-                      ),
-                      enableFeedback: true,
-                      tooltip: showMyPosition
-                          ? 'Hide my position'
-                          : 'Show my position',
-                    ),
                     IconButton.filled(
                       onPressed: () {
                         setState(() {

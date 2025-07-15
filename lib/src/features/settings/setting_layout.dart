@@ -2,6 +2,7 @@ import 'package:aprs/src/features/settings/app_setting/screens/app_setting_scree
 import 'package:aprs/src/features/settings/aprs_setting/screens/aprs_setting_screen.dart';
 import 'package:aprs/src/features/settings/drr_setting/screens/drr_setting_screen.dart';
 import 'package:aprs/src/features/settings/radio_setting/screens/radio_setting_screen.dart';
+import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:flutter/material.dart';
 
 class SettingLayout extends StatefulWidget {
@@ -52,14 +53,15 @@ class _SettingLayoutState extends State<SettingLayout> {
             ),
             label: 'APRS',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.warehouse_outlined),
-            selectedIcon: Icon(
-              Icons.warehouse_outlined,
-              color: Theme.of(context).primaryColor,
+          if (enablePositionSharing)
+            NavigationDestination(
+              icon: Icon(Icons.warehouse_outlined),
+              selectedIcon: Icon(
+                Icons.warehouse_outlined,
+                color: Theme.of(context).primaryColor,
+              ),
+              label: 'DRR',
             ),
-            label: 'DRR',
-          ),
           NavigationDestination(
             icon: Icon(Icons.app_settings_alt),
             selectedIcon: Icon(
