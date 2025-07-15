@@ -21,6 +21,7 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
   Future<void> getLogs() async {
     _storedPositions = await AprsLogRepository.getUniquePackets();
     setState(() {});
+
     if (kDebugMode) {
       print(_storedPositions);
     }
@@ -39,11 +40,16 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
           ? ValueListenableBuilder(
               valueListenable: aprsPositionPackets,
               builder: (context, value, child) {
+                var invertedList = value.reversed.toList();
                 return ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (context, index) {
-                    var packet = value[index];
-                    return PacketTile(packet: packet);
+                    var packet = invertedList[index];
+                    return PacketTile(
+                      packet: packet,
+                      showTimestamp: true,
+                      minTimestamp: true,
+                    );
                   },
                 );
               },
@@ -56,7 +62,9 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
                 );
                 return PacketTile(
                   packet: packet,
+                  minTitle: true,
                   trailing: IconButton(
+                    tooltip: 'See full history',
                     onPressed: () {
                       Navigator.push(
                         context,

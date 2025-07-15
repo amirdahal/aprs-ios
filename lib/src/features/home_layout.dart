@@ -93,7 +93,7 @@ class _HomeLayoutState extends State<HomeLayout> {
               backgroundColor: unreadChatCount > 0
                   ? Colors.redAccent
                   : Colors.transparent,
-              child: Icon(Icons.message),
+              child: Icon(Icons.local_post_office_outlined),
             ),
           ),
           // IconButton(
@@ -113,7 +113,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 MaterialPageRoute(builder: (context) => AprsLogScreen()),
               );
             },
-            icon: Icon(Icons.list_alt),
+            icon: Icon(Icons.list_alt_outlined),
             tooltip: 'Aprs logs',
           ),
           IconButton(
@@ -123,7 +123,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 MaterialPageRoute(builder: (context) => SettingLayout()),
               );
             },
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.settings_outlined),
             tooltip: 'Settings',
           ),
         ],

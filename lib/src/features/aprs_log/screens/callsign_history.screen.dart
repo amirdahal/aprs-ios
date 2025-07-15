@@ -26,6 +26,7 @@ class CallsignPositionTrackerScreen extends StatefulWidget {
 class _CallsignPositionTrackerScreenState
     extends State<CallsignPositionTrackerScreen> {
   List<BeaconStore> _packets = [];
+  List<BeaconStore> _uniquePositions = [];
   bool mapView = false;
 
   void _loadPackets({DateTime? start, DateTime? end}) async {
@@ -34,14 +35,17 @@ class _CallsignPositionTrackerScreenState
       start: start,
       end: end,
     );
+    _uniquePositions = AprsLogRepository.getUniquePositions(_packets);
     setState(() {});
   }
 
   final mapController = MapController();
-  late final Future<MbTiles> _mbtilesFuture;
   double currentZoom = 7;
   final double maxZoom = 12;
   final double minZoom = 6;
+
+  final Future<MbTiles> _mbtilesFuture;
+  _CallsignPositionTrackerScreenState() : _mbtilesFuture = _loadMBTiles();
 
   static Future<MbTiles> _loadMBTiles() async {
     final appDir = await getApplicationDocumentsDirectory();
@@ -58,7 +62,6 @@ class _CallsignPositionTrackerScreenState
   @override
   void initState() {
     _loadPackets();
-    _loadMBTiles();
     super.initState();
   }
 
@@ -66,7 +69,7 @@ class _CallsignPositionTrackerScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.callsign} history'),
+        title: Text('${widget.callsign} History'),
         actions: [
           IconButton(
             onPressed: () async {
@@ -115,10 +118,10 @@ class _CallsignPositionTrackerScreenState
                     minZoom: minZoom,
                     initialZoom: currentZoom,
                     initialCenter: LatLng(
-                      _packets.isNotEmpty
+                      _uniquePositions.isNotEmpty
                           ? _packets[0].latitude!
                           : 12.151274550622965,
-                      _packets.isNotEmpty
+                      _uniquePositions.isNotEmpty
                           ? _packets[0].longitude!
                           : 122.36676560910182,
                     ),
@@ -136,7 +139,7 @@ class _CallsignPositionTrackerScreenState
                     ),
                     MarkerLayer(
                       markers: [
-                        for (var pos in _packets)
+                        for (var pos in _uniquePositions)
                           Marker(
                             point: LatLng(pos.latitude!, pos.longitude!),
                             child: Icon(Icons.location_on_outlined),
@@ -148,9 +151,10 @@ class _CallsignPositionTrackerScreenState
               },
             )
           : ListView.builder(
+              itemCount: _packets.length,
               itemBuilder: (context, index) {
                 var packet = beaconStoreToPositionPacket(_packets[index]);
-                return PacketTile(packet: packet);
+                return PacketTile(packet: packet, showTimestamp: true);
               },
             ),
       floatingActionButton: FloatingActionButton.extended(
@@ -160,6 +164,7 @@ class _CallsignPositionTrackerScreenState
           });
         },
         label: Row(
+          spacing: 10,
           children: [
             Text(mapView ? 'List' : 'Map'),
             Icon(mapView ? Icons.list_outlined : Icons.map_outlined),

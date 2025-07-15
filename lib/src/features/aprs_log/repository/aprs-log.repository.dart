@@ -39,13 +39,47 @@ class AprsLogRepository {
       query.and.timestamp.lessThanOrEquals(end);
     }
 
+    query.orderByDesc('timestamp');
+
     return await query.toList();
   }
 
   static Future<List<BeaconStore>> getUniquePackets() async {
     return await BeaconStore()
-        .distinct(columnsToSelect: ['source'])
+        .select()
+        .where('''
+        id IN (
+          SELECT id FROM beaconStore 
+          GROUP BY source 
+          HAVING MAX(timestamp)
+        )
+        ''')
         .orderByDesc('timestamp')
         .toList();
+  }
+
+  static List<BeaconStore> getUniquePositions(List<BeaconStore> allPackets) {
+    final Map<String, BeaconStore> uniqueLocations = {};
+
+    for (final packet in allPackets) {
+      // Create a unique key from latitude and longitude (rounded to 6 decimal places)
+      final locationKey =
+          '${packet.latitude?.toStringAsFixed(6)}_${packet.longitude?.toStringAsFixed(6)}';
+
+      // If we haven't seen this location before, or this packet is newer, store it
+      if (!uniqueLocations.containsKey(locationKey) ||
+          (packet.timestamp != null &&
+              uniqueLocations[locationKey]!.timestamp != null &&
+              packet.timestamp!.isAfter(
+                uniqueLocations[locationKey]!.timestamp!,
+              ))) {
+        uniqueLocations[locationKey] = packet;
+      }
+    }
+
+    // Convert the map values to a list and sort by timestamp (descending)
+    final result = uniqueLocations.values.toList();
+    result.sort((a, b) => b.timestamp!.compareTo(a.timestamp!));
+    return result;
   }
 }

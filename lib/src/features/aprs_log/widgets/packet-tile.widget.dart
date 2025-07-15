@@ -1,19 +1,43 @@
+import 'package:aprs/src/helpers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 
 class PacketTile extends StatelessWidget {
   final PositionPacket packet;
   final Widget? trailing;
-  const PacketTile({super.key, required this.packet, this.trailing});
+  final bool showTimestamp;
+  final bool minTimestamp;
+  final bool minTitle;
+  const PacketTile({
+    super.key,
+    required this.packet,
+    this.trailing,
+    this.showTimestamp = false,
+    this.minTimestamp = false,
+    this.minTitle = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(packet.source),
-          Icon(Icons.arrow_right_alt_outlined, color: Colors.grey),
-          Text(packet.destination),
+          Row(
+            children: [
+              Text(packet.source),
+              if (!minTitle)
+                Icon(Icons.arrow_right_alt_outlined, color: Colors.grey),
+              if (!minTitle) Text(packet.destination),
+            ],
+          ),
+          if (showTimestamp)
+            Text(
+              formatTimestamp(packet.timestamp, min: minTimestamp),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+            ),
         ],
       ),
       subtitle: Row(
