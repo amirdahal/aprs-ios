@@ -42,7 +42,6 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
     setState(() {
       editingEnabled = false;
     });
-    // RadioExtract.radio.radioSetting = newSetting;
     close();
   }
 
@@ -67,7 +66,30 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Radio Settings")),
+      appBar: AppBar(
+        title: Text("Radio Settings"),
+        actions: [
+          if (!editingEnabled)
+            IconButton(
+              onPressed: () async {
+                bool isValidated = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PasswordScreen(
+                      actionDescription:
+                          'Validate to enable editing the radio settings',
+                    ),
+                  ),
+                );
+                if (isValidated) {
+                  setState(() {
+                    editingEnabled = true;
+                  });
+                }
+              },
+              icon: Icon(Icons.edit),
+            ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
@@ -150,29 +172,12 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            editingEnabled
-                ? Button.primary(
-                    label: "Save setting",
-                    onPressed: _updateRadioSetting,
-                  )
-                : Button.outlined(
-                    label: "Enable editing",
-                    onPressed: () async {
-                      bool isValidated = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PasswordScreen(
-                            actionDescription:
-                                'Validate to enable editing the radio settings',
-                          ),
-                        ),
-                      );
-                      if (isValidated) {
-                        setState(() {
-                          editingEnabled = true;
-                        });
-                      }
-                    },
-                  ),
+            if (editingEnabled)
+              Button.primary(
+                label: "Save setting",
+                onPressed: _updateRadioSetting,
+              ),
+
             const SizedBox(height: 20),
             if (!editingEnabled)
               Button.primary(

@@ -1,13 +1,12 @@
 import 'package:aprs/src/features/bluetooth/repository/bluetooth_scanner.dart';
+import 'package:aprs/src/features/home_layout.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/scan_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Radio;
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:radio/radio.dart';
-
-import '../../home_layout.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -36,10 +35,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     });
   }
 
-  void toHome() {
+  void toHome(String deviceName) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomeLayout()),
+      MaterialPageRoute(
+        builder: (context) => HomeLayout(connectedDeviceName: deviceName),
+      ),
     );
   }
 
@@ -53,9 +54,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       if (kDebugMode) {
         print("Connection to radio successful");
       }
-      // RadioExtract.radio.addEventHandler(radioEventsHandler);
-
-      toHome();
+      toHome(device.advName);
     } on Exception catch (error) {
       if (kDebugMode) {
         print(error.toString());
@@ -76,14 +75,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Radio",
-          style: TextTheme.of(
-            context,
-          ).headlineLarge?.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: AppBar(title: Text("Connect to Radio")),
       body: isScanning || isConnecting
           ? Center(
               child: LoadingIndicator(

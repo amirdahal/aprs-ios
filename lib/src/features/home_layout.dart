@@ -15,7 +15,8 @@ import 'message/repository/message.repository.dart';
 import 'message/screens/chat_list_screen.dart';
 
 class HomeLayout extends StatefulWidget {
-  const HomeLayout({super.key});
+  final String connectedDeviceName;
+  const HomeLayout({super.key, required this.connectedDeviceName});
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -46,6 +47,8 @@ class _HomeLayoutState extends State<HomeLayout> {
   }
 
   dynamic listener;
+
+  String get connectedDeviceName => widget.connectedDeviceName;
 
   void addChatListener() {
     getChatCount();
@@ -92,6 +95,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(connectedDeviceName),
         actions: [
           if (_batteryLevel != null)
             BatteryIndicator(batteryLevel: _batteryLevel!),

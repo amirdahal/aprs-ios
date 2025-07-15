@@ -112,7 +112,30 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Aprs Settings")),
+      appBar: AppBar(
+        title: Text("Aprs Settings"),
+        actions: [
+          if (!editingEnabled)
+            IconButton(
+              onPressed: () async {
+                bool isValidated = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PasswordScreen(
+                      actionDescription:
+                          'Validate to enable editing the aprs settings',
+                    ),
+                  ),
+                );
+                if (isValidated) {
+                  setState(() {
+                    editingEnabled = true;
+                  });
+                }
+              },
+              icon: Icon(Icons.edit),
+            ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Form(
@@ -170,29 +193,11 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
                 label: 'Location share interval (minutes)',
               ),
               const SizedBox(height: 40),
-              editingEnabled
-                  ? Button.primary(
-                      label: "Save setting",
-                      onPressed: _updateAprsSetting,
-                    )
-                  : Button.outlined(
-                      label: "Enable editing",
-                      onPressed: () async {
-                        bool isValidated = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PasswordScreen(
-                              actionDescription:
-                                  'Validate to enable editing the aprs settings',
-                            ),
-                          ),
-                        );
-                        if (isValidated) {
-                          setState(() {
-                            editingEnabled = true;
-                          });
-                        }
-                      },
-                    ),
+              if (editingEnabled)
+                Button.primary(
+                  label: "Save setting",
+                  onPressed: _updateAprsSetting,
+                ),
             ],
           ),
         ),

@@ -69,7 +69,7 @@ class _CallsignPositionTrackerScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.callsign} History'),
+        title: Text('${widget.callsign} Position History'),
         actions: [
           IconButton(
             onPressed: () async {

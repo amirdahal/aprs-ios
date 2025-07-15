@@ -191,10 +191,32 @@ class _MapScreenState extends State<MapScreen> {
               DoubleChannelSwitch(),
               if (showMyPosition) MyLocation(mapController: mapController),
               Positioned(
-                bottom: 50,
-                right: 15,
+                right: 30,
+                bottom: 70,
                 child: Column(
+                  spacing: 10,
                   children: [
+                    IconButton.filled(
+                      onPressed: () {
+                        setState(() {
+                          showMyPosition = !showMyPosition;
+                        });
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          showMyPosition ? Colors.green : Colors.red,
+                        ),
+                      ),
+                      icon: Icon(
+                        showMyPosition
+                            ? Icons.location_on_outlined
+                            : Icons.location_off_outlined,
+                      ),
+                      enableFeedback: true,
+                      tooltip: showMyPosition
+                          ? 'Hide my position'
+                          : 'Show my position',
+                    ),
                     IconButton.filled(
                       onPressed: () {
                         setState(() {
@@ -224,31 +246,6 @@ class _MapScreenState extends State<MapScreen> {
                       icon: const Icon(Icons.zoom_out),
                     ),
                   ],
-                ),
-              ),
-              Positioned(
-                bottom: 150,
-                right: 15,
-                child: IconButton.filled(
-                  onPressed: () {
-                    setState(() {
-                      showMyPosition = !showMyPosition;
-                    });
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      showMyPosition ? Colors.green : Colors.red,
-                    ),
-                  ),
-                  icon: Icon(
-                    showMyPosition
-                        ? Icons.location_on_outlined
-                        : Icons.location_off_outlined,
-                  ),
-                  enableFeedback: true,
-                  tooltip: showMyPosition
-                      ? 'Hide my position'
-                      : 'Show my position',
                 ),
               ),
             ],

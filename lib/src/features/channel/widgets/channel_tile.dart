@@ -2,6 +2,7 @@ import 'package:aprs/src/features/channel/repository/channel_repository.dart';
 import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
+import 'package:aprs/src/helpers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 
@@ -38,6 +39,72 @@ class _ChannelTileState extends State<ChannelTile> {
     statusChangeNotifier.addListener(statusListener);
   }
 
+  void _channelAction() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Action on channel ${widget.channel.channelId}'),
+          content: null,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                bool isValid = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PasswordScreen(
+                      actionDescription: 'Validate to complete the action',
+                    ),
+                  ),
+                );
+                if (isValid) {
+                  // ReplyStatus status =
+                  await ChannelRepository.setChannelAorB(
+                    option: ChannelOption.channelA,
+                    channelId: widget.channel.channelId,
+                  );
+                }
+              },
+              child: const Text('Set Channel A'),
+            ),
+            TextButton(
+              onPressed: () async {
+                bool isValid = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PasswordScreen(
+                      actionDescription: 'Validate to complete the action',
+                    ),
+                  ),
+                );
+                if (isValid) {
+                  // ReplyStatus status =
+                  await ChannelRepository.setChannelAorB(
+                    option: ChannelOption.channelB,
+                    channelId: widget.channel.channelId,
+                  );
+                }
+              },
+              child: const Text('Set Channel B'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ChannelDetailScreen(channel: widget.channel),
+                  ),
+                );
+              },
+              child: const Text('Details'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     addStatusListener();
@@ -62,71 +129,8 @@ class _ChannelTileState extends State<ChannelTile> {
       }
     }
     return GestureDetector(
-      onLongPress: () {
-        showDialog<void>(
-          context: context,
-          barrierDismissible: true, // user must tap button!
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Action on channel ${widget.channel.channelId}'),
-              content: null,
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () async {
-                    bool isValid = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PasswordScreen(
-                          actionDescription: 'Validate to complete the action',
-                        ),
-                      ),
-                    );
-                    if (isValid) {
-                      // ReplyStatus status =
-                      await ChannelRepository.setChannelAorB(
-                        option: ChannelOption.channelA,
-                        channelId: widget.channel.channelId,
-                      );
-                    }
-                  },
-                  child: const Text('Set Channel A'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    bool isValid = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PasswordScreen(
-                          actionDescription: 'Validate to complete the action',
-                        ),
-                      ),
-                    );
-                    if (isValid) {
-                      // ReplyStatus status =
-                      await ChannelRepository.setChannelAorB(
-                        option: ChannelOption.channelB,
-                        channelId: widget.channel.channelId,
-                      );
-                    }
-                  },
-                  child: const Text('Set Channel B'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ChannelDetailScreen(channel: widget.channel),
-                      ),
-                    );
-                  },
-                  child: const Text('Details'),
-                ),
-              ],
-            );
-          },
-        );
-      },
+      onLongPress: _channelAction,
+      onTap: isLargeScreen ? _channelAction : null,
       child: Card(
         color: boxColor,
         shadowColor: boxColor,
@@ -142,23 +146,27 @@ class _ChannelTileState extends State<ChannelTile> {
                 ),
               ),
             Text(
-              "${widget.channel.rxFreq.toString()} / ${widget.channel.txFreq.toString()}",
+              "Rx: ${widget.channel.rxFreq.toString()}",
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
             ),
-            if (status.currChId == widget.channel.channelId)
-              if (status.isInRx)
-                const Icon(
-                  Icons.arrow_circle_down_outlined,
-                  color: Colors.green,
-                  size: 40,
-                ),
-            if (status.currChId == widget.channel.channelId)
-              if (status.isInTx)
-                const Icon(
-                  Icons.arrow_circle_up_outlined,
-                  color: Colors.red,
-                  size: 40,
-                ),
+            Text(
+              "Tx: ${widget.channel.txFreq.toString()}",
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            ),
+            // if (status.currChId == widget.channel.channelId)
+            //   if (status.isInRx)
+            //     const Icon(
+            //       Icons.arrow_circle_down_outlined,
+            //       color: Colors.green,
+            //       size: 40,
+            //     ),
+            // if (status.currChId == widget.channel.channelId)
+            //   if (status.isInTx)
+            //     const Icon(
+            //       Icons.arrow_circle_up_outlined,
+            //       color: Colors.red,
+            //       size: 40,
+            //     ),
           ],
         ),
       ),

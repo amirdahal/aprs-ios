@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 
 String formatDateTime(DateTime dateTime) {
@@ -20,3 +22,6 @@ String formatTimestamp(dynamic timestamp, {bool min = false}) {
             : DateFormat('yyyy-MM-dd HH:mm:ss').format(date)
       : timestamp.toString();
 }
+
+final isLargeScreen =
+    Platform.isWindows || Platform.isMacOS || Platform.isLinux;

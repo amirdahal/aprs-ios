@@ -8,12 +8,14 @@ environment:
 
 dependencies:
   radio:
-    git: https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git
+    git:
+      url: https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git
+      ref: 'win_lib'
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  flutter_blue_plus: ^1.35.5
+#  flutter_blue_plus: ^1.35.5
   permission_handler: ^12.0.1
   custom_events: ^0.0.5
   toastification: ^1.0.0
@@ -30,6 +32,8 @@ dependencies:
   sqfentity: ^2.5.0
   http: ^1.4.0
   crypt: ^4.3.1
+  flutter_blue_plus_windows: ^1.26.1
+  window_manager: ^0.5.1
 
 dev_dependencies:
   flutter_test:

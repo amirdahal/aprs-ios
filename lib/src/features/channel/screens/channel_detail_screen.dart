@@ -1,16 +1,16 @@
 import 'package:aprs/src/features/channel/repository/channel_repository.dart';
+import 'package:aprs/src/features/channel/utils/constants.dart';
+import 'package:aprs/src/features/channel/utils/helpers.dart'
+    show getToneLabel, toneStringToValue, frequencyValidator;
 import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
+import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
+import 'package:aprs/src/widgets/checkbox.dart' show CustomCheckbox;
 import 'package:aprs/src/widgets/dropdown.dart' show DropDown;
+import 'package:aprs/src/widgets/toast.dart' show showToast;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 import 'package:toastification/toastification.dart';
-
-import '../../../helpers/theme.dart';
-import '../../../widgets/checkbox.dart';
-import '../../../widgets/toast.dart';
-import '../utils/constants.dart';
-import '../utils/helpers.dart';
 
 enum STATE { success, error }
 
@@ -177,6 +177,29 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("[${widget.channel.channelId}] ${widget.channel.nameStr}"),
+        actions: [
+          if (!editingEnabled)
+            IconButton(
+              onPressed: () async {
+                bool isValidated = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PasswordScreen(
+                      onValidate: null,
+                      actionDescription:
+                          'Validate to edit channel configuration',
+                    ),
+                  ),
+                );
+                if (isValidated) {
+                  setState(() {
+                    editingEnabled = true;
+                  });
+                }
+              },
+              icon: Icon(Icons.edit),
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -379,30 +402,8 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                   ElevatedButton(
                     onPressed: _submit,
                     style: const ButtonStyle(enableFeedback: true),
-                    child: const Text("Submit", style: TextStyle(fontSize: 16)),
-                  ),
-                if (!editingEnabled)
-                  ElevatedButton(
-                    onPressed: () async {
-                      bool isValidated = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PasswordScreen(
-                            onValidate: null,
-                            actionDescription:
-                                'Validate to edit channel configuration',
-                          ),
-                        ),
-                      );
-                      if (isValidated) {
-                        setState(() {
-                          editingEnabled = true;
-                        });
-                      }
-                    },
-                    style: const ButtonStyle(enableFeedback: true),
                     child: const Text(
-                      "Edit channel",
+                      "Save channel",
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

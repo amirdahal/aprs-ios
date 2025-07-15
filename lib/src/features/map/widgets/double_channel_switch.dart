@@ -91,7 +91,8 @@ class _DoubleChannelSwitchState extends State<DoubleChannelSwitch> {
               // updateDoubleChannel(1);
             },
             child: Container(
-              constraints: const BoxConstraints(minWidth: 150, minHeight: 60),
+              constraints: const BoxConstraints(minWidth: 150),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: status.doubleChannel.value == 1
                     ? Colors.lightGreen
@@ -114,10 +115,7 @@ class _DoubleChannelSwitchState extends State<DoubleChannelSwitch> {
                     chanA.nameStr.isNotEmpty
                         ? chanA.nameStr
                         : chanA.rxFreq.toString(),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextTheme.of(context).titleMedium,
                   ),
                   Icon(
                     Icons.arrow_upward_sharp,
@@ -144,7 +142,8 @@ class _DoubleChannelSwitchState extends State<DoubleChannelSwitch> {
               // updateDoubleChannel(2);
             },
             child: Container(
-              constraints: const BoxConstraints(minWidth: 150, minHeight: 60),
+              constraints: const BoxConstraints(minWidth: 150),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: status.doubleChannel.value == 2
                     ? Colors.lightGreen
@@ -167,10 +166,7 @@ class _DoubleChannelSwitchState extends State<DoubleChannelSwitch> {
                     chanA.nameStr.isNotEmpty
                         ? chanB.nameStr
                         : chanB.rxFreq.toString(),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextTheme.of(context).titleMedium,
                   ),
                   Icon(
                     Icons.arrow_upward_sharp,

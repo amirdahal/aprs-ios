@@ -1,5 +1,6 @@
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/features/channel/widgets/channel_tile.dart';
+import 'package:aprs/src/helpers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 
@@ -17,12 +18,13 @@ class _ChannelScreenState extends State<ChannelScreen> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width / 1.2,
+      semanticLabel: 'Channels',
+      width: isLargeScreen ? 450 : MediaQuery.of(context).size.width / 1.2,
       child: MediaQuery.removePadding(
         context: context,
-        removeTop: true,
+        removeTop: false,
         child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
           ),
           itemCount: _channels.length,

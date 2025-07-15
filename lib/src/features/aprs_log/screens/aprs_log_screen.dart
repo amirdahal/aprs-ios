@@ -35,7 +35,11 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Aprs Logs')),
+      appBar: AppBar(
+        title: Text(
+          live ? 'Recent Position Packets' : 'Position Packet History',
+        ),
+      ),
       body: live
           ? ValueListenableBuilder(
               valueListenable: aprsPositionPackets,
@@ -64,7 +68,7 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
                   packet: packet,
                   minTitle: true,
                   trailing: IconButton(
-                    tooltip: 'See full history',
+                    tooltip: 'See all packets from ${packet.source}',
                     onPressed: () {
                       Navigator.push(
                         context,
