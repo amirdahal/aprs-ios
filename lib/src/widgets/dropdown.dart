@@ -23,6 +23,7 @@ class DropDown extends StatelessWidget {
       decoration: inputDecoration(
         label,
       ).copyWith(fillColor: Colors.transparent),
+      menuMaxHeight: 400,
       dropdownColor: Colors.white,
       value: selectedValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
