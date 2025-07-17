@@ -1,11 +1,12 @@
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/model/model.dart';
-import 'package:custom_events/custom_events.dart';
+// import 'package:custom_events/custom_events.dart';
 import 'package:radio/radio.dart';
 
 enum AprsEvents { newBeaconEvent }
 
 class AprsLogRepository {
-  static CustomEvents appEvent = CustomEvents.instance;
+  // static CustomEvents appEvent = CustomEvents.instance;
 
   static Future<void> savePacket(PositionPacket packet) async {
     BeaconStore newBeacon = BeaconStore(
@@ -22,7 +23,8 @@ class AprsLogRepository {
     );
 
     newBeacon.saveOrThrow();
-    appEvent.dispatchEvent(AprsEvents.newBeaconEvent, value: newBeacon);
+    eventBus.fire(NewPositionEvent(newBeacon));
+    // appEvent.dispatchEvent(AprsEvents.newBeaconEvent, value: newBeacon);
   }
 
   static Future<List<BeaconStore>> getPackets({

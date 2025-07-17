@@ -1,4 +1,3 @@
 import 'dart:io';
 
-final enablePositionSharing =
-    !Platform.isWindows && !Platform.isLinux && !Platform.isFuchsia;
+final enablePositionSharing = !Platform.isLinux && !Platform.isFuchsia;

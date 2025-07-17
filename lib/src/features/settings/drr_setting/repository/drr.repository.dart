@@ -1,20 +1,16 @@
 import 'dart:async';
 
-import 'package:aprs/src/features/map/repository/location_provider.dart'
-    show determinePosition;
-import 'package:aprs/src/features/message/repository/message.repository.dart'
-    show MyEvents;
+import 'package:aprs/src/helpers/location_provider.dart'
+    show determineGeoPosition, locationSettings;
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatDateTime;
 import 'package:aprs/src/model/model.dart';
-import 'package:custom_events/custom_events.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
 
 class DrrRepository {
   static String get drrUrl => '24.222.96.163:9060';
-
-  static CustomEvents appEvent = CustomEvents.instance;
 
   static Future<DrrStore?> getDrrConfig() async {
     return await DrrStore().getById(1);
@@ -22,7 +18,7 @@ class DrrRepository {
 
   static void setDrrConfig(DrrStore drrStore) async {
     await drrStore.save();
-    appEvent.dispatchEvent(MyEvents.drrSettingChangedEvent, value: drrStore);
+    eventBus.fire(DrrSettingChangeEvent(drrStore));
   }
 
   static Future<void> seedDrr() async {
@@ -39,30 +35,34 @@ class DrrRepository {
 
   static void startDrr() async {
     Timer? intervalTimer;
-    Location location = await determinePosition();
 
-    appEvent.addEventListener(MyEvents.drrSettingChangedEvent, (DrrStore drr) {
+    await determineGeoPosition();
+
+    StreamSubscription _ = eventBus.on<DrrSettingChangeEvent>().listen((event) {
       if (kDebugMode) {
         print("Drr config change event received");
       }
       intervalTimer?.cancel();
-      if (drr.sendMyPosition!) {
-        intervalTimer = Timer.periodic(Duration(minutes: drr.interval!), (
-          timer,
-        ) async {
-          LocationData loc = await location.getLocation();
-          runScheduledTask(drr, loc);
-        });
+      if (event.drrStore.sendMyPosition!) {
+        intervalTimer = Timer.periodic(
+          Duration(minutes: event.drrStore.interval!),
+          (timer) async {
+            Position position = await Geolocator.getCurrentPosition(
+              locationSettings: locationSettings,
+            );
+            runScheduledTask(event.drrStore, position);
+          },
+        );
       }
     });
 
     DrrStore? drr = await getDrrConfig();
     if (drr != null) {
-      appEvent.dispatchEvent(MyEvents.drrSettingChangedEvent, value: drr);
+      eventBus.fire(DrrSettingChangeEvent(drr));
     }
   }
 
-  static void runScheduledTask(DrrStore drr, LocationData location) async {
+  static void runScheduledTask(DrrStore drr, Position location) async {
     if (kDebugMode) {
       print("Send position to DRR");
     }

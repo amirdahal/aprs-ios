@@ -1,12 +1,19 @@
-import 'package:aprs/src/features/message/widgets/message_input.dart';
+import 'dart:async';
+
 import 'package:aprs/src/features/message/repository/message.repository.dart';
+import 'package:aprs/src/features/message/widgets/message_input.dart';
 import 'package:aprs/src/features/message/widgets/message_tile.dart';
+import 'package:aprs/src/helpers/app.events.dart'
+    show eventBus, NewMessageEvent;
 import 'package:aprs/src/model/model.dart' show ChatStore, MessageStore;
-import 'package:custom_events/custom_events.dart';
+// import 'package:custom_events/custom_events.dart';
 import 'package:flutter/material.dart';
+
+import '../../../helpers/app.events.dart' show eventBus;
 
 class MessageScreen extends StatefulWidget {
   final ChatStore currentChat;
+
   const MessageScreen({super.key, required this.currentChat});
 
   @override
@@ -17,7 +24,7 @@ class _MessageScreenState extends State<MessageScreen> {
   List<MessageStore> _messages = [];
   ScrollController scrollController = ScrollController();
 
-  CustomEvents events = CustomEvents.instance;
+  // CustomEvents events = CustomEvents.instance;
 
   Future<void> markAsSeen() async {
     await MessageRepository.markChatAsSeen(widget.currentChat);
@@ -36,22 +43,33 @@ class _MessageScreenState extends State<MessageScreen> {
     });
   }
 
+  late StreamSubscription messageSubscription;
+
+  void addListener() {
+    fetchMessages();
+    messageSubscription = eventBus.on<NewMessageEvent>().listen((event) {
+      if (event.callsign == widget.currentChat.callsign) {
+        fetchMessages();
+      }
+    });
+    // events.addEventListener(MyEvents.newMessageEvent, (callsign) async {
+    //   if (callsign == widget.currentChat.callsign) {
+    //     fetchMessages();
+    //   }
+    // });
+  }
+
   @override
   void initState() {
-    if (mounted) {
-      fetchMessages();
-      events.addEventListener(MyEvents.newMessageEvent, (callsign) async {
-        if (callsign == widget.currentChat.callsign) {
-          fetchMessages();
-        }
-      });
-    }
+    addListener();
+    if (mounted) {}
     super.initState();
   }
 
   @override
   void dispose() {
-    events.removeEventListener(MyEvents.newMessageEvent);
+    messageSubscription.cancel();
+    // events.removeEventListener(MyEvents.newMessageEvent);
     super.dispose();
   }
 

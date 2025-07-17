@@ -1,5 +1,6 @@
 import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
 import 'package:aprs/src/features/message/repository/message.repository.dart';
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
@@ -58,6 +59,10 @@ void radioEventsHandler(RadioEvents eventType, dynamic data) {
     case RadioEvents.radioStatusChanged:
       Status st = data;
       statusChangeNotifier.value = st;
+      break;
+    case RadioEvents.deviceDisconnected:
+      debugPrint('Device disconnected success');
+      eventBus.fire(DeviceDisconnectedEvent());
       break;
   }
 }

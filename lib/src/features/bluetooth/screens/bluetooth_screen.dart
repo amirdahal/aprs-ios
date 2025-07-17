@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:aprs/src/features/bluetooth/repository/bluetooth_scanner.dart';
 import 'package:aprs/src/features/home_layout.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/widgets/buttons.dart';
 import 'package:aprs/src/widgets/scan_indicator.dart';
+import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:radio/radio.dart';
+import 'package:toastification/toastification.dart';
+
+import '../repository/bonding.repository.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -55,7 +61,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         print("Connection to radio successful");
       }
       toHome(device.advName);
-    } on Exception catch (error) {
+    } catch (error) {
+      RadioExtract.radio.dispose();
+      showToast(
+        context: context,
+        title: 'Connection error',
+        description: 'Failed to connect to device. Try again',
+        type: ToastificationType.error,
+      );
       if (kDebugMode) {
         print(error.toString());
       }
@@ -94,7 +107,44 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   subtitle: Text(device.remoteId.str),
                   trailing: Button.primary(
                     label: "Connect",
-                    onPressed: () => _connect(device),
+                    onPressed: () async {
+                      await device.disconnect();
+                      if (Platform.isAndroid) {
+                        bool bonded = await isBonded(device);
+                        if (!bonded) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Device not paired'),
+                                content: Text(
+                                  'Turn on pairing mode on the radio and click on Continue',
+                                ),
+                                actions: [
+                                  Button.outlined(
+                                    label: 'Cancel',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Button.primary(
+                                    label: 'Connect',
+                                    onPressed: () {
+                                      _connect(device);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          _connect(device);
+                        }
+                      } else {
+                        _connect(device);
+                      }
+                    },
                   ),
                 );
               },

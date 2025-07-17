@@ -1,14 +1,10 @@
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/model/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
-import 'package:custom_events/custom_events.dart';
-
-enum MyEvents { newMessageEvent, newChatEvent, drrSettingChangedEvent }
 
 class MessageRepository {
-  static CustomEvents appEvent = CustomEvents.instance;
-
   static Future<void> addChat(
     String callsign,
     String lastMessage, {
@@ -49,8 +45,8 @@ class MessageRepository {
         print("Error chat save: $e");
       }
     }
-    appEvent.dispatchEvent(MyEvents.newChatEvent, value: callsign);
-    appEvent.dispatchEvent(MyEvents.newMessageEvent, value: callsign);
+    eventBus.fire(NewChatEvent(callsign));
+    eventBus.fire(NewMessageEvent(callsign));
   }
 
   static Future<void> addMessage(MessagePacket message) async {
@@ -115,7 +111,6 @@ class MessageRepository {
     ChatStore? ct = await ChatStore().getById(chat.id);
     ct?.seen = true;
     await ct?.save();
-    appEvent.dispatchEvent(MyEvents.newChatEvent, value: chat.callsign);
-    // await loadChats();
+    eventBus.fire(NewChatEvent(chat.callsign!));
   }
 }

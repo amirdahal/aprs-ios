@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:aprs/src/features/message/repository/message.repository.dart';
 import 'package:aprs/src/features/message/screens/new_chat_screen.dart';
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:aprs/src/model/model.dart';
 import 'package:flutter/material.dart';
@@ -23,29 +26,36 @@ class _ChatListScreenState extends State<ChatListScreen> {
     });
   }
 
-  dynamic listener;
+  // dynamic listener;
+
+  late StreamSubscription chatSubscription;
 
   void addListener() {
     loadChats();
-    listener = (dynamic value) => loadChats();
-    MessageRepository.appEvent.addEventListener(
-      MyEvents.newChatEvent,
-      listener,
-    );
+    chatSubscription = eventBus.on<NewChatEvent>().listen((event) {
+      loadChats();
+    });
+    // listener = (dynamic value) => loadChats();
+    // MessageRepository.appEvent.addEventListener(
+    //   MyEvents.newChatEvent,
+    //   listener,
+    // );
   }
 
   @override
   void initState() {
     addListener();
+    // loadChats();
     super.initState();
   }
 
   @override
   void dispose() {
-    MessageRepository.appEvent.removeEventListener(
-      MyEvents.newChatEvent,
-      listener: listener,
-    );
+    // MessageRepository.appEvent.removeEventListener(
+    //   MyEvents.newChatEvent,
+    //   listener: listener,
+    // );
+    chatSubscription.cancel();
     super.dispose();
   }
 

@@ -4,10 +4,12 @@ import 'package:aprs/src/features/map/repository/map_provider.dart'
 import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
 import 'package:aprs/src/features/map/widgets/my_location.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/location_provider.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mbtiles/mbtiles.dart';
 import 'package:path/path.dart' as path;
@@ -198,6 +200,19 @@ class _MapScreenState extends State<MapScreen> {
                 child: Column(
                   spacing: 10,
                   children: [
+                    if (showMyPosition)
+                      IconButton.filled(
+                        onPressed: () async {
+                          Position position = await determineGeoPosition();
+                          mapController.move(
+                            LatLng(position.latitude, position.longitude),
+                            currentZoom,
+                          );
+                        },
+                        icon: Icon(Icons.my_location),
+                        enableFeedback: true,
+                        tooltip: 'My position',
+                      ),
                     if (enablePositionSharing)
                       IconButton.filled(
                         onPressed: () {

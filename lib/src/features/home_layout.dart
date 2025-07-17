@@ -1,22 +1,28 @@
 import 'dart:async';
 
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
+import 'package:aprs/src/features/bluetooth/screens/bluetooth_screen.dart';
+import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
 import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
 import 'package:aprs/src/features/settings/setting_layout.dart';
+import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/features/channel/screens/channel_screen.dart';
 import 'package:aprs/src/widgets/battery_level.widget.dart';
+import 'package:aprs/src/widgets/buttons.dart';
+import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 import 'message/repository/message.repository.dart';
 import 'message/screens/chat_list_screen.dart';
 
 class HomeLayout extends StatefulWidget {
   final String connectedDeviceName;
+
   const HomeLayout({super.key, required this.connectedDeviceName});
 
   @override
@@ -47,18 +53,33 @@ class _HomeLayoutState extends State<HomeLayout> {
     if (enablePositionSharing) DrrRepository.startDrr();
   }
 
-  dynamic listener;
-
   String get connectedDeviceName => widget.connectedDeviceName;
+  late StreamSubscription _chatSubscription;
+  late StreamSubscription _connectionSubscription;
+  late Timer _batteryReaderTimer;
 
   void addChatListener() {
     getChatCount();
-    listener = (dynamic value) => getChatCount();
+    _chatSubscription = eventBus.on<NewChatEvent>().listen((event) {
+      getChatCount();
+    });
+  }
 
-    MessageRepository.appEvent.addEventListener(
-      MyEvents.newChatEvent,
-      listener,
+  void resetApp() {
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => BluetoothScreen()),
     );
+  }
+
+  void addConnectionListener() {
+    _connectionSubscription = eventBus.on<DeviceDisconnectedEvent>().listen((
+      event,
+    ) {
+      debugPrint("Event received to disconnect");
+      resetApp();
+    });
   }
 
   Future<void> _getBatteryLevel() async {
@@ -67,8 +88,11 @@ class _HomeLayoutState extends State<HomeLayout> {
   }
 
   void updateBatteryLevel() {
-    Future.delayed(const Duration(seconds: 5), _getBatteryLevel);
-    Timer.periodic(const Duration(minutes: 2), (timer) => _getBatteryLevel);
+    Future.delayed(const Duration(seconds: 10), _getBatteryLevel);
+    _batteryReaderTimer = Timer.periodic(
+      const Duration(seconds: 45),
+      (timer) => _getBatteryLevel,
+    );
   }
 
   @override
@@ -78,6 +102,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       drrInit();
       addEventHandler();
       addChatListener();
+      addConnectionListener();
       updateBatteryLevel();
     }
     super.initState();
@@ -85,10 +110,9 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   void dispose() {
-    MessageRepository.appEvent.removeEventListener(
-      MyEvents.newChatEvent,
-      listener: listener,
-    );
+    _batteryReaderTimer.cancel();
+    _chatSubscription.cancel();
+    _connectionSubscription.cancel();
     super.dispose();
   }
 
@@ -147,6 +171,44 @@ class _HomeLayoutState extends State<HomeLayout> {
             },
             icon: Icon(Icons.settings_outlined),
             tooltip: 'Settings',
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    icon: Icon(Icons.power_settings_new_sharp),
+                    title: Text("Disconnect Device?"),
+                    actions: [
+                      Button.outlined(
+                        label: 'Cancel',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      Button.primary(
+                        label: 'Disconnect',
+                        onPressed: () async {
+                          bool success = await RadioExtract.radio.dispose();
+                          if (!success) {
+                            showToast(
+                              context: context,
+                              title: 'Failed to disconnect',
+                              description: '',
+                              type: ToastificationType.error,
+                            );
+                          }
+                          // Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.power_settings_new_outlined),
+            tooltip: 'Disconnect',
           ),
         ],
       ),
