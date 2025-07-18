@@ -42,3 +42,14 @@ final Map<String, int> hmSpeakerOptions = {
   "Off": 2,
   "Sq": 3,
 };
+
+final Map<String, int> wxModeOptions = {'Off': 0, 'Monitor': 1, 'Alert': 2};
+final Map<String, int> wxChannelOptions = {
+  'WX1 - 162.550 MHz': 0,
+  'WX2 - 162.400 MHz': 1,
+  'WX3 - 162.475 MHz': 2,
+  'WX4 - 162.425 MHz': 3,
+  'WX5 - 162.450 MHz': 4,
+  'WX6 - 162.500 MHz': 5,
+  'WX7 - 162.525 MHz': 6,
+};

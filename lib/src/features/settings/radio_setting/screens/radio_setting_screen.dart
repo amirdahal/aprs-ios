@@ -18,6 +18,7 @@ class RadioSettingScreen extends StatefulWidget {
 
 class _RadioSettingScreenState extends State<RadioSettingScreen> {
   late RadioSetting currentSetting;
+  late DeviceInfo deviceInfo;
 
   bool scan = false;
   bool powerSavingMode = false;
@@ -36,14 +37,19 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
   int txHoldTime = 0;
   int localSpeaker = 0;
   int headphoneMode = 0;
-  bool keepHeadphoneConnected = false;
+  bool keepHeadsetConnected = false;
   bool adaptiveResponse = false;
   bool tone = false;
   int autoPowerOff = 0;
   int autoShareLocationChannel = 0;
   int wiredMicrophoneSpeaker = 0;
-
+  bool signalingPreamble = false;
+  bool digitalMute = false;
   bool editingEnabled = false;
+  bool pairingAtPowerOn = false;
+  bool channelDataLock = false;
+  int wxMode = 0;
+  int wxChannel = 0;
 
   bool showAdvancedSetting = false;
 
@@ -52,12 +58,47 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
   }
 
   Future<void> _updateRadioSetting() async {
-    RadioSetting newSetting = RadioExtract.radio.radioSetting.copyWith();
-    newSetting.scan = scan;
-    newSetting.doubleChannel = doubleChannel;
-    newSetting.powerSavingMode = powerSavingMode;
-    newSetting.squelchLevel = squelchLevel;
-    newSetting.autoRelayEn = audioRelay;
+    RadioSetting newSetting = RadioSetting(
+      channelA: channelA,
+      channelB: channelB,
+      scan: scan,
+      aghfpCallMode: headphoneMode,
+      doubleChannel: doubleChannel,
+      squelchLevel: squelchLevel,
+      tailElim: tailElimination,
+      autoRelayEn: audioRelay,
+      autoPowerOn: autoPowerOn,
+      keepAghfpLink: keepHeadsetConnected,
+      micGain: micGain,
+      txHoldTime: txHoldTime,
+      txTimeLimit: txTimeLimit,
+      localSpeaker: localSpeaker,
+      btMicGain: btMicGain,
+      adaptiveResponse: adaptiveResponse,
+      disTone: !tone,
+      powerSavingMode: powerSavingMode,
+      autoPowerOff: autoPowerOff,
+      autoShareLocCh: autoShareLocationChannel,
+      hmSpeaker: wiredMicrophoneSpeaker,
+      positioningSystem: currentSetting.positioningSystem,
+      timeOffset: currentSetting.timeOffset,
+      useFreqRange2: currentSetting.useFreqRange2,
+      pttLock: currentSetting.pttLock,
+      leadingSyncBitEn: signalingPreamble,
+      pairingAtPowerOn: pairingAtPowerOn,
+      screenTimeout: currentSetting.screenTimeout,
+      vfoX: currentSetting.vfoX,
+      imperialUnit: currentSetting.imperialUnit,
+      wxMode: wxMode,
+      noaaCh: wxChannel,
+      vfolTxPowerX: currentSetting.vfolTxPowerX,
+      vfo2TxPowerX: currentSetting.vfo2TxPowerX,
+      disDigitalMute: !digitalMute,
+      signalingEccEn: currentSetting.signalingEccEn,
+      chDataLock: channelDataLock,
+      vfo1ModFreqX: currentSetting.vfo1ModFreqX,
+      vfo2ModFreqX: currentSetting.vfo2ModFreqX,
+    );
     await RadioExtract.radio.setRadioSettings(newSetting);
     setState(() {
       editingEnabled = false;
@@ -67,7 +108,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
 
   void populateSettings() {
     currentSetting = RadioExtract.radio.radioSetting;
-    print(currentSetting.toMap());
+    deviceInfo = RadioExtract.radio.deviceInfo;
     setState(() {
       scan = currentSetting.scan;
       powerSavingMode = currentSetting.powerSavingMode;
@@ -86,12 +127,21 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
       txHoldTime = currentSetting.txHoldTime;
       localSpeaker = currentSetting.localSpeaker;
       headphoneMode = currentSetting.aghfpCallMode;
-      keepHeadphoneConnected = currentSetting.keepAghfpLink;
+      keepHeadsetConnected = currentSetting.keepAghfpLink;
       adaptiveResponse = currentSetting.adaptiveResponse;
       tone = !currentSetting.disTone;
       autoPowerOff = currentSetting.autoPowerOff;
-      autoShareLocationChannel = currentSetting.autoShareLocCh;
+      autoShareLocationChannel =
+          currentSetting.autoShareLocCh >= deviceInfo.channelCount
+          ? 29
+          : currentSetting.autoShareLocCh;
       wiredMicrophoneSpeaker = currentSetting.hmSpeaker;
+      signalingPreamble = currentSetting.leadingSyncBitEn;
+      digitalMute = !currentSetting.disDigitalMute;
+      pairingAtPowerOn = currentSetting.pairingAtPowerOn;
+      channelDataLock = currentSetting.chDataLock;
+      wxMode = currentSetting.wxMode;
+      wxChannel = currentSetting.noaaCh;
     });
   }
 
@@ -372,13 +422,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                   ),
                 ),
                 ListTile(
-                  title: const Text("Keep headphone connected"),
+                  title: const Text("Keep headset connected"),
                   trailing: Switch(
-                    value: keepHeadphoneConnected,
+                    value: keepHeadsetConnected,
                     onChanged: editingEnabled
                         ? (bool value) {
                             setState(() {
-                              keepHeadphoneConnected = value;
+                              keepHeadsetConnected = value;
                             });
                           }
                         : null,
@@ -453,6 +503,88 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                     label: 'Wired microphone speaker',
                   ),
                 ),
+                ListTile(
+                  title: const Text("Signaling preamble"),
+                  trailing: Switch(
+                    value: signalingPreamble,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              signalingPreamble = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Digital mute"),
+                  trailing: Switch(
+                    value: digitalMute,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              digitalMute = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Pairing at power on"),
+                  trailing: Switch(
+                    value: pairingAtPowerOn,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              pairingAtPowerOn = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Channel data lock"),
+                  trailing: Switch(
+                    value: channelDataLock,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              channelDataLock = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+                if (deviceInfo.supportsNoaa)
+                  ListTile(
+                    title: DropDown(
+                      onChanged: (value) {
+                        setState(() {
+                          wxMode = wxModeOptions[value]!;
+                        });
+                      },
+                      options: wxModeOptions.keys.toList(),
+                      selectedValue: wxModeOptions.entries
+                          .firstWhere((entry) => entry.value == wxMode)
+                          .key,
+                      label: 'Wx mode',
+                    ),
+                  ),
+                if (deviceInfo.supportsNoaa)
+                  ListTile(
+                    title: DropDown(
+                      onChanged: (value) {
+                        setState(() {
+                          wxChannel = wxChannelOptions[value]!;
+                        });
+                      },
+                      options: wxChannelOptions.keys.toList(),
+                      selectedValue: wxChannelOptions.entries
+                          .firstWhere((entry) => entry.value == wxChannel)
+                          .key,
+                      label: 'Wx channel',
+                    ),
+                  ),
               ],
             ),
             const SizedBox(height: 20),
