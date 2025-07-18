@@ -142,6 +142,7 @@ class TableDrrStore extends SqfEntityTableBase {
 
     // declare fields
     fields = [
+      SqfEntityFieldBase('sendAllPositions', DbType.bool, defaultValue: false),
       SqfEntityFieldBase('sendMyPosition', DbType.bool),
       SqfEntityFieldBase('uuid', DbType.text),
       SqfEntityFieldBase('interval', DbType.integer),
@@ -3841,16 +3842,21 @@ class PasswordStoreManager extends SqfEntityProvider {
 // region DrrStore
 class DrrStore extends TableBase {
   DrrStore(
-      {this.id, this.sendMyPosition, this.uuid, this.interval, this.comment}) {
+      {this.id,
+      this.sendAllPositions,
+      this.sendMyPosition,
+      this.uuid,
+      this.interval,
+      this.comment}) {
     _setDefaultValues();
     softDeleteActivated = false;
   }
-  DrrStore.withFields(
-      this.sendMyPosition, this.uuid, this.interval, this.comment) {
+  DrrStore.withFields(this.sendAllPositions, this.sendMyPosition, this.uuid,
+      this.interval, this.comment) {
     _setDefaultValues();
   }
-  DrrStore.withId(
-      this.id, this.sendMyPosition, this.uuid, this.interval, this.comment) {
+  DrrStore.withId(this.id, this.sendAllPositions, this.sendMyPosition,
+      this.uuid, this.interval, this.comment) {
     _setDefaultValues();
   }
   // fromMap v2.0
@@ -3859,6 +3865,10 @@ class DrrStore extends TableBase {
       _setDefaultValues();
     }
     id = int.tryParse(o['id'].toString());
+    if (o['sendAllPositions'] != null) {
+      sendAllPositions = o['sendAllPositions'].toString() == '1' ||
+          o['sendAllPositions'].toString() == 'true';
+    }
     if (o['sendMyPosition'] != null) {
       sendMyPosition = o['sendMyPosition'].toString() == '1' ||
           o['sendMyPosition'].toString() == 'true';
@@ -3875,6 +3885,7 @@ class DrrStore extends TableBase {
   }
   // FIELDS (DrrStore)
   int? id;
+  bool? sendAllPositions;
   bool? sendMyPosition;
   String? uuid;
   int? interval;
@@ -3895,6 +3906,12 @@ class DrrStore extends TableBase {
       {bool forQuery = false, bool forJson = false, bool forView = false}) {
     final map = <String, dynamic>{};
     map['id'] = id;
+    if (sendAllPositions != null) {
+      map['sendAllPositions'] =
+          forQuery ? (sendAllPositions! ? 1 : 0) : sendAllPositions;
+    } else if (sendAllPositions != null || !forView) {
+      map['sendAllPositions'] = null;
+    }
     if (sendMyPosition != null) {
       map['sendMyPosition'] =
           forQuery ? (sendMyPosition! ? 1 : 0) : sendMyPosition;
@@ -3921,6 +3938,12 @@ class DrrStore extends TableBase {
       bool forView = false]) async {
     final map = <String, dynamic>{};
     map['id'] = id;
+    if (sendAllPositions != null) {
+      map['sendAllPositions'] =
+          forQuery ? (sendAllPositions! ? 1 : 0) : sendAllPositions;
+    } else if (sendAllPositions != null || !forView) {
+      map['sendAllPositions'] = null;
+    }
     if (sendMyPosition != null) {
       map['sendMyPosition'] =
           forQuery ? (sendMyPosition! ? 1 : 0) : sendMyPosition;
@@ -3954,12 +3977,12 @@ class DrrStore extends TableBase {
 
   @override
   List<dynamic> toArgs() {
-    return [sendMyPosition, uuid, interval, comment];
+    return [sendAllPositions, sendMyPosition, uuid, interval, comment];
   }
 
   @override
   List<dynamic> toArgsWithIds() {
-    return [id, sendMyPosition, uuid, interval, comment];
+    return [id, sendAllPositions, sendMyPosition, uuid, interval, comment];
   }
 
   static Future<List<DrrStore>?> fromWebUrl(Uri uri,
@@ -4107,8 +4130,8 @@ class DrrStore extends TableBase {
   Future<int?> upsert({bool ignoreBatch = true}) async {
     try {
       final result = await _mnDrrStore.rawInsert(
-          'INSERT OR REPLACE INTO drrStore (id, sendMyPosition, uuid, interval, comment)  VALUES (?,?,?,?,?)',
-          [id, sendMyPosition, uuid, interval, comment],
+          'INSERT OR REPLACE INTO drrStore (id, sendAllPositions, sendMyPosition, uuid, interval, comment)  VALUES (?,?,?,?,?,?)',
+          [id, sendAllPositions, sendMyPosition, uuid, interval, comment],
           ignoreBatch);
       if (result! > 0) {
         saveResult = BoolResult(
@@ -4134,7 +4157,7 @@ class DrrStore extends TableBase {
   Future<BoolCommitResult> upsertAll(List<DrrStore> drrstores,
       {bool? exclusive, bool? noResult, bool? continueOnError}) async {
     final results = await _mnDrrStore.rawInsertAll(
-        'INSERT OR REPLACE INTO drrStore (id, sendMyPosition, uuid, interval, comment)  VALUES (?,?,?,?,?)',
+        'INSERT OR REPLACE INTO drrStore (id, sendAllPositions, sendMyPosition, uuid, interval, comment)  VALUES (?,?,?,?,?,?)',
         drrstores,
         exclusive: exclusive,
         noResult: noResult,
@@ -4181,7 +4204,9 @@ class DrrStore extends TableBase {
       ..qparams.distinct = true;
   }
 
-  void _setDefaultValues() {}
+  void _setDefaultValues() {
+    sendAllPositions = sendAllPositions ?? false;
+  }
 
   @override
   void rollbackPk() {
@@ -4390,6 +4415,12 @@ class DrrStoreFilterBuilder extends ConjunctionBase {
   DrrStoreField? _id;
   DrrStoreField get id {
     return _id = _setField(_id, 'id', DbType.integer);
+  }
+
+  DrrStoreField? _sendAllPositions;
+  DrrStoreField get sendAllPositions {
+    return _sendAllPositions =
+        _setField(_sendAllPositions, 'sendAllPositions', DbType.bool);
   }
 
   DrrStoreField? _sendMyPosition;
@@ -4635,6 +4666,12 @@ class DrrStoreFields {
   static TableField? _fId;
   static TableField get id {
     return _fId = _fId ?? SqlSyntax.setField(_fId, 'id', DbType.integer);
+  }
+
+  static TableField? _fSendAllPositions;
+  static TableField get sendAllPositions {
+    return _fSendAllPositions = _fSendAllPositions ??
+        SqlSyntax.setField(_fSendAllPositions, 'sendAllPositions', DbType.bool);
   }
 
   static TableField? _fSendMyPosition;

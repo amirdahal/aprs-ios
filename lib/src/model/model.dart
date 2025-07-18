@@ -74,6 +74,7 @@ const tableDrr = SqfEntityTable(
   useSoftDeleting: false,
   modelName: null,
   fields: [
+    SqfEntityField('sendAllPositions', DbType.bool, defaultValue: false),
     SqfEntityField('sendMyPosition', DbType.bool),
     SqfEntityField('uuid', DbType.text),
     SqfEntityField('interval', DbType.integer),

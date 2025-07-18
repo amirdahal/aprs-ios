@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:aprs/src/helpers/location_provider.dart'
     show determineGeoPosition, locationSettings;
 import 'package:aprs/src/helpers/app.events.dart';
@@ -11,6 +11,8 @@ import 'package:http/http.dart' as http;
 
 class DrrRepository {
   static String get drrUrl => '24.222.96.163:9060';
+
+  static StreamSubscription? allPacketsToDrrSubs;
 
   static Future<DrrStore?> getDrrConfig() async {
     return await DrrStore().getById(1);
@@ -42,6 +44,15 @@ class DrrRepository {
       if (kDebugMode) {
         print("Drr config change event received");
       }
+
+      if (allPacketsToDrrSubs != null) {
+        allPacketsToDrrSubs?.cancel();
+      }
+
+      if (event.drrStore.sendAllPositions!) {
+        allPacketsToDrr();
+      }
+
       intervalTimer?.cancel();
       if (event.drrStore.sendMyPosition!) {
         intervalTimer = Timer.periodic(
@@ -63,10 +74,6 @@ class DrrRepository {
   }
 
   static void runScheduledTask(DrrStore drr, Position location) async {
-    if (kDebugMode) {
-      print("Send position to DRR");
-    }
-
     DateTime now = DateTime.now();
 
     try {
@@ -92,5 +99,51 @@ class DrrRepository {
         print("Send drr error: $e");
       }
     }
+  }
+
+  static void sendPositionPacketToDrr(BeaconStore beacon) async {
+    dynamic payload = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [beacon.latitude, beacon.longitude],
+          },
+          "properties": {
+            "source": beacon.source,
+            "destination": beacon.destination,
+            "comment": beacon.comment,
+            "raw": beacon.raw,
+            "path": beacon.path,
+            "timestamp": beacon.timestamp,
+          },
+        },
+      ],
+    };
+
+    try {
+      var url = Uri.http(drrUrl, 'api/store-geojson');
+
+      var response = await http.post(url, body: jsonEncode(payload));
+
+      if (kDebugMode) {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print("Send all position to drr error: $e");
+      }
+    }
+  }
+
+  static void allPacketsToDrr() async {
+    allPacketsToDrrSubs = eventBus.on<NewPositionEvent>().listen((event) {
+      sendPositionPacketToDrr(event.position);
+    });
+
+    print("subscription complete");
   }
 }

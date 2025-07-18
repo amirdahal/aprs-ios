@@ -19,6 +19,7 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool _drrEnabled = false;
+  bool _sendAllPositions = false;
   final TextEditingController _drrUuidController = TextEditingController(
     text: '',
   );
@@ -54,36 +55,40 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
       return;
     }
 
+    if (_drrStore != null) {
+      _drrStore?.interval = int.parse(_sendIntervalController.text.trim());
+      _drrStore?.uuid = _drrUuidController.text.trim();
+      _drrStore?.comment = _commentController.text.trim();
+      _drrStore?.sendMyPosition = _drrEnabled;
+      _drrStore?.sendAllPositions = _sendAllPositions;
+    } else {
+      _drrStore = DrrStore(
+        uuid: _drrUuidController.text.trim(),
+        interval: int.parse(_sendIntervalController.text.trim()),
+        comment: _commentController.text.trim(),
+        sendMyPosition: _drrEnabled,
+        sendAllPositions: _sendAllPositions,
+      );
+    }
+
+    DrrRepository.setDrrConfig(_drrStore!);
+    showMessage('Drr configuration saved', false);
+
     if (_drrEnabled) {
       bool isValid = await testConnection();
       if (!isValid) {
         showMessage('Could not validate configuration', true);
-      } else {
-        if (_drrStore != null) {
-          _drrStore?.interval = int.parse(_sendIntervalController.text.trim());
-          _drrStore?.uuid = _drrUuidController.text.trim();
-          _drrStore?.comment = _commentController.text.trim();
-          _drrStore?.sendMyPosition = _drrEnabled;
-        } else {
-          _drrStore = DrrStore(
-            uuid: _drrUuidController.text.trim(),
-            interval: int.parse(_sendIntervalController.text.trim()),
-            comment: _commentController.text.trim(),
-            sendMyPosition: _drrEnabled,
-          );
-        }
-        DrrRepository.setDrrConfig(_drrStore!);
-        showMessage('Drr configuration saved', false);
-      }
+      } else {}
     }
   }
 
   void fetchDrr() async {
     var drr = await DrrRepository.getDrrConfig();
-    print(drr?.toMap());
     if (drr != null) {
+      print(drr.toMap());
       _drrStore = drr;
       setState(() {
+        _sendAllPositions = drr.sendAllPositions!;
         _drrEnabled = drr.sendMyPosition!;
         _drrUuidController.text = drr.uuid!;
         _commentController.text = drr.comment!;
@@ -110,7 +115,18 @@ class _DrrSettingScreenState extends State<DrrSettingScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ListTile(
-                title: Text("Send position to DRR.center"),
+                title: Text("Send incoming position to DRR.center"),
+                trailing: Switch(
+                  value: _sendAllPositions,
+                  onChanged: (value) {
+                    setState(() {
+                      _sendAllPositions = value;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: Text("Send my position to DRR.center"),
                 trailing: Switch(
                   value: _drrEnabled,
                   onChanged: (value) {
