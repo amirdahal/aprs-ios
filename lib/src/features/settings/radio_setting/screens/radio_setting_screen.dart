@@ -264,12 +264,16 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      int id = int.parse(value!.trim().split('Channel ')[1]);
-                      setState(() {
-                        channelA = id;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            int id = int.parse(
+                              value!.trim().split('Channel ')[1],
+                            );
+                            setState(() {
+                              channelA = id;
+                            });
+                          }
+                        : null,
                     options: channelOptions,
                     selectedValue: 'Channel $channelA',
                     label: 'Channel A',
@@ -277,12 +281,16 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      int id = int.parse(value!.trim().split('Channel ')[1]);
-                      setState(() {
-                        channelB = id;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            int id = int.parse(
+                              value!.trim().split('Channel ')[1],
+                            );
+                            setState(() {
+                              channelB = id;
+                            });
+                          }
+                        : null,
                     options: channelOptions,
                     selectedValue: 'Channel $channelB',
                     label: 'Channel B',
@@ -329,11 +337,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        micGain = micGainOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              micGain = micGainOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: micGainOptions.keys.toList(),
                     selectedValue: micGainOptions.entries
                         .firstWhere((entry) => entry.value == micGain)
@@ -343,11 +353,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        btMicGain = btMicGainOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              btMicGain = btMicGainOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: btMicGainOptions.keys.toList(),
                     selectedValue: btMicGainOptions.entries
                         .firstWhere((entry) => entry.value == btMicGain)
@@ -357,11 +369,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        localSpeaker = localSpeakerOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              localSpeaker = localSpeakerOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: localSpeakerOptions.keys.toList(),
                     selectedValue: localSpeakerOptions.entries
                         .firstWhere((entry) => entry.value == localSpeaker)
@@ -371,17 +385,19 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      int val = 0;
-                      if (value!.trim().equals('Unlimited')) {
-                        val = 0;
-                      } else {
-                        val = int.parse(value.split(' ')[0]);
-                      }
-                      setState(() {
-                        txTimeLimit = (val / 10).toInt();
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            int val = 0;
+                            if (value!.trim().equals('Unlimited')) {
+                              val = 0;
+                            } else {
+                              val = int.parse(value.split(' ')[0]);
+                            }
+                            setState(() {
+                              txTimeLimit = (val / 10).toInt();
+                            });
+                          }
+                        : null,
                     options: txTimeLimitOptions,
                     selectedValue: txTimeLimit == 0
                         ? 'Unlimited'
@@ -391,15 +407,18 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      int val = 0;
-                      if (value!.trim().equals('Off')) {
-                        val = 0;
-                      } else {
-                        val = (double.parse(value.split(' ')[0]) * 10).toInt();
-                      }
-                      txHoldTime = val;
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            int val = 0;
+                            if (value!.trim().equals('Off')) {
+                              val = 0;
+                            } else {
+                              val = (double.parse(value.split(' ')[0]) * 10)
+                                  .toInt();
+                            }
+                            txHoldTime = val;
+                          }
+                        : null,
                     options: txHoldTimeOptions,
                     selectedValue: txHoldTime == 0
                         ? 'Off'
@@ -409,11 +428,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        headphoneMode = headphoneModeOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              headphoneMode = headphoneModeOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: headphoneModeOptions.keys.toList(),
                     selectedValue: headphoneModeOptions.entries
                         .firstWhere((entry) => entry.value == headphoneMode)
@@ -462,11 +483,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        autoPowerOff = autoPowerOffOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              autoPowerOff = autoPowerOffOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: autoPowerOffOptions.keys.toList(),
                     selectedValue: autoPowerOffOptions.entries
                         .firstWhere((entry) => entry.value == autoPowerOff)
@@ -476,12 +499,16 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      int id = int.parse(value!.trim().split('Channel ')[1]);
-                      setState(() {
-                        autoShareLocationChannel = id;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            int id = int.parse(
+                              value!.trim().split('Channel ')[1],
+                            );
+                            setState(() {
+                              autoShareLocationChannel = id;
+                            });
+                          }
+                        : null,
                     options: channelOptions,
                     selectedValue: 'Channel $autoShareLocationChannel',
                     label: 'Auto share location channel (APRS channel)',
@@ -489,11 +516,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 ),
                 ListTile(
                   title: DropDown(
-                    onChanged: (value) {
-                      setState(() {
-                        wiredMicrophoneSpeaker = hmSpeakerOptions[value]!;
-                      });
-                    },
+                    onChanged: editingEnabled
+                        ? (value) {
+                            setState(() {
+                              wiredMicrophoneSpeaker = hmSpeakerOptions[value]!;
+                            });
+                          }
+                        : null,
                     options: hmSpeakerOptions.keys.toList(),
                     selectedValue: hmSpeakerOptions.entries
                         .firstWhere(
@@ -558,11 +587,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 if (deviceInfo.supportsNoaa)
                   ListTile(
                     title: DropDown(
-                      onChanged: (value) {
-                        setState(() {
-                          wxMode = wxModeOptions[value]!;
-                        });
-                      },
+                      onChanged: editingEnabled
+                          ? (value) {
+                              setState(() {
+                                wxMode = wxModeOptions[value]!;
+                              });
+                            }
+                          : null,
                       options: wxModeOptions.keys.toList(),
                       selectedValue: wxModeOptions.entries
                           .firstWhere((entry) => entry.value == wxMode)
@@ -573,11 +604,13 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                 if (deviceInfo.supportsNoaa)
                   ListTile(
                     title: DropDown(
-                      onChanged: (value) {
-                        setState(() {
-                          wxChannel = wxChannelOptions[value]!;
-                        });
-                      },
+                      onChanged: editingEnabled
+                          ? (value) {
+                              setState(() {
+                                wxChannel = wxChannelOptions[value]!;
+                              });
+                            }
+                          : null,
                       options: wxChannelOptions.keys.toList(),
                       selectedValue: wxChannelOptions.entries
                           .firstWhere((entry) => entry.value == wxChannel)

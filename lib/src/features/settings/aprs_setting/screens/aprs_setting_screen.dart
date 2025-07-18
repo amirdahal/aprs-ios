@@ -1,11 +1,13 @@
 import 'package:aprs/src/features/protect_app/screens/password_screen.dart'
     show PasswordScreen;
+import 'package:aprs/src/features/settings/repository/constants.dart';
 import 'package:aprs/src/helpers/radio_extract.dart' show RadioExtract;
 import 'package:aprs/src/helpers/theme.dart';
 import 'package:aprs/src/widgets/buttons.dart' show Button;
 import 'package:aprs/src/widgets/dropdown.dart';
 import 'package:aprs/src/widgets/toast.dart' show showSnackBar;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:radio/radio.dart';
 
 class AprsSettingScreen extends StatefulWidget {
@@ -16,66 +18,77 @@ class AprsSettingScreen extends StatefulWidget {
 }
 
 class _AprsSettingScreenState extends State<AprsSettingScreen> {
-  final List<String> _ssidOptions = List.generate(
-    15,
-    (i) => (i + 1).toString(),
-  );
-
-  final List<String> _locationShareIntervalOptions = [
-    "1",
-    "5",
-    "10",
-    "15",
-    "30",
-    "60",
-    "90",
-    "120",
-  ];
-
-  final TextEditingController _callsignController = TextEditingController();
-
-  final TextEditingController _ssidController = TextEditingController(
-    text: "1",
-  );
-
-  final TextEditingController _messageController = TextEditingController();
-
-  final TextEditingController _intervalController = TextEditingController(
-    text: "30",
-  );
+  AprsSetting currentSetting = RadioExtract.radio.aprsSetting;
+  DeviceInfo deviceInfo = RadioExtract.radio.deviceInfo;
+  final _formKey = GlobalKey<FormState>();
 
   bool editingEnabled = false;
 
-  late AprsSetting currentSetting;
+  TextEditingController callsign = TextEditingController();
+  TextEditingController bssUserId = TextEditingController();
+  TextEditingController beaconMessage = TextEditingController();
+  TextEditingController pttReleaseIdInfo = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
+  PacketFormat packetFormat = PacketFormat.aprs;
+  int ssid = 1;
+  int interval = 600;
+  bool shouldShareLocation = true;
+  bool allowPositionCheck = true;
+  bool sendPowerVoltage = false;
+  bool pttReleaseSendLocation = false;
+  bool pttReleaseSendIdInfo = false;
+  bool pttReleaseSendBssUserId = false;
 
   void populateSettings() {
-    currentSetting = RadioExtract.radio.aprsSetting;
-    setState(() {
-      _callsignController.text = currentSetting.aprsCallsign;
-      _ssidController.text = currentSetting.aprsSsid.toString();
-      _messageController.text = currentSetting.beaconMessage;
-      int interval = (currentSetting.locationShareInterval / 60).toInt();
-      if (_locationShareIntervalOptions.contains(interval.toString())) {
-        _intervalController.text = interval.toString();
-      } else {
-        _intervalController.text = "30";
-      }
-    });
+    packetFormat = currentSetting.packetFormat;
+    interval = currentSetting.locationShareInterval;
+
+    if (!locationShareIntervalOptions.values.toList().contains(interval)) {
+      interval = 600;
+    }
+    shouldShareLocation = currentSetting.shouldShareLocation;
+    if (!shouldShareLocation) {
+      interval = 0;
+    }
+
+    callsign.text = currentSetting.aprsCallsign;
+    ssid = currentSetting.aprsSsid;
+
+    beaconMessage.text = currentSetting.beaconMessage;
+
+    allowPositionCheck = currentSetting.allowPositionCheck;
+    sendPowerVoltage = currentSetting.sendPwrVoltage;
+
+    bssUserId.text = currentSetting.bssUserId.toString();
+    pttReleaseIdInfo.text = currentSetting.pttReleaseIdInfo;
+
+    pttReleaseSendLocation = currentSetting.pttReleaseSendLocation;
+    pttReleaseSendBssUserId = currentSetting.pttReleaseSendBssUserId;
+    pttReleaseSendIdInfo = currentSetting.pttReleaseSendIdInfo;
+
+    setState(() {});
   }
 
   Future<void> _updateAprsSetting() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    int ssid = int.parse(_ssidController.text.trim());
-    int interval = int.parse(_intervalController.text.trim()) * 60;
-    AprsSetting newSetting = RadioExtract.radio.aprsSetting.copyWith();
-    newSetting.aprsCallsign = _callsignController.text.trim();
-    newSetting.aprsSsid = ssid;
-    newSetting.beaconMessage = _messageController.text.trim();
-    newSetting.locationShareInterval = interval;
+    AprsSetting newSetting = AprsSetting(
+      maxFwdTimes: 1,
+      timeToLive: 3,
+      pttReleaseSendLocation: pttReleaseSendLocation,
+      pttReleaseSendIdInfo: pttReleaseSendIdInfo,
+      pttReleaseSendBssUserId: pttReleaseSendBssUserId,
+      shouldShareLocation: shouldShareLocation,
+      sendPwrVoltage: sendPowerVoltage,
+      packetFormat: packetFormat,
+      allowPositionCheck: allowPositionCheck,
+      aprsSsid: ssid,
+      locationShareInterval: interval,
+      bssUserId: int.tryParse(bssUserId.text.trim()) ?? 0,
+      pttReleaseIdInfo: pttReleaseIdInfo.text.trim(),
+      beaconMessage: beaconMessage.text.trim(),
+      aprsSymbol: currentSetting.aprsSymbol,
+      aprsCallsign: callsign.text.trim(),
+    );
+
     await RadioExtract.radio.setAprsSettings(newSetting);
     setState(() {
       editingEnabled = false;
@@ -84,14 +97,7 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
   }
 
   void close() {
-    showSnackBar(
-      context: context,
-      content: 'Aprs setting updated.',
-      actionLabel: 'Close',
-      action: () {
-        Navigator.pop(context);
-      },
-    );
+    showSnackBar(context: context, content: 'Aprs setting updated.');
   }
 
   @override
@@ -102,10 +108,6 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
 
   @override
   void dispose() {
-    _callsignController.dispose();
-    _ssidController.dispose();
-    _messageController.dispose();
-    _intervalController.dispose();
     super.dispose();
   }
 
@@ -141,58 +143,156 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
         child: Form(
           key: _formKey,
           child: Column(
+            spacing: 15,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextFormField(
-                enabled: editingEnabled,
-                controller: _callsignController,
-                decoration: inputDecoration('APRS callsign'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "APRS callsign cannot be empty";
-                  }
-
-                  if (value.length < 3 || value.length > 7) {
-                    return "APRS callsign should contain between 3 to 7 characters";
-                  }
-
-                  _callsignController.text = value.toUpperCase();
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 20),
               DropDown(
                 onChanged: editingEnabled
                     ? (value) {
-                        _ssidController.text = value!;
+                        setState(() {
+                          packetFormat = packetFormatOptions[value]!;
+                        });
                       }
                     : null,
-                options: _ssidOptions,
-                selectedValue: _ssidController.text,
-                label: 'Aprs ssid',
+                options: packetFormatOptions.keys.toList(),
+                selectedValue: packetFormatOptions.entries
+                    .firstWhere((entry) => entry.value == packetFormat)
+                    .key,
+                label: 'Packet format',
               ),
-              const SizedBox(height: 20),
+              if (packetFormat == PacketFormat.aprs)
+                TextField(
+                  enabled: editingEnabled,
+                  controller: callsign,
+                  maxLength: 6,
+                  decoration: inputDecoration('APRS callsign'),
+                ),
+              if (packetFormat == PacketFormat.aprs)
+                DropDown(
+                  onChanged: editingEnabled
+                      ? (value) {
+                          ssid = int.parse(value!);
+                        }
+                      : null,
+                  options: ssidOptions,
+                  selectedValue: ssid.toString(),
+                  label: 'Aprs ssid',
+                ),
 
-              TextFormField(
+              if (packetFormat == PacketFormat.bss)
+                TextField(
+                  enabled: editingEnabled,
+                  controller: bssUserId,
+                  decoration: inputDecoration('BSS user ID'),
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: false,
+                    signed: false,
+                  ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                ),
+              if (packetFormat == PacketFormat.bss)
+                TextField(
+                  enabled: editingEnabled,
+                  controller: pttReleaseIdInfo,
+                  maxLength: 12,
+                  decoration: inputDecoration('Identification information'),
+                ),
+
+              TextField(
                 enabled: editingEnabled,
-                controller: _messageController,
-                decoration: inputDecoration('Aprs message'),
+                controller: beaconMessage,
+                decoration: inputDecoration('Message'),
+                maxLength: 40,
               ),
 
-              const SizedBox(height: 20),
               DropDown(
                 onChanged: editingEnabled
                     ? (val) {
-                        _intervalController.text = val!;
+                        if (val == 'off') {
+                          shouldShareLocation = false;
+                        } else {
+                          shouldShareLocation = true;
+                        }
+                        interval = locationShareIntervalOptions[val]!;
                       }
                     : null,
-                options: _locationShareIntervalOptions,
-                selectedValue: _intervalController.text,
-                label: 'Location share interval (minutes)',
+                options: locationShareIntervalOptions.keys.toList(),
+                selectedValue: locationShareIntervalOptions.entries
+                    .firstWhere((entry) => entry.value == interval)
+                    .key,
+                label: 'Location sharing',
               ),
-              const SizedBox(height: 40),
+              ListTile(
+                title: const Text("Allow position check"),
+                trailing: Switch(
+                  value: allowPositionCheck,
+                  onChanged: editingEnabled
+                      ? (bool value) {
+                          setState(() {
+                            allowPositionCheck = value;
+                          });
+                        }
+                      : null,
+                ),
+              ),
+              ListTile(
+                title: const Text("Send power voltage"),
+                trailing: Switch(
+                  value: sendPowerVoltage,
+                  onChanged: editingEnabled
+                      ? (bool value) {
+                          setState(() {
+                            sendPowerVoltage = value;
+                          });
+                        }
+                      : null,
+                ),
+              ),
+              if (packetFormat == PacketFormat.bss)
+                ListTile(
+                  title: const Text("Send location on PTT release"),
+                  trailing: Switch(
+                    value: pttReleaseSendLocation,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              pttReleaseSendLocation = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+              if (packetFormat == PacketFormat.bss)
+                ListTile(
+                  title: const Text("Send BSS user ID"),
+                  trailing: Switch(
+                    value: pttReleaseSendBssUserId,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              pttReleaseSendBssUserId = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+              if (packetFormat == PacketFormat.bss)
+                ListTile(
+                  title: const Text("Send ID information"),
+                  trailing: Switch(
+                    value: pttReleaseSendIdInfo,
+                    onChanged: editingEnabled
+                        ? (bool value) {
+                            setState(() {
+                              pttReleaseSendBssUserId = value;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+
               if (editingEnabled)
                 Button.primary(
                   label: "Save setting",

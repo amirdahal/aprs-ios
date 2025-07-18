@@ -1,5 +1,6 @@
 // Radio Settings
 import 'package:aprs/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:radio/radio.dart';
 
 final Map<String, int> doubleChanOptions = {"Off": 0, "A": 1, "B": 2};
 final List<String> channelOptions = List.generate(
@@ -52,4 +53,35 @@ final Map<String, int> wxChannelOptions = {
   'WX5 - 162.450 MHz': 4,
   'WX6 - 162.500 MHz': 5,
   'WX7 - 162.525 MHz': 6,
+};
+
+//Aprs Settings
+final Map<String, PacketFormat> packetFormatOptions = {
+  'APRS': PacketFormat.aprs,
+  'BSS': PacketFormat.bss,
+};
+
+final List<String> ssidOptions = List.generate(15, (i) => (i + 1).toString());
+
+final Map<String, int> locationShareIntervalOptions = {
+  'Off': 0,
+  'Every 10 seconds': 10,
+  'Every 20 seconds': 20,
+  'Every 30 seconds': 30,
+  'Every 40 seconds': 40,
+  'Every 50 seconds': 50,
+  'Every 1 minute': 60,
+  'Every 2 minutes': 120,
+  'Every 3 minutes': 180,
+  'Every 4 minutes': 240,
+  'Every 5 minutes': 300,
+  'Every 6 minutes': 360,
+  'Every 7 minutes': 420,
+  'Every 8 minutes': 480,
+  'Every 9 minutes': 540,
+  'Every 10 minutes': 600,
+  'Every 15 minutes': 900,
+  'Every 20 minutes': 1200,
+  'Every 25 minutes': 1500,
+  'Every 30 minutes': 1800,
 };
