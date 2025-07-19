@@ -785,8 +785,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: win_lib
-      resolved-ref: b355a3874843dbd2b72d3af0cb72a8012ad9211e
+      ref: main
+      resolved-ref: bfd4b6daf72bef626be09383976dde49d1b15fc9
       url: "https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git"
     source: git
     version: "1.0.0"

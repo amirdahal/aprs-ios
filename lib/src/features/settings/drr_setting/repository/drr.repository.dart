@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
 import 'package:aprs/src/helpers/location_provider.dart'
-    show determineGeoPosition, locationSettings;
+    show MyLocationProvider, myLocationProvider;
 import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatDateTime;
 import 'package:aprs/src/model/model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class DrrRepository {
@@ -39,8 +38,6 @@ class DrrRepository {
   static void startDrr() async {
     Timer? intervalTimer;
 
-    await determineGeoPosition();
-
     StreamSubscription _ = eventBus.on<DrrSettingChangeEvent>().listen((event) {
       if (kDebugMode) {
         print("Drr config change event received");
@@ -59,10 +56,10 @@ class DrrRepository {
         intervalTimer = Timer.periodic(
           Duration(minutes: event.drrStore.interval!),
           (timer) async {
-            Position position = await Geolocator.getCurrentPosition(
-              locationSettings: locationSettings,
-            );
-            runScheduledTask(event.drrStore, position);
+            MyLocationProvider? myLocation = myLocationProvider.value;
+            if(myLocation != null) {
+            runScheduledTask(event.drrStore, myLocation);
+            }
           },
         );
       }
@@ -74,7 +71,7 @@ class DrrRepository {
     }
   }
 
-  static void runScheduledTask(DrrStore drr, Position location) async {
+  static void runScheduledTask(DrrStore drr, MyLocationProvider location) async {
     DateTime now = DateTime.now();
 
     try {
@@ -85,7 +82,7 @@ class DrrRepository {
         body: {
           'latitude': location.latitude.toString(),
           'longitude': location.longitude.toString(),
-          'altitude': location.altitude.toString(),
+          'altitude': location.altitude != null? location.altitude.toString(): '0.0',
           'comment': drr.comment,
           'recorded_at': formatDateTime(now),
         },

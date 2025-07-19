@@ -9,6 +9,7 @@ import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository
 import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/helpers/location_provider.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:aprs/src/widgets/battery_level.widget.dart';
@@ -104,6 +105,8 @@ class _HomeLayoutState extends State<HomeLayout> {
       addChatListener();
       addConnectionListener();
       updateBatteryLevel();
+      print(RadioExtract.radio.deviceInfo.toMap());
+      runLocationProviderResolver();
     }
     super.initState();
   }

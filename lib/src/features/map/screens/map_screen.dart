@@ -7,13 +7,14 @@ import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/location_provider.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
+import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mbtiles/mbtiles.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:toastification/toastification.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -202,12 +203,16 @@ class _MapScreenState extends State<MapScreen> {
                   children: [
                     if (showMyPosition)
                       IconButton.filled(
-                        onPressed: () async {
-                          Position position = await determineGeoPosition();
-                          mapController.move(
-                            LatLng(position.latitude, position.longitude),
-                            currentZoom,
-                          );
+                        onPressed: () {
+                          MyLocationProvider? myLocation = myLocationProvider.value;
+                          if(myLocation != null) {
+                            mapController.move(
+                              LatLng(myLocation.latitude, myLocation.longitude),
+                              currentZoom,
+                            );
+                          } else {
+                            showToast(context: context, title: 'Unable to determine current position', description: 'Please try again in a while.', type: ToastificationType.error);
+                          }
                         },
                         icon: Icon(Icons.my_location),
                         enableFeedback: true,

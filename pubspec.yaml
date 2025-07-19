@@ -10,7 +10,7 @@ dependencies:
   radio:
     git:
       url: https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git
-      ref: 'win_lib'
+      ref: 'main'
   flutter:
     sdk: flutter
 

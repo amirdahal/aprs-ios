@@ -1,21 +1,67 @@
 import 'dart:async';
+import 'package:aprs/src/helpers/radio_extract.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'package:radio/radio.dart' as radio;
+
+typedef RadioPosition = radio.Position;
+
+class MyLocationProvider {
+  final double latitude;
+  final double longitude;
+  final double? altitude;
+  final DateTime timestamp;
+
+  const MyLocationProvider({required this.latitude, required this.longitude, required this.timestamp, this.altitude
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "Latitude": latitude,
+      "Longitude": longitude,
+      "Altitude": altitude,
+      "Timestamp": timestamp.toIso8601String(),
+    };
+  }
+}
+
+ValueNotifier<MyLocationProvider?> myLocationProvider = ValueNotifier<MyLocationProvider?>(null);
+
 
 final LocationSettings locationSettings = LocationSettings(
   accuracy: LocationAccuracy.high,
   distanceFilter: 100,
 );
 
-Future<Position> determineGeoPosition() async {
+void determineGeoPosition() async {
+  try {
+    await handleGeoPositionPermission();
+    Geolocator.getPositionStream(
+      locationSettings: locationSettings,
+    ).listen((Position? position) {
+      if(position != null) {
+        myLocationProvider.value = MyLocationProvider(latitude: position.latitude, longitude: position.longitude, altitude: position.altitude, timestamp: position.timestamp);
+        if(kDebugMode) {
+          print("Position determined from GPS: ${myLocationProvider.value?.toMap()}");
+        }
+      }
+    });
+  }  catch(e) {
+    if (kDebugMode) {
+      print(e);
+    }
+    }
+
+}
+
+Future<Position> handleGeoPositionPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
 
   // Test if location services are enabled.
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
     return Future.error('Location services are disabled.');
   }
 
@@ -23,11 +69,6 @@ Future<Position> determineGeoPosition() async {
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
       return Future.error('Location permissions are denied');
     }
   }
@@ -39,7 +80,37 @@ Future<Position> determineGeoPosition() async {
     );
   }
 
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
+}
+
+Future<void> getRadioPosition() async {
+  RadioPosition? position = await RadioExtract.radio.position();
+  if(position != null) {
+    myLocationProvider.value = MyLocationProvider(latitude: position.latitude, longitude: position.longitude, altitude: position.altitude?.toDouble(), timestamp: position.time);
+    if(kDebugMode) {
+      print("Position determined from radio: ${myLocationProvider.value?.toMap()}");
+    }
+  }
+}
+
+void determineRadioPosition() async{
+  await getRadioPosition();
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
+     await getRadioPosition();
+  });
+}
+
+void runLocationProviderResolver() {
+  int firmwareVersion = RadioExtract.radio.deviceInfo.firmwareVersion;
+  if(firmwareVersion >= 136) {
+    if(kDebugMode) {
+      print("Determine position from radio");
+    }
+    determineRadioPosition();
+  } else {
+    if(kDebugMode) {
+      print("Determine position from GPS");
+    }
+    determineGeoPosition();
+  }
 }
