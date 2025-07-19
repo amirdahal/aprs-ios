@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
 import 'package:aprs/src/helpers/location_provider.dart'
     show determineGeoPosition, locationSettings;
 import 'package:aprs/src/helpers/app.events.dart';
@@ -101,32 +102,42 @@ class DrrRepository {
     }
   }
 
-  static void sendPositionPacketToDrr(BeaconStore beacon) async {
-    dynamic payload = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [beacon.latitude, beacon.longitude],
-          },
-          "properties": {
-            "source": beacon.source,
-            "destination": beacon.destination,
-            "comment": beacon.comment,
-            "raw": beacon.raw,
-            "path": beacon.path,
-            "timestamp": beacon.timestamp,
-          },
+  static Future<void> sendPositionPacketToDrr(BeaconStore beacon) async {
+    List<BeaconStore> unsentPackets = await AprsLogRepository.getPacketToDrr();
+    if (unsentPackets.isEmpty) {
+      return;
+    }
+
+    List<dynamic> features = [];
+
+    for (var beacon in unsentPackets) {
+      features.add({
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [beacon.latitude, beacon.longitude],
         },
-      ],
-    };
+        "properties": {
+          "source": beacon.source,
+          "destination": beacon.destination,
+          "comment": beacon.comment,
+          "raw": beacon.raw,
+          "path": beacon.path,
+          "timestamp": beacon.timestamp?.toIso8601String(),
+        },
+      });
+    }
+
+    dynamic payload = {"type": "FeatureCollection", "features": features};
 
     try {
       var url = Uri.http(drrUrl, 'api/store-geojson');
 
-      var response = await http.post(url, body: jsonEncode(payload));
+      var response = await http.post(url,  headers: {"Content-Type": "application/json"}, body: jsonEncode(payload));
+
+      if(response.statusCode == 201) {
+        await AprsLogRepository.markPacketsAsSentToDrr(unsentPackets);
+      }
 
       if (kDebugMode) {
         print('Response status: ${response.statusCode}');
@@ -140,10 +151,11 @@ class DrrRepository {
   }
 
   static void allPacketsToDrr() async {
+    if (kDebugMode) {
+      print("Send all packets to drr");
+    }
     allPacketsToDrrSubs = eventBus.on<NewPositionEvent>().listen((event) {
       sendPositionPacketToDrr(event.position);
     });
-
-    print("subscription complete");
   }
 }

@@ -44,6 +44,7 @@ class TableBeaconStore extends SqfEntityTableBase {
       SqfEntityFieldBase('raw', DbType.text),
       SqfEntityFieldBase('timestamp', DbType.datetime,
           minValue: DateTime.parse('1900-01-01')),
+      SqfEntityFieldBase('sentToDrr', DbType.bool, defaultValue: false),
     ];
     super.init();
   }
@@ -223,7 +224,8 @@ class BeaconStore extends TableBase {
       this.symbol,
       this.comment,
       this.raw,
-      this.timestamp}) {
+      this.timestamp,
+      this.sentToDrr}) {
     _setDefaultValues();
     softDeleteActivated = false;
   }
@@ -237,7 +239,8 @@ class BeaconStore extends TableBase {
       this.symbol,
       this.comment,
       this.raw,
-      this.timestamp) {
+      this.timestamp,
+      this.sentToDrr) {
     _setDefaultValues();
   }
   BeaconStore.withId(
@@ -251,7 +254,8 @@ class BeaconStore extends TableBase {
       this.symbol,
       this.comment,
       this.raw,
-      this.timestamp) {
+      this.timestamp,
+      this.sentToDrr) {
     _setDefaultValues();
   }
   // fromMap v2.0
@@ -293,6 +297,10 @@ class BeaconStore extends TableBase {
               int.tryParse(o['timestamp'].toString())!)
           : DateTime.tryParse(o['timestamp'].toString());
     }
+    if (o['sentToDrr'] != null) {
+      sentToDrr = o['sentToDrr'].toString() == '1' ||
+          o['sentToDrr'].toString() == 'true';
+    }
   }
   // FIELDS (BeaconStore)
   int? id;
@@ -306,6 +314,7 @@ class BeaconStore extends TableBase {
   String? comment;
   String? raw;
   DateTime? timestamp;
+  bool? sentToDrr;
 
   // end FIELDS (BeaconStore)
 
@@ -358,6 +367,11 @@ class BeaconStore extends TableBase {
     } else if (timestamp != null || !forView) {
       map['timestamp'] = null;
     }
+    if (sentToDrr != null) {
+      map['sentToDrr'] = forQuery ? (sentToDrr! ? 1 : 0) : sentToDrr;
+    } else if (sentToDrr != null || !forView) {
+      map['sentToDrr'] = null;
+    }
 
     return map;
   }
@@ -405,6 +419,11 @@ class BeaconStore extends TableBase {
     } else if (timestamp != null || !forView) {
       map['timestamp'] = null;
     }
+    if (sentToDrr != null) {
+      map['sentToDrr'] = forQuery ? (sentToDrr! ? 1 : 0) : sentToDrr;
+    } else if (sentToDrr != null || !forView) {
+      map['sentToDrr'] = null;
+    }
 
     return map;
   }
@@ -433,7 +452,8 @@ class BeaconStore extends TableBase {
       symbol,
       comment,
       raw,
-      timestamp != null ? timestamp!.millisecondsSinceEpoch : null
+      timestamp != null ? timestamp!.millisecondsSinceEpoch : null,
+      sentToDrr
     ];
   }
 
@@ -450,7 +470,8 @@ class BeaconStore extends TableBase {
       symbol,
       comment,
       raw,
-      timestamp != null ? timestamp!.millisecondsSinceEpoch : null
+      timestamp != null ? timestamp!.millisecondsSinceEpoch : null,
+      sentToDrr
     ];
   }
 
@@ -600,7 +621,7 @@ class BeaconStore extends TableBase {
   Future<int?> upsert({bool ignoreBatch = true}) async {
     try {
       final result = await _mnBeaconStore.rawInsert(
-          'INSERT OR REPLACE INTO beaconStore (id, source, destination, path, latitude, longitude, symbolTable, symbol, comment, raw, timestamp)  VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+          'INSERT OR REPLACE INTO beaconStore (id, source, destination, path, latitude, longitude, symbolTable, symbol, comment, raw, timestamp, sentToDrr)  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
           [
             id,
             source,
@@ -612,7 +633,8 @@ class BeaconStore extends TableBase {
             symbol,
             comment,
             raw,
-            timestamp != null ? timestamp!.millisecondsSinceEpoch : null
+            timestamp != null ? timestamp!.millisecondsSinceEpoch : null,
+            sentToDrr
           ],
           ignoreBatch);
       if (result! > 0) {
@@ -639,7 +661,7 @@ class BeaconStore extends TableBase {
   Future<BoolCommitResult> upsertAll(List<BeaconStore> beaconstores,
       {bool? exclusive, bool? noResult, bool? continueOnError}) async {
     final results = await _mnBeaconStore.rawInsertAll(
-        'INSERT OR REPLACE INTO beaconStore (id, source, destination, path, latitude, longitude, symbolTable, symbol, comment, raw, timestamp)  VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT OR REPLACE INTO beaconStore (id, source, destination, path, latitude, longitude, symbolTable, symbol, comment, raw, timestamp, sentToDrr)  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
         beaconstores,
         exclusive: exclusive,
         noResult: noResult,
@@ -686,7 +708,9 @@ class BeaconStore extends TableBase {
       ..qparams.distinct = true;
   }
 
-  void _setDefaultValues() {}
+  void _setDefaultValues() {
+    sentToDrr = sentToDrr ?? false;
+  }
 
   @override
   void rollbackPk() {
@@ -948,6 +972,11 @@ class BeaconStoreFilterBuilder extends ConjunctionBase {
   BeaconStoreField? _timestamp;
   BeaconStoreField get timestamp {
     return _timestamp = _setField(_timestamp, 'timestamp', DbType.datetime);
+  }
+
+  BeaconStoreField? _sentToDrr;
+  BeaconStoreField get sentToDrr {
+    return _sentToDrr = _setField(_sentToDrr, 'sentToDrr', DbType.bool);
   }
 
   /// Deletes List<BeaconStore> bulk by query
@@ -1232,6 +1261,12 @@ class BeaconStoreFields {
   static TableField get timestamp {
     return _fTimestamp = _fTimestamp ??
         SqlSyntax.setField(_fTimestamp, 'timestamp', DbType.datetime);
+  }
+
+  static TableField? _fSentToDrr;
+  static TableField get sentToDrr {
+    return _fSentToDrr = _fSentToDrr ??
+        SqlSyntax.setField(_fSentToDrr, 'sentToDrr', DbType.bool);
   }
 }
 // endregion BeaconStoreFields

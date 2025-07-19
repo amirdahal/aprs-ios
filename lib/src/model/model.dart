@@ -38,6 +38,7 @@ const tableBeaconStore = SqfEntityTable(
     SqfEntityField('comment', DbType.text),
     SqfEntityField('raw', DbType.text),
     SqfEntityField('timestamp', DbType.datetime),
+    SqfEntityField('sentToDrr', DbType.bool, defaultValue: false),
   ],
 );
 

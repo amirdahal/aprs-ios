@@ -1,13 +1,10 @@
 import 'package:aprs/src/helpers/app.events.dart';
 import 'package:aprs/src/model/model.dart';
-// import 'package:custom_events/custom_events.dart';
 import 'package:radio/radio.dart';
 
 enum AprsEvents { newBeaconEvent }
 
 class AprsLogRepository {
-  // static CustomEvents appEvent = CustomEvents.instance;
-
   static Future<void> savePacket(PositionPacket packet) async {
     BeaconStore newBeacon = BeaconStore(
       source: packet.source,
@@ -83,5 +80,18 @@ class AprsLogRepository {
     final result = uniqueLocations.values.toList();
     result.sort((a, b) => b.timestamp!.compareTo(a.timestamp!));
     return result;
+  }
+
+  static Future<List<BeaconStore>> getPacketToDrr() async {
+    return await BeaconStore().select().sentToDrr.equals(false).orderByDesc('timestamp').top(30).toList();
+  }
+
+  static Future<void> markPacketsAsSentToDrr(List<BeaconStore> packets) async {
+    var packetList = [...packets];
+    for (var packet in packetList) {
+      packet.sentToDrr = true;
+    }
+
+    await BeaconStore().upsertAll(packetList);
   }
 }
