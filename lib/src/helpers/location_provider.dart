@@ -13,7 +13,11 @@ class MyLocationProvider {
   final double? altitude;
   final DateTime timestamp;
 
-  const MyLocationProvider({required this.latitude, required this.longitude, required this.timestamp, this.altitude
+  const MyLocationProvider({
+    required this.latitude,
+    required this.longitude,
+    required this.timestamp,
+    this.altitude,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,33 +30,40 @@ class MyLocationProvider {
   }
 }
 
-ValueNotifier<MyLocationProvider?> myLocationProvider = ValueNotifier<MyLocationProvider?>(null);
-
+ValueNotifier<MyLocationProvider?> myLocationProvider =
+    ValueNotifier<MyLocationProvider?>(null);
 
 final LocationSettings locationSettings = LocationSettings(
   accuracy: LocationAccuracy.high,
-  distanceFilter: 100,
+  distanceFilter: 30,
 );
 
 void determineGeoPosition() async {
   try {
     await handleGeoPositionPermission();
-    Geolocator.getPositionStream(
-      locationSettings: locationSettings,
-    ).listen((Position? position) {
-      if(position != null) {
-        myLocationProvider.value = MyLocationProvider(latitude: position.latitude, longitude: position.longitude, altitude: position.altitude, timestamp: position.timestamp);
-        if(kDebugMode) {
-          print("Position determined from GPS: ${myLocationProvider.value?.toMap()}");
+    Geolocator.getPositionStream(locationSettings: locationSettings).listen((
+      Position? position,
+    ) {
+      if (position != null) {
+        myLocationProvider.value = MyLocationProvider(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          altitude: position.altitude,
+          timestamp: position.timestamp,
+        );
+
+        if (kDebugMode) {
+          print(
+            "Position determined from GPS: ${myLocationProvider.value?.toMap()}",
+          );
         }
       }
     });
-  }  catch(e) {
+  } catch (e) {
     if (kDebugMode) {
       print(e);
     }
-    }
-
+  }
 }
 
 Future<Position> handleGeoPositionPermission() async {
@@ -83,32 +94,42 @@ Future<Position> handleGeoPositionPermission() async {
   return await Geolocator.getCurrentPosition();
 }
 
-Future<void> getRadioPosition() async {
+Future<void> getPosition() async {
   RadioPosition? position = await RadioExtract.radio.position();
-  if(position != null) {
-    myLocationProvider.value = MyLocationProvider(latitude: position.latitude, longitude: position.longitude, altitude: position.altitude?.toDouble(), timestamp: position.time);
-    if(kDebugMode) {
-      print("Position determined from radio: ${myLocationProvider.value?.toMap()}");
+  if (position != null) {
+    myLocationProvider.value = MyLocationProvider(
+      latitude: position.latitude,
+      longitude: position.longitude,
+      altitude: position.altitude?.toDouble(),
+      timestamp: position.time,
+    );
+    if (kDebugMode) {
+      print(
+        "Position determined from radio: ${myLocationProvider.value?.toMap()}",
+      );
     }
+  } else {
+    determineGeoPosition();
   }
 }
 
-void determineRadioPosition() async{
-  await getRadioPosition();
+void determineRadioPosition() async {
+  await handleGeoPositionPermission();
+  await getPosition();
   Timer.periodic(const Duration(minutes: 1), (timer) async {
-     await getRadioPosition();
+    await getPosition();
   });
 }
 
 void runLocationProviderResolver() {
   int firmwareVersion = RadioExtract.radio.deviceInfo.firmwareVersion;
-  if(firmwareVersion >= 136) {
-    if(kDebugMode) {
+  if (firmwareVersion >= 136) {
+    if (kDebugMode) {
       print("Determine position from radio");
     }
     determineRadioPosition();
   } else {
-    if(kDebugMode) {
+    if (kDebugMode) {
       print("Determine position from GPS");
     }
     determineGeoPosition();
