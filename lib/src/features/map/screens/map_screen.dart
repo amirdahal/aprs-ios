@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:aprs/src/features/map/repository/map_provider.dart'
     show MBTilesImageProvider;
+import 'package:aprs/src/features/map/widgets/aprs_layer.widget.dart';
 import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
+import 'package:aprs/src/features/map/widgets/evacuation_center_layer.widget.dart';
+import 'package:aprs/src/features/map/widgets/layer.widget.dart';
 import 'package:aprs/src/features/map/widgets/my_location.dart';
-import 'package:aprs/src/helpers/event_handler.dart';
+import 'package:aprs/src/features/map/widgets/warehouse_layer.widget.dart';
 import 'package:aprs/src/helpers/location_provider.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
-import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -32,13 +34,14 @@ class _MapScreenState extends State<MapScreen> {
   final double maxZoom = 12;
   final double minZoom = 6;
 
+  MapLayer selectedLayer = MapLayer.aprsLayer;
+
   bool showMyPosition = false;
 
   static Future<MbTiles> _loadMBTiles() async {
     final appDir = await getApplicationDocumentsDirectory();
     final mbtilesPath = path.join(appDir.path, "phhi.omm.mbtiles");
 
-    // Check if file exists
     if (!File(mbtilesPath).existsSync()) {
       throw Exception('MBTiles file not found at $mbtilesPath');
     }
@@ -83,21 +86,13 @@ class _MapScreenState extends State<MapScreen> {
               maxZoom: maxZoom,
               minZoom: minZoom,
               initialZoom: currentZoom,
-              // initialCameraFit: CameraFit.bounds(bounds: mapBounds),
               initialCenter: const LatLng(
                 12.151274550622965,
                 122.36676560910182,
               ),
-              // cameraConstraint: CameraConstraint.containCenter(
-              //   bounds: mapBounds,
-              // ),
               interactionOptions: const InteractionOptions(
-                // enableMultiFingerGestureRace: true,
                 flags: InteractiveFlag.drag | InteractiveFlag.flingAnimation,
               ),
-              // onMapReady: () {
-              //   // mapController.move(mapController.camera.center, currentZoom);
-              // },
             ),
             children: [
               TileLayer(
@@ -106,95 +101,6 @@ class _MapScreenState extends State<MapScreen> {
                 tileDimension: 256,
                 tileDisplay: const TileDisplay.fadeIn(),
               ),
-              ValueListenableBuilder(
-                valueListenable: aprsPositionPackets,
-                builder: (context, value, child) {
-                  //   final List<Map<String, dynamic>> points =
-                  //       filterUniqueByFromAttribute(value);
-
-                  return MarkerLayer(
-                    markers: [
-                      for (var pos in value)
-                        Marker(
-                          point: LatLng(pos.latitude, pos.longitude),
-                          child: GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(pos.source),
-                                    content: SingleChildScrollView(
-                                      // Better than ListView for small content
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                              Icons.location_on,
-                                            ),
-                                            title: Text(
-                                              '${pos.latitude.toStringAsFixed(6)}, '
-                                              '${pos.longitude.toStringAsFixed(6)}',
-                                            ),
-                                            subtitle: const Text("Position"),
-                                          ),
-                                          ListTile(
-                                            leading: const Icon(
-                                              Icons.comment_bank_outlined,
-                                            ),
-                                            title: Text(pos.comment),
-                                            subtitle: const Text("Comment"),
-                                          ),
-                                          ListTile(
-                                            leading: const Icon(
-                                              Icons.timelapse,
-                                            ),
-                                            title: Text(
-                                              formatTimestamp(
-                                                pos.timestamp,
-                                              ), // Format the timestamp
-                                            ),
-                                            subtitle: const Text("Last seen"),
-                                          ),
-                                          ListTile(
-                                            leading: const Icon(
-                                              Icons.perm_identity_rounded,
-                                            ),
-                                            title: Text(
-                                              "${pos.symbolTable}${pos.symbol}",
-                                            ),
-                                            subtitle: const Text("Symbol"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: const Icon(
-                              Icons.location_on,
-                              size: 30,
-                              color: Colors.purple,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
-              DoubleChannelSwitch(),
-              if (showMyPosition && enablePositionSharing)
-                MyLocation(mapController: mapController),
               Positioned(
                 right: 30,
                 bottom: 70,
@@ -271,6 +177,24 @@ class _MapScreenState extends State<MapScreen> {
                   ],
                 ),
               ),
+              Positioned(
+                right: 10,
+                top: 10,
+                child: MapLayerMenu(initialLayer: MapLayer.aprsLayer, onChanged: (layer) {
+                  setState(() {
+                    selectedLayer = layer;
+                  });
+                }),
+              ),
+              if (showMyPosition && enablePositionSharing)
+                MyLocation(mapController: mapController),
+              DoubleChannelSwitch(),
+
+              switch(selectedLayer) {
+                MapLayer.aprsLayer => AprsLayer(),
+                MapLayer.warehousesLayer => WarehouseLayer(mapController: mapController,),
+                MapLayer.evacuationCentreLayer => EvacuationCenterLayer(mapController: mapController,),
+              },
             ],
           );
         },

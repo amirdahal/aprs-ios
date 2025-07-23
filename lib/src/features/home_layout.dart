@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
 import 'package:aprs/src/features/bluetooth/screens/bluetooth_screen.dart';
 import 'package:aprs/src/features/channel/screens/channel_screen.dart';
+import 'package:aprs/src/features/map/repository/gis.repository.dart';
 import 'package:aprs/src/features/map/screens/map_screen.dart';
 import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
 import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
@@ -105,8 +106,8 @@ class _HomeLayoutState extends State<HomeLayout> {
       addChatListener();
       addConnectionListener();
       updateBatteryLevel();
-      print(RadioExtract.radio.deviceInfo.toMap());
       runLocationProviderResolver();
+      GisRepository.loadServerData();
     }
     super.initState();
   }

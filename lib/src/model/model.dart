@@ -83,6 +83,35 @@ const tableDrr = SqfEntityTable(
   ],
 );
 
+const tableEvacuationCentre = SqfEntityTable(
+  tableName: 'evacuationCentre',
+  primaryKeyName: 'id',
+  primaryKeyType: PrimaryKeyType.integer_auto_incremental,
+  useSoftDeleting: false,
+  modelName: null,
+  fields: [
+    SqfEntityField('name', DbType.text, isUnique: true),
+    SqfEntityField('address', DbType.text),
+    SqfEntityField('latitude', DbType.real, isNotNull: true),
+    SqfEntityField('longitude', DbType.real, isNotNull: true),
+    SqfEntityField('capacity', DbType.integer),
+  ],
+);
+
+const tableWarehouse = SqfEntityTable(
+  tableName: 'warehouse',
+  primaryKeyName: 'id',
+  primaryKeyType: PrimaryKeyType.integer_auto_incremental,
+  useSoftDeleting: false,
+  modelName: null,
+  fields: [
+    SqfEntityField('name', DbType.text, isUnique: true),
+    SqfEntityField('address', DbType.text),
+    SqfEntityField('latitude', DbType.real, isNotNull: true),
+    SqfEntityField('longitude', DbType.real, isNotNull: true),
+  ],
+);
+
 const seqIdentity = SqfEntitySequence(sequenceName: 'identity');
 
 @SqfEntityBuilder(myDbModel)
@@ -95,6 +124,8 @@ const myDbModel = SqfEntityModel(
     tableChatStore,
     tablePassword,
     tableDrr,
+    tableEvacuationCentre,
+    tableWarehouse,
   ],
   sequences: [seqIdentity],
 );
