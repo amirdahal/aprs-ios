@@ -6,6 +6,7 @@ import 'package:aprs/src/features/aprs_log/screens/packet-filter.screen.dart';
 import 'package:aprs/src/features/aprs_log/widgets/packet-tile.widget.dart';
 import 'package:aprs/src/features/map/repository/map_provider.dart';
 import 'package:aprs/src/model/model.dart';
+import 'package:aprs/src/widgets/aprs_symbol.widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -142,7 +143,7 @@ class _CallsignPositionTrackerScreenState
                         for (var pos in _uniquePositions)
                           Marker(
                             point: LatLng(pos.latitude!, pos.longitude!),
-                            child: Icon(Icons.location_on_outlined),
+                            child: AprsSymbolIcon(symbolTable: pos.symbolTable!, symbol: pos.symbol!),
                           ),
                       ],
                     ),

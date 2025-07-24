@@ -1,6 +1,8 @@
+import 'package:aprs/src/features/aprs_log/screens/callsign_history.screen.dart';
 import 'package:aprs/src/features/map/repository/location_service.repository.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
+import 'package:aprs/src/widgets/aprs_symbol.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -55,12 +57,13 @@ class AprsLayer extends StatelessWidget {
                                   subtitle: const Text("Last seen"),
                                 ),
                                 ListTile(
-                                  leading: const Icon(
-                                    Icons.perm_identity_rounded,
-                                  ),
-                                  title: Text(
-                                    "${pos.symbolTable}${pos.symbol}",
-                                  ),
+                                  // leading: const Icon(
+                                  //   Icons.perm_identity_rounded,
+                                  // ),
+                                  leading: AprsSymbolIcon(symbolTable: pos.symbolTable, symbol: pos.symbol),
+                                  // title: Text(
+                                  //   "${pos.symbolTable}${pos.symbol}",
+                                  // ),
                                   subtitle: const Text("Symbol"),
                                 ),
                               ],
@@ -81,20 +84,16 @@ class AprsLayer extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallsignPositionTrackerScreen(callsign: pos.source)));
                               },
-                              child: const Text('Close'),
+                              child: const Text('History'),
                             ),
                           ],
                         );
                       },
                     );
                   },
-                  child: const Icon(
-                    Icons.location_on,
-                    size: 30,
-                    color: Colors.purple,
-                  ),
+                  child: AprsSymbolIcon(symbolTable: pos.symbolTable, symbol: pos.symbol),
                 ),
               ),
           ],
