@@ -134,7 +134,7 @@ class _CallsignPositionTrackerScreenState
                     TileLayer(
                       tileProvider: MBTilesImageProvider(mbtiles),
                       tileBounds: mapBounds,
-                      tileDimension: 256,
+                      // tileDimension: 256,
                       tileDisplay: const TileDisplay.fadeIn(),
                     ),
                     MarkerLayer(

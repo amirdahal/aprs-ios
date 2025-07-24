@@ -1,12 +1,14 @@
 import 'dart:io';
+
 import 'package:aprs/src/features/map/repository/map_provider.dart'
     show MBTilesImageProvider;
 import 'package:aprs/src/features/map/widgets/aprs_layer.widget.dart';
 import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
 import 'package:aprs/src/features/map/widgets/evacuation_center_layer.widget.dart';
+import 'package:aprs/src/features/map/widgets/gis_layer.widget.dart'
+    show GisLayer;
 import 'package:aprs/src/features/map/widgets/layer.widget.dart';
 import 'package:aprs/src/features/map/widgets/my_location.dart';
-import 'package:aprs/src/features/map/widgets/warehouse_layer.widget.dart';
 import 'package:aprs/src/helpers/location_provider.dart';
 import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:aprs/src/widgets/toast.dart';
@@ -98,7 +100,7 @@ class _MapScreenState extends State<MapScreen> {
               TileLayer(
                 tileProvider: MBTilesImageProvider(mbtiles),
                 tileBounds: mapBounds,
-                tileDimension: 256,
+                // tileDimension: 256,
                 tileDisplay: const TileDisplay.fadeIn(),
               ),
               Positioned(
@@ -110,14 +112,20 @@ class _MapScreenState extends State<MapScreen> {
                     if (showMyPosition)
                       IconButton.filled(
                         onPressed: () {
-                          MyLocationProvider? myLocation = myLocationProvider.value;
-                          if(myLocation != null) {
+                          MyLocationProvider? myLocation =
+                              myLocationProvider.value;
+                          if (myLocation != null) {
                             mapController.move(
                               LatLng(myLocation.latitude, myLocation.longitude),
                               currentZoom,
                             );
                           } else {
-                            showToast(context: context, title: 'Unable to determine current position', description: 'Please try again in a while.', type: ToastificationType.error);
+                            showToast(
+                              context: context,
+                              title: 'Unable to determine current position',
+                              description: 'Please try again in a while.',
+                              type: ToastificationType.error,
+                            );
                           }
                         },
                         icon: Icon(Icons.my_location),
@@ -180,20 +188,25 @@ class _MapScreenState extends State<MapScreen> {
               Positioned(
                 right: 10,
                 top: 10,
-                child: MapLayerMenu(initialLayer: MapLayer.aprsLayer, onChanged: (layer) {
-                  setState(() {
-                    selectedLayer = layer;
-                  });
-                }),
+                child: MapLayerMenu(
+                  initialLayer: MapLayer.aprsLayer,
+                  onChanged: (layer) {
+                    setState(() {
+                      selectedLayer = layer;
+                    });
+                  },
+                ),
               ),
               if (showMyPosition && enablePositionSharing)
                 MyLocation(mapController: mapController),
               DoubleChannelSwitch(),
 
-              switch(selectedLayer) {
+              switch (selectedLayer) {
                 MapLayer.aprsLayer => AprsLayer(),
-                MapLayer.warehousesLayer => WarehouseLayer(mapController: mapController,),
-                MapLayer.evacuationCentreLayer => EvacuationCenterLayer(mapController: mapController,),
+                MapLayer.gisLayer => GisLayer(),
+                MapLayer.evacuationCentreLayer => EvacuationCenterLayer(
+                  mapController: mapController,
+                ),
               },
             ],
           );

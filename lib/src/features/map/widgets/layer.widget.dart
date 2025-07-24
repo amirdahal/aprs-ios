@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum MapLayer {
   aprsLayer(1),
-  warehousesLayer(2),
+  gisLayer(2),
   evacuationCentreLayer(3);
 
   final int layer;
@@ -17,10 +17,10 @@ class MapLayerMenu extends StatefulWidget {
   final void Function(MapLayer selected) onChanged;
 
   const MapLayerMenu({
-    Key? key,
+    super.key,
     required this.initialLayer,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<MapLayerMenu> createState() => _MapLayerMenuState();
@@ -38,7 +38,7 @@ class _MapLayerMenuState extends State<MapLayerMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<MapLayer>(
-      icon:  Icon(Icons.layers, size: 40,),
+      icon: Icon(Icons.layers, size: 40),
       onSelected: (MapLayer layer) {
         setState(() {
           selectedLayer = layer;
@@ -54,7 +54,9 @@ class _MapLayerMenuState extends State<MapLayerMenu> {
               _labelForLayer(layer),
               style: TextStyle(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Theme.of(context).colorScheme.primary : null,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
               ),
             ),
           );
@@ -67,8 +69,8 @@ class _MapLayerMenuState extends State<MapLayerMenu> {
     switch (layer) {
       case MapLayer.aprsLayer:
         return 'APRS';
-      case MapLayer.warehousesLayer:
-        return 'Warehouses';
+      case MapLayer.gisLayer:
+        return 'GIS';
       case MapLayer.evacuationCentreLayer:
         return 'Evacuation Centres';
     }
