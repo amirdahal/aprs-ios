@@ -1,3 +1,4 @@
+import 'package:aprs/src/features/map/repository/location_service.repository.dart';
 import 'package:aprs/src/helpers/event_handler.dart';
 import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
 import 'package:flutter/material.dart';
@@ -68,9 +69,21 @@ class AprsLayer extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
+                                LocationRepository.openInMap(lat: pos.latitude, lng: pos.longitude);
+                              },
+                              child: const Text('Get direction'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                LocationRepository.sharePosition(lat: pos.latitude, lng: pos.longitude, name: pos.source, address: pos.digipeaters.join(', '));
+                              },
+                              child: const Text('Share position'),
+                            ),
+                            TextButton(
+                              onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('OK'),
+                              child: const Text('Close'),
                             ),
                           ],
                         );

@@ -39,6 +39,7 @@ class _MapLayerMenuState extends State<MapLayerMenu> {
   Widget build(BuildContext context) {
     return PopupMenuButton<MapLayer>(
       icon: Icon(Icons.layers, size: 40),
+      tooltip: 'Layers',
       onSelected: (MapLayer layer) {
         setState(() {
           selectedLayer = layer;
