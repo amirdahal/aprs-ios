@@ -1,6 +1,6 @@
-import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
-import 'package:aprs/src/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/helpers/utils.dart' show formatTimestamp;
+import 'package:smart_rf/src/model/model.dart';
 
 class MessageTile extends StatelessWidget {
   final MessageStore msg;

@@ -1,23 +1,23 @@
 import 'dart:io';
 
-import 'package:aprs/src/features/map/repository/map_provider.dart'
-    show MBTilesImageProvider;
-import 'package:aprs/src/features/map/widgets/aprs_layer.widget.dart';
-import 'package:aprs/src/features/map/widgets/double_channel_switch.dart';
-import 'package:aprs/src/features/map/widgets/evacuation_center_layer.widget.dart';
-import 'package:aprs/src/features/map/widgets/gis_layer.widget.dart'
-    show GisLayer;
-import 'package:aprs/src/features/map/widgets/layer.widget.dart';
-import 'package:aprs/src/features/map/widgets/my_location.dart';
-import 'package:aprs/src/helpers/location_provider.dart';
-import 'package:aprs/src/helpers/my_position.util.dart';
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mbtiles/mbtiles.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:smart_rf/src/features/map/repository/map_provider.dart'
+    show MBTilesImageProvider;
+import 'package:smart_rf/src/features/map/widgets/aprs_layer.widget.dart';
+import 'package:smart_rf/src/features/map/widgets/double_channel_switch.dart';
+import 'package:smart_rf/src/features/map/widgets/evacuation_center_layer.widget.dart';
+import 'package:smart_rf/src/features/map/widgets/gis_layer.widget.dart'
+    show GisLayer;
+import 'package:smart_rf/src/features/map/widgets/layer.widget.dart';
+import 'package:smart_rf/src/features/map/widgets/my_location.dart';
+import 'package:smart_rf/src/helpers/location_provider.dart';
+import 'package:smart_rf/src/helpers/my_position.util.dart';
+import 'package:smart_rf/src/widgets/toast.dart';
 import 'package:toastification/toastification.dart';
 
 class MapScreen extends StatefulWidget {

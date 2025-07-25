@@ -1,6 +1,6 @@
-import 'package:aprs/src/model/model.dart' show PasswordStore;
 import 'package:crypt/crypt.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smart_rf/src/model/model.dart' show PasswordStore;
 
 class AppSettingRepository {
   static Future<bool> createPassword(String inputPassword) async {

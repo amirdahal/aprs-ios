@@ -1,8 +1,8 @@
-import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
-import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
-import 'package:aprs/src/widgets/buttons.dart';
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/settings/app_setting/repository/app_setting.repository.dart';
+import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
+import 'package:smart_rf/src/widgets/buttons.dart';
+import 'package:smart_rf/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
 class AppSettingScreen extends StatefulWidget {

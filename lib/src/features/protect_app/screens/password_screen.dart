@@ -1,7 +1,7 @@
-import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
-import 'package:aprs/src/model/model.dart' show PasswordStore;
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
+import 'package:smart_rf/src/model/model.dart' show PasswordStore;
 
 class PasswordScreen extends StatefulWidget {
   final Future Function()? onValidate;

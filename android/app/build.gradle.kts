@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.climatesurvivalsolutions.aprs"
+    namespace = "com.climatesurvivalsolutions.smart_rf"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,13 +21,14 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.climatesurvivalsolutions.aprs"
+        applicationId = "com.climatesurvivalsolutions.smart_rf"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        setProperty("archivesBaseName", "Smart RF")
     }
 
     buildTypes {

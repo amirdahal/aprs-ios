@@ -1,10 +1,10 @@
-import 'package:aprs/src/features/channel/repository/channel_repository.dart';
-import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
-import 'package:aprs/src/helpers/event_handler.dart';
-import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/helpers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/features/channel/repository/channel_repository.dart';
+import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart';
+import 'package:smart_rf/src/helpers/event_handler.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:smart_rf/src/helpers/utils.dart';
 
 import '../screens/channel_detail_screen.dart';
 

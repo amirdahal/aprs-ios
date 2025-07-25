@@ -1,5 +1,5 @@
-import 'package:aprs/src/helpers/radio_extract.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart';
 
 enum ChannelOption { channelA, channelB }
 

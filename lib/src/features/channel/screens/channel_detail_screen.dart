@@ -1,15 +1,15 @@
-import 'package:aprs/src/features/channel/repository/channel_repository.dart';
-import 'package:aprs/src/features/channel/utils/constants.dart';
-import 'package:aprs/src/features/channel/utils/helpers.dart'
-    show getToneLabel, toneStringToValue, frequencyValidator;
-import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
-import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
-import 'package:aprs/src/widgets/checkbox.dart' show CustomCheckbox;
-import 'package:aprs/src/widgets/dropdown.dart' show DropDown;
-import 'package:aprs/src/widgets/toast.dart' show showToast;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/features/channel/repository/channel_repository.dart';
+import 'package:smart_rf/src/features/channel/utils/constants.dart';
+import 'package:smart_rf/src/features/channel/utils/helpers.dart'
+    show getToneLabel, toneStringToValue, frequencyValidator;
+import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart';
+import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
+import 'package:smart_rf/src/widgets/checkbox.dart' show CustomCheckbox;
+import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
+import 'package:smart_rf/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
 enum STATE { success, error }

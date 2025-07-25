@@ -1,6 +1,6 @@
-import 'package:aprs/src/helpers/app.events.dart';
-import 'package:aprs/src/model/model.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/helpers/app.events.dart';
+import 'package:smart_rf/src/model/model.dart';
 
 enum AprsEvents { newBeaconEvent }
 
@@ -83,7 +83,13 @@ class AprsLogRepository {
   }
 
   static Future<List<BeaconStore>> getPacketToDrr() async {
-    return await BeaconStore().select().sentToDrr.equals(false).orderByDesc('timestamp').top(30).toList();
+    return await BeaconStore()
+        .select()
+        .sentToDrr
+        .equals(false)
+        .orderByDesc('timestamp')
+        .top(30)
+        .toList();
   }
 
   static Future<void> markPacketsAsSentToDrr(List<BeaconStore> packets) async {

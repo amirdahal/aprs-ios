@@ -1,11 +1,11 @@
-import 'package:aprs/src/features/protect_app/screens/password_screen.dart'
+import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart'
     show PasswordScreen;
-import 'package:aprs/src/features/settings/repository/constants.dart';
-import 'package:aprs/src/helpers/radio_extract.dart' show RadioExtract;
-import 'package:aprs/src/helpers/theme.dart';
-import 'package:aprs/src/widgets/buttons.dart' show Button;
-import 'package:aprs/src/widgets/dropdown.dart';
-import 'package:aprs/src/widgets/toast.dart' show showSnackBar;
+import 'package:smart_rf/src/features/settings/repository/constants.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:smart_rf/src/helpers/theme.dart';
+import 'package:smart_rf/src/widgets/buttons.dart' show Button;
+import 'package:smart_rf/src/widgets/dropdown.dart';
+import 'package:smart_rf/src/widgets/toast.dart' show showSnackBar;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:radio/radio.dart';

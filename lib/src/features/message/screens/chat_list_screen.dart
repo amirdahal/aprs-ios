@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:aprs/src/features/message/repository/message.repository.dart';
-import 'package:aprs/src/features/message/screens/new_chat_screen.dart';
-import 'package:aprs/src/helpers/app.events.dart';
-import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
-import 'package:aprs/src/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/message/repository/message.repository.dart';
+import 'package:smart_rf/src/helpers/app.events.dart';
+import 'package:smart_rf/src/helpers/utils.dart' show formatTimestamp;
+import 'package:smart_rf/src/model/model.dart';
 
 import 'message.dart';
+import 'new_chat_screen.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});

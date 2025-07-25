@@ -1,5 +1,5 @@
-import 'package:aprs/src/model/model.dart' show PasswordStore;
 import 'package:crypt/crypt.dart';
+import 'package:smart_rf/src/model/model.dart' show PasswordStore;
 
 class ProtectRepository {
   static Future<bool> validatePassword(String inputPassword) async {

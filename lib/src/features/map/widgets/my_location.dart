@@ -1,8 +1,8 @@
-import 'package:aprs/src/helpers/location_provider.dart'
-    show myLocationProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:smart_rf/src/helpers/location_provider.dart'
+    show myLocationProvider;
 
 class MyLocation extends StatelessWidget {
   final MapController mapController;

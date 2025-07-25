@@ -1,7 +1,7 @@
-import 'package:aprs/src/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:smart_rf/src/model/model.dart';
 
 class WarehouseLayer extends StatefulWidget {
   final MapController mapController;
@@ -12,12 +12,10 @@ class WarehouseLayer extends StatefulWidget {
 }
 
 class _WarehouseLayerState extends State<WarehouseLayer> {
-
   List<Warehouse> _warehouses = [];
 
-
-  void loadWarehouses() async{
-    _warehouses =  await Warehouse().select().toList();
+  void loadWarehouses() async {
+    _warehouses = await Warehouse().select().toList();
     setState(() {});
     widget.mapController.move(widget.mapController.camera.center, 8);
   }
@@ -30,16 +28,22 @@ class _WarehouseLayerState extends State<WarehouseLayer> {
 
   @override
   Widget build(BuildContext context) {
-    return MarkerLayer(markers: [
-      for(var warehouse in _warehouses)
-        Marker(
-          point:  LatLng(warehouse.latitude!, warehouse.longitude!),
-          child: InkWell(
+    return MarkerLayer(
+      markers: [
+        for (var warehouse in _warehouses)
+          Marker(
+            point: LatLng(warehouse.latitude!, warehouse.longitude!),
+            child: InkWell(
               onTap: () {
-                widget.mapController.move( LatLng(warehouse.latitude!, warehouse.longitude!), 10);
+                widget.mapController.move(
+                  LatLng(warehouse.latitude!, warehouse.longitude!),
+                  10,
+                );
               },
-              child: Image.asset('assets/images/warehouse.png')),
-        ),
-    ]);
+              child: Image.asset('assets/images/warehouse.png'),
+            ),
+          ),
+      ],
+    );
   }
 }

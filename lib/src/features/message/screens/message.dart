@@ -1,15 +1,12 @@
 import 'dart:async';
 
-import 'package:aprs/src/features/message/repository/message.repository.dart';
-import 'package:aprs/src/features/message/widgets/message_input.dart';
-import 'package:aprs/src/features/message/widgets/message_tile.dart';
-import 'package:aprs/src/helpers/app.events.dart'
-    show eventBus, NewMessageEvent;
-import 'package:aprs/src/model/model.dart' show ChatStore, MessageStore;
-// import 'package:custom_events/custom_events.dart';
 import 'package:flutter/material.dart';
-
-import '../../../helpers/app.events.dart' show eventBus;
+import 'package:smart_rf/src/features/message/repository/message.repository.dart';
+import 'package:smart_rf/src/features/message/widgets/message_input.dart';
+import 'package:smart_rf/src/features/message/widgets/message_tile.dart';
+import 'package:smart_rf/src/helpers/app.events.dart'
+    show eventBus, NewMessageEvent;
+import 'package:smart_rf/src/model/model.dart' show ChatStore, MessageStore;
 
 class MessageScreen extends StatefulWidget {
   final ChatStore currentChat;

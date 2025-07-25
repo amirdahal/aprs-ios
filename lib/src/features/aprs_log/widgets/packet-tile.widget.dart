@@ -1,7 +1,7 @@
-import 'package:aprs/src/helpers/utils.dart';
-import 'package:aprs/src/widgets/aprs_symbol.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/helpers/utils.dart';
+import 'package:smart_rf/src/widgets/aprs_symbol.widget.dart';
 
 class PacketTile extends StatelessWidget {
   final PositionPacket packet;
@@ -21,7 +21,10 @@ class PacketTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: AprsSymbolIcon(symbolTable: packet.symbolTable, symbol: packet.symbol),
+      leading: AprsSymbolIcon(
+        symbolTable: packet.symbolTable,
+        symbol: packet.symbol,
+      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

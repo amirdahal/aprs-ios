@@ -1,10 +1,10 @@
-import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
-import 'package:aprs/src/helpers/theme.dart';
-import 'package:aprs/src/model/model.dart';
-import 'package:aprs/src/widgets/buttons.dart';
-import 'package:aprs/src/widgets/dropdown.dart' show DropDown;
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/settings/drr_setting/repository/drr.repository.dart';
+import 'package:smart_rf/src/helpers/theme.dart';
+import 'package:smart_rf/src/model/model.dart';
+import 'package:smart_rf/src/widgets/buttons.dart';
+import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
+import 'package:smart_rf/src/widgets/toast.dart';
 import 'package:string_validator/string_validator.dart';
 
 class DrrSettingScreen extends StatefulWidget {

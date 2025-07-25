@@ -1,5 +1,5 @@
-import 'package:aprs/src/model/model.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/model/model.dart';
 
 PositionPacket beaconStoreToPositionPacket(BeaconStore beacon) {
   return PositionPacket(

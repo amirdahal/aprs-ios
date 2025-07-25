@@ -1,12 +1,12 @@
-import 'package:aprs/src/features/protect_app/screens/password_screen.dart';
-import 'package:aprs/src/features/settings/repository/constants.dart';
-import 'package:aprs/src/features/settings/repository/setting.repository.dart';
-import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/widgets/buttons.dart';
-import 'package:aprs/src/widgets/dropdown.dart';
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart';
+import 'package:smart_rf/src/features/settings/repository/constants.dart';
+import 'package:smart_rf/src/features/settings/repository/setting.repository.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:smart_rf/src/widgets/buttons.dart';
+import 'package:smart_rf/src/widgets/dropdown.dart';
+import 'package:smart_rf/src/widgets/toast.dart';
 import 'package:string_validator/string_validator.dart';
 
 class RadioSettingScreen extends StatefulWidget {

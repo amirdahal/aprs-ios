@@ -1,11 +1,11 @@
-import 'package:aprs/src/features/aprs_log/screens/callsign_history.screen.dart';
-import 'package:aprs/src/features/map/repository/location_service.repository.dart';
-import 'package:aprs/src/helpers/event_handler.dart';
-import 'package:aprs/src/helpers/utils.dart' show formatTimestamp;
-import 'package:aprs/src/widgets/aprs_symbol.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:smart_rf/src/features/aprs_log/screens/callsign_history.screen.dart';
+import 'package:smart_rf/src/features/map/repository/location_service.repository.dart';
+import 'package:smart_rf/src/helpers/event_handler.dart';
+import 'package:smart_rf/src/helpers/utils.dart' show formatTimestamp;
+import 'package:smart_rf/src/widgets/aprs_symbol.widget.dart';
 
 class AprsLayer extends StatelessWidget {
   const AprsLayer({super.key});
@@ -60,7 +60,10 @@ class AprsLayer extends StatelessWidget {
                                   // leading: const Icon(
                                   //   Icons.perm_identity_rounded,
                                   // ),
-                                  leading: AprsSymbolIcon(symbolTable: pos.symbolTable, symbol: pos.symbol),
+                                  leading: AprsSymbolIcon(
+                                    symbolTable: pos.symbolTable,
+                                    symbol: pos.symbol,
+                                  ),
                                   // title: Text(
                                   //   "${pos.symbolTable}${pos.symbol}",
                                   // ),
@@ -72,19 +75,34 @@ class AprsLayer extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                LocationRepository.openInMap(lat: pos.latitude, lng: pos.longitude);
+                                LocationRepository.openInMap(
+                                  lat: pos.latitude,
+                                  lng: pos.longitude,
+                                );
                               },
                               child: const Text('Get direction'),
                             ),
                             TextButton(
                               onPressed: () {
-                                LocationRepository.sharePosition(lat: pos.latitude, lng: pos.longitude, name: pos.source, address: pos.digipeaters.join(', '));
+                                LocationRepository.sharePosition(
+                                  lat: pos.latitude,
+                                  lng: pos.longitude,
+                                  name: pos.source,
+                                  address: pos.digipeaters.join(', '),
+                                );
                               },
                               child: const Text('Share position'),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallsignPositionTrackerScreen(callsign: pos.source)));
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CallsignPositionTrackerScreen(
+                                          callsign: pos.source,
+                                        ),
+                                  ),
+                                );
                               },
                               child: const Text('History'),
                             ),
@@ -93,7 +111,10 @@ class AprsLayer extends StatelessWidget {
                       },
                     );
                   },
-                  child: AprsSymbolIcon(symbolTable: pos.symbolTable, symbol: pos.symbol),
+                  child: AprsSymbolIcon(
+                    symbolTable: pos.symbolTable,
+                    symbol: pos.symbol,
+                  ),
                 ),
               ),
           ],

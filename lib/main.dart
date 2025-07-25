@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:aprs/src/features/bluetooth/screens/bluetooth_screen.dart';
-import 'package:aprs/src/helpers/theme.dart';
-import 'package:aprs/src/helpers/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:smart_rf/src/features/bluetooth/screens/bluetooth_screen.dart';
+import 'package:smart_rf/src/helpers/theme.dart';
+import 'package:smart_rf/src/helpers/utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> copyMBTilesToLocal() async {
@@ -30,7 +30,7 @@ const WindowOptions windowOptions = WindowOptions(
   maximumSize: Size(800, 700),
   minimumSize: Size(800, 700),
   center: true,
-  title: 'APRS Application',
+  title: 'Smart RF',
   // titleBarStyle: TitleBarStyle.hidden,
   fullScreen: false,
 );
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Smart RF',
       theme: greenTheme,
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,

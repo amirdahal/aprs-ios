@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:aprs/src/features/bluetooth/repository/bluetooth_scanner.dart';
-import 'package:aprs/src/features/home_layout.dart';
-import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/widgets/buttons.dart';
-import 'package:aprs/src/widgets/scan_indicator.dart';
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/features/bluetooth/repository/bluetooth_scanner.dart';
+import 'package:smart_rf/src/features/home_layout.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:smart_rf/src/widgets/buttons.dart';
+import 'package:smart_rf/src/widgets/scan_indicator.dart';
+import 'package:smart_rf/src/widgets/toast.dart';
 import 'package:toastification/toastification.dart';
 
 import '../repository/bonding.repository.dart';

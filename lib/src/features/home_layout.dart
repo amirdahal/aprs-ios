@@ -1,24 +1,31 @@
 import 'dart:async';
 
-import 'package:aprs/src/features/aprs_log/screens/aprs_log_screen.dart';
-import 'package:aprs/src/features/bluetooth/screens/bluetooth_screen.dart';
-import 'package:aprs/src/features/channel/screens/channel_screen.dart';
-import 'package:aprs/src/features/map/repository/gis.repository.dart';
-import 'package:aprs/src/features/map/screens/map_screen.dart';
-import 'package:aprs/src/features/settings/app_setting/repository/app_setting.repository.dart';
-import 'package:aprs/src/features/settings/drr_setting/repository/drr.repository.dart';
-import 'package:aprs/src/features/settings/setting_layout.dart';
-import 'package:aprs/src/helpers/app.events.dart';
-import 'package:aprs/src/helpers/event_handler.dart';
-import 'package:aprs/src/helpers/location_provider.dart';
-import 'package:aprs/src/helpers/my_position.util.dart';
-import 'package:aprs/src/helpers/radio_extract.dart';
-import 'package:aprs/src/widgets/battery_level.widget.dart';
-import 'package:aprs/src/widgets/buttons.dart';
-import 'package:aprs/src/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/aprs_log/screens/aprs_log_screen.dart'
+    show AprsLogScreen;
+import 'package:smart_rf/src/features/settings/app_setting/repository/app_setting.repository.dart'
+    show AppSettingRepository;
+import 'package:smart_rf/src/features/settings/drr_setting/repository/drr.repository.dart'
+    show DrrRepository;
+import 'package:smart_rf/src/features/settings/setting_layout.dart'
+    show SettingLayout;
+import 'package:smart_rf/src/helpers/app.events.dart';
+import 'package:smart_rf/src/helpers/event_handler.dart'
+    show radioEventsHandler;
+import 'package:smart_rf/src/helpers/location_provider.dart'
+    show runLocationProviderResolver;
+import 'package:smart_rf/src/helpers/my_position.util.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:smart_rf/src/widgets/battery_level.widget.dart'
+    show BatteryIndicator;
+import 'package:smart_rf/src/widgets/buttons.dart' show Button;
+import 'package:smart_rf/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
+import 'bluetooth/screens/bluetooth_screen.dart';
+import 'channel/screens/channel_screen.dart';
+import 'map/repository/gis.repository.dart';
+import 'map/screens/map_screen.dart';
 import 'message/repository/message.repository.dart';
 import 'message/screens/chat_list_screen.dart';
 

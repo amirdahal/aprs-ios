@@ -1,8 +1,8 @@
-import 'package:aprs/src/features/message/repository/message.repository.dart';
-import 'package:aprs/src/helpers/theme.dart' show inputDecoration;
-import 'package:aprs/src/widgets/dropdown.dart' show DropDown;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/message/repository/message.repository.dart';
+import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
+import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
 
 class NewChatScreen extends StatefulWidget {
   const NewChatScreen({super.key});

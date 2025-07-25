@@ -1,6 +1,6 @@
 // Radio Settings
-import 'package:aprs/src/helpers/radio_extract.dart' show RadioExtract;
 import 'package:radio/radio.dart';
+import 'package:smart_rf/src/helpers/radio_extract.dart' show RadioExtract;
 
 final Map<String, int> doubleChanOptions = {"Off": 0, "A": 1, "B": 2};
 final List<String> channelOptions = List.generate(

@@ -1,9 +1,9 @@
-import 'package:aprs/src/features/settings/app_setting/screens/app_setting_screen.dart';
-import 'package:aprs/src/features/settings/aprs_setting/screens/aprs_setting_screen.dart';
-import 'package:aprs/src/features/settings/drr_setting/screens/drr_setting_screen.dart';
-import 'package:aprs/src/features/settings/radio_setting/screens/radio_setting_screen.dart';
-import 'package:aprs/src/helpers/my_position.util.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/settings/app_setting/screens/app_setting_screen.dart';
+import 'package:smart_rf/src/features/settings/aprs_setting/screens/aprs_setting_screen.dart';
+import 'package:smart_rf/src/features/settings/drr_setting/screens/drr_setting_screen.dart';
+import 'package:smart_rf/src/features/settings/radio_setting/screens/radio_setting_screen.dart';
+import 'package:smart_rf/src/helpers/my_position.util.dart';
 
 class SettingLayout extends StatefulWidget {
   const SettingLayout({super.key});

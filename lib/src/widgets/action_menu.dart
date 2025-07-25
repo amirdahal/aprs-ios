@@ -1,5 +1,6 @@
-import 'package:aprs/src/features/settings/setting_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_rf/src/features/settings/setting_layout.dart'
+    show SettingLayout;
 
 class ActionMenu extends StatefulWidget {
   const ActionMenu({super.key});

@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:aprs/src/features/aprs_log/repository/aprs-log.repository.dart';
-import 'package:aprs/src/helpers/location_provider.dart'
-    show MyLocationProvider, myLocationProvider;
-import 'package:aprs/src/helpers/app.events.dart';
-import 'package:aprs/src/helpers/utils.dart' show formatDateTime;
-import 'package:aprs/src/model/model.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_rf/src/features/aprs_log/repository/aprs-log.repository.dart';
+import 'package:smart_rf/src/helpers/app.events.dart';
+import 'package:smart_rf/src/helpers/location_provider.dart'
+    show MyLocationProvider, myLocationProvider;
+import 'package:smart_rf/src/helpers/utils.dart' show formatDateTime;
+import 'package:smart_rf/src/model/model.dart';
 
 class DrrRepository {
   static String get drrUrl => '24.222.96.163:9060';
@@ -57,8 +58,8 @@ class DrrRepository {
           Duration(minutes: event.drrStore.interval!),
           (timer) async {
             MyLocationProvider? myLocation = myLocationProvider.value;
-            if(myLocation != null) {
-            runScheduledTask(event.drrStore, myLocation);
+            if (myLocation != null) {
+              runScheduledTask(event.drrStore, myLocation);
             }
           },
         );
@@ -71,7 +72,10 @@ class DrrRepository {
     }
   }
 
-  static void runScheduledTask(DrrStore drr, MyLocationProvider location) async {
+  static void runScheduledTask(
+    DrrStore drr,
+    MyLocationProvider location,
+  ) async {
     DateTime now = DateTime.now();
 
     try {
@@ -82,7 +86,9 @@ class DrrRepository {
         body: {
           'latitude': location.latitude.toString(),
           'longitude': location.longitude.toString(),
-          'altitude': location.altitude != null? location.altitude.toString(): '0.0',
+          'altitude': location.altitude != null
+              ? location.altitude.toString()
+              : '0.0',
           'comment': drr.comment,
           'recorded_at': formatDateTime(now),
         },
@@ -130,9 +136,13 @@ class DrrRepository {
     try {
       var url = Uri.http(drrUrl, 'api/store-geojson');
 
-      var response = await http.post(url,  headers: {"Content-Type": "application/json"}, body: jsonEncode(payload));
+      var response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(payload),
+      );
 
-      if(response.statusCode == 201) {
+      if (response.statusCode == 201) {
         await AprsLogRepository.markPacketsAsSentToDrr(unsentPackets);
       }
 
