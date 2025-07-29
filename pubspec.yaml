@@ -39,6 +39,8 @@ dependencies:
   url_launcher: ^6.3.2
   share_plus: ^11.0.0
   flutter_launcher_icons: ^0.14.4
+  animated_text_kit: ^4.2.3
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -51,8 +53,18 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icon.png
     - assets/images/
     - assets/phhi.omm.mbtiles
+
+  fonts:
+    - family: SmoochSans
+      fonts:
+        - asset: assets/fonts/SmoochSans.ttf
+
+    - family: Trispace
+      fonts:
+        - asset: assets/fonts/Trispace.ttf
 
 flutter_launcher_icons:
   # Main source image (1024x1024 PNG recommended)

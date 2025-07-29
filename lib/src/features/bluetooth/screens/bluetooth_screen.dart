@@ -88,7 +88,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Connect to Radio")),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset('assets/icon.png', height: 60, width: 60),
+            Text("Smart RF"),
+          ],
+        ),
+      ),
       body: isScanning || isConnecting
           ? Center(
               child: LoadingIndicator(
