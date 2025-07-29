@@ -38,6 +38,7 @@ dependencies:
   latlong2: ^0.9.1
   url_launcher: ^6.3.2
   share_plus: ^11.0.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -52,3 +53,35 @@ flutter:
   assets:
     - assets/images/
     - assets/phhi.omm.mbtiles
+
+flutter_launcher_icons:
+  # Main source image (1024x1024 PNG recommended)
+  image_path: "assets/icon.png"
+
+  # Android (Legacy + Adaptive Icons)
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"  # White background
+  adaptive_icon_foreground: "assets/icon.png"
+
+  # iOS (App Icons)
+  ios: true
+  remove_alpha_ios: true  # Keep transparency
+
+  # Windows (Must be in Map format)
+  windows:
+    generate: true  # Explicitly enable Windows
+    image_path: "assets/icon.png"
+    icon_sizes: 256  # Multiple sizes for .ico file
+
+  # macOS (Must be in Map format)
+  macos:
+    generate: true  # Explicitly enable macOS
+    image_path: "assets/icon.png"
+    icon_size: 1024  # Single size for .icns file
+
+  # Linux (Must be in Map format)
+  linux:
+    generate: true  # Explicitly enable Linux
+    image_path: "assets/icon.png"
+    icon_size: 256  # Default size

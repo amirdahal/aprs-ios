@@ -1,4 +1,4 @@
-package com.climatesurvivalsolutions.aprs
+package com.climatesurvivalsolutions.smart_rf
 
 import io.flutter.embedding.android.FlutterActivity
 
