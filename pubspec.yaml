@@ -1,7 +1,7 @@
 name: smart_rf
 description: "An APRS application for all radios"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ^3.8.1
@@ -19,8 +19,6 @@ dependencies:
   toastification: ^1.0.0
   mbtiles: ^0.4.2
   path_provider: ^2.1.5
-#  latlong2: ^0.9.1
-#  flutter_map: ^8.1.1
   path: ^1.9.1
   sqlite3_flutter_libs: ^0.5.34
   string_validator: ^1.2.0
@@ -47,6 +45,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   build_runner: ^2.4.0
+  msix: ^3.16.10
 
 
 flutter:
@@ -97,3 +96,11 @@ flutter_launcher_icons:
     generate: true  # Explicitly enable Linux
     image_path: "assets/icon.png"
     icon_size: 256  # Default size
+
+msix_config:
+  display_name: "Smart RF"
+  publisher_display_name: "Climate Survival Solutions"
+  identity_name: "ClimateSurvivalSolutions.SmartRF"
+  msix_version: "1.0.0.0"
+  logo_path: "assets/icon.png"
+  capabilities: internetClient, location, bluetooth

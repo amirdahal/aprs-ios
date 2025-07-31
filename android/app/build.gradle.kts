@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -31,11 +33,39 @@ android {
         setProperty("archivesBaseName", "Smart RF")
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreProperties = Properties().apply {
+                load(rootProject.file("keystore.properties").inputStream())
+            }
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    androidComponents {
+        onVariants(selector().withBuildType("release")) { variant ->
+            variant.outputs.forEach { output ->
+                if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
+                    output.outputFileName.set("Smart RF.apk") // Use .set() for Property<String>
+                } else {
+                    println("Warning: Could not set outputFileName for non-VariantOutputImpl type: ${output.javaClass.name}")
+                }
+            }
         }
     }
 }
