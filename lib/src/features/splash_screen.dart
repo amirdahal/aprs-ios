@@ -90,6 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void appSetup() async {
     await _copyMBTilesToLocal();
     await _requestPermissions();
+    await _requestPermissions();
     if (deniedPermissions.isEmpty) {
       runningTask = "All permissions granted. Launching app now";
       Future.delayed(const Duration(seconds: 1), () {
