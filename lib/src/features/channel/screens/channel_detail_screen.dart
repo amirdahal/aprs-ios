@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/channel/repository/channel_repository.dart';
-import 'package:smart_rf/src/features/channel/utils/constants.dart';
-import 'package:smart_rf/src/features/channel/utils/helpers.dart'
+import 'package:drr_radio_tracker/src/features/channel/repository/channel_repository.dart';
+import 'package:drr_radio_tracker/src/features/channel/utils/constants.dart';
+import 'package:drr_radio_tracker/src/features/channel/utils/helpers.dart'
     show getToneLabel, toneStringToValue, frequencyValidator;
-import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart';
-import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
-import 'package:smart_rf/src/widgets/checkbox.dart' show CustomCheckbox;
-import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
-import 'package:smart_rf/src/widgets/toast.dart' show showToast;
+import 'package:drr_radio_tracker/src/features/protect_app/screens/password_screen.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart' show inputDecoration;
+import 'package:drr_radio_tracker/src/widgets/checkbox.dart' show CustomCheckbox;
+import 'package:drr_radio_tracker/src/widgets/dropdown.dart' show DropDown;
+import 'package:drr_radio_tracker/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
 enum STATE { success, error }

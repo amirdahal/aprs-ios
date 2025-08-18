@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/message/repository/message.repository.dart';
-import 'package:smart_rf/src/features/message/widgets/message_input.dart';
-import 'package:smart_rf/src/features/message/widgets/message_tile.dart';
-import 'package:smart_rf/src/helpers/app.events.dart'
+import 'package:drr_radio_tracker/src/features/message/repository/message.repository.dart';
+import 'package:drr_radio_tracker/src/features/message/widgets/message_input.dart';
+import 'package:drr_radio_tracker/src/features/message/widgets/message_tile.dart';
+import 'package:drr_radio_tracker/src/helpers/app.events.dart'
     show eventBus, NewMessageEvent;
-import 'package:smart_rf/src/model/model.dart' show ChatStore, MessageStore;
+import 'package:drr_radio_tracker/src/model/model.dart' show ChatStore, MessageStore;
 
 class MessageScreen extends StatefulWidget {
   final ChatStore currentChat;

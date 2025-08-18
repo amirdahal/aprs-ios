@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rf/src/helpers/location_provider.dart';
-import 'package:smart_rf/src/helpers/server.constants.dart';
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/helpers/location_provider.dart';
+import 'package:drr_radio_tracker/src/helpers/server.constants.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class GisRepository {
   static String gisData = "";

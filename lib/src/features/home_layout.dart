@@ -1,25 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/aprs_log/screens/aprs_log_screen.dart'
+import 'package:drr_radio_tracker/src/features/aprs_log/screens/aprs_log_screen.dart'
     show AprsLogScreen;
-import 'package:smart_rf/src/features/settings/app_setting/repository/app_setting.repository.dart'
+import 'package:drr_radio_tracker/src/features/settings/app_setting/repository/app_setting.repository.dart'
     show AppSettingRepository;
-import 'package:smart_rf/src/features/settings/drr_setting/repository/drr.repository.dart'
+import 'package:drr_radio_tracker/src/features/settings/drr_setting/repository/drr.repository.dart'
     show DrrRepository;
-import 'package:smart_rf/src/features/settings/setting_layout.dart'
+import 'package:drr_radio_tracker/src/features/settings/setting_layout.dart'
     show SettingLayout;
-import 'package:smart_rf/src/helpers/app.events.dart';
-import 'package:smart_rf/src/helpers/event_handler.dart'
+import 'package:drr_radio_tracker/src/helpers/app.events.dart';
+import 'package:drr_radio_tracker/src/helpers/event_handler.dart'
     show radioEventsHandler;
-import 'package:smart_rf/src/helpers/location_provider.dart'
+import 'package:drr_radio_tracker/src/helpers/location_provider.dart'
     show runLocationProviderResolver;
-import 'package:smart_rf/src/helpers/my_position.util.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart' show RadioExtract;
-import 'package:smart_rf/src/widgets/battery_level.widget.dart'
+import 'package:drr_radio_tracker/src/helpers/my_position.util.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:drr_radio_tracker/src/widgets/battery_level.widget.dart'
     show BatteryIndicator;
-import 'package:smart_rf/src/widgets/buttons.dart' show Button;
-import 'package:smart_rf/src/widgets/toast.dart' show showToast;
+import 'package:drr_radio_tracker/src/widgets/buttons.dart' show Button;
+import 'package:drr_radio_tracker/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
 import 'bluetooth/screens/bluetooth_screen.dart';

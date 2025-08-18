@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:radio/radio.dart' as radio;
-import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
 
 typedef RadioPosition = radio.Position;
 

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/message/repository/message.repository.dart';
-import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
-import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
+import 'package:drr_radio_tracker/src/features/message/repository/message.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart' show inputDecoration;
+import 'package:drr_radio_tracker/src/widgets/dropdown.dart' show DropDown;
 
 class NewChatScreen extends StatefulWidget {
   const NewChatScreen({super.key});

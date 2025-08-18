@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/settings/app_setting/repository/app_setting.repository.dart';
-import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
-import 'package:smart_rf/src/widgets/buttons.dart';
-import 'package:smart_rf/src/widgets/toast.dart' show showToast;
+import 'package:drr_radio_tracker/src/features/settings/app_setting/repository/app_setting.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart' show inputDecoration;
+import 'package:drr_radio_tracker/src/widgets/buttons.dart';
+import 'package:drr_radio_tracker/src/widgets/toast.dart' show showToast;
 import 'package:toastification/toastification.dart';
 
 class AppSettingScreen extends StatefulWidget {

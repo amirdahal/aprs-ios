@@ -1,4 +1,4 @@
-name: smart_rf
+name: drr_radio_tracker
 description: "An APRS application for all radios"
 publish_to: 'none'
 version: 1.0.1
@@ -98,9 +98,9 @@ flutter_launcher_icons:
     icon_size: 256  # Default size
 
 msix_config:
-  display_name: "Smart RF"
-  publisher_display_name: "Climate Survival Solutions"
-  identity_name: "ClimateSurvivalSolutions.SmartRF"
+  display_name: "DRR Radio Tracker"
+  publisher_display_name: "Sofistica"
+  identity_name: "Sofistica.SmartRF"
   msix_version: "1.0.0.0"
   logo_path: "assets/icon.png"
   capabilities: internetClient, location, bluetooth

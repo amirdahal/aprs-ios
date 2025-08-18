@@ -3,12 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rf/src/features/aprs_log/repository/aprs-log.repository.dart';
-import 'package:smart_rf/src/helpers/app.events.dart';
-import 'package:smart_rf/src/helpers/location_provider.dart'
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/aprs-log.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/app.events.dart';
+import 'package:drr_radio_tracker/src/helpers/location_provider.dart'
     show MyLocationProvider, myLocationProvider;
-import 'package:smart_rf/src/helpers/utils.dart' show formatDateTime;
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart' show formatDateTime;
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class DrrRepository {
   static String get drrUrl => '24.222.96.163:9060';

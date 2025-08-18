@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Radio;
 import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/bluetooth/repository/bluetooth_scanner.dart';
-import 'package:smart_rf/src/features/home_layout.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart';
-import 'package:smart_rf/src/widgets/buttons.dart';
-import 'package:smart_rf/src/widgets/scan_indicator.dart';
-import 'package:smart_rf/src/widgets/toast.dart';
+import 'package:drr_radio_tracker/src/features/bluetooth/repository/bluetooth_scanner.dart';
+import 'package:drr_radio_tracker/src/features/home_layout.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/widgets/buttons.dart';
+import 'package:drr_radio_tracker/src/widgets/scan_indicator.dart';
+import 'package:drr_radio_tracker/src/widgets/toast.dart';
 import 'package:toastification/toastification.dart';
 
 import '../repository/bonding.repository.dart';
@@ -92,7 +92,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         title: Row(
           children: [
             Image.asset('assets/icon.png', height: 60, width: 60),
-            Text("Smart RF"),
+            Text("DRR Radio Tracker"),
           ],
         ),
       ),

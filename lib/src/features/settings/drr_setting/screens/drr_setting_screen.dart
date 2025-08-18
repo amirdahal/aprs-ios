@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/settings/drr_setting/repository/drr.repository.dart';
-import 'package:smart_rf/src/helpers/theme.dart';
-import 'package:smart_rf/src/model/model.dart';
-import 'package:smart_rf/src/widgets/buttons.dart';
-import 'package:smart_rf/src/widgets/dropdown.dart' show DropDown;
-import 'package:smart_rf/src/widgets/toast.dart';
+import 'package:drr_radio_tracker/src/features/settings/drr_setting/repository/drr.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
+import 'package:drr_radio_tracker/src/widgets/buttons.dart';
+import 'package:drr_radio_tracker/src/widgets/dropdown.dart' show DropDown;
+import 'package:drr_radio_tracker/src/widgets/toast.dart';
 import 'package:string_validator/string_validator.dart';
 
 class DrrSettingScreen extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class WarehouseLayer extends StatefulWidget {
   final MapController mapController;

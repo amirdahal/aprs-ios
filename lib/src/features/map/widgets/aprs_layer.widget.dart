@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:smart_rf/src/features/aprs_log/screens/callsign_history.screen.dart';
-import 'package:smart_rf/src/features/map/repository/location_service.repository.dart';
-import 'package:smart_rf/src/helpers/event_handler.dart';
-import 'package:smart_rf/src/helpers/utils.dart' show formatTimestamp;
-import 'package:smart_rf/src/widgets/aprs_symbol.widget.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/screens/callsign_history.screen.dart';
+import 'package:drr_radio_tracker/src/features/map/repository/location_service.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/event_handler.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart' show formatTimestamp;
+import 'package:drr_radio_tracker/src/widgets/aprs_symbol.widget.dart';
 
 class AprsLayer extends StatelessWidget {
   const AprsLayer({super.key});

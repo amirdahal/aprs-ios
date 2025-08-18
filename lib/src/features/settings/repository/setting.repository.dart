@@ -1,6 +1,6 @@
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/settings/repository/default.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/features/settings/repository/default.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
 
 class SettingRepository {
   static Future<void> useDefaultRadioSetting() async {

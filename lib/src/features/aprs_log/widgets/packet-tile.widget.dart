@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/helpers/utils.dart';
-import 'package:smart_rf/src/widgets/aprs_symbol.widget.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart';
+import 'package:drr_radio_tracker/src/widgets/aprs_symbol.widget.dart';
 
 class PacketTile extends StatelessWidget {
   final PositionPacket packet;

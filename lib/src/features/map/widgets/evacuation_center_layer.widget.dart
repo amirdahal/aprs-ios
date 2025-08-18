@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:smart_rf/src/features/map/repository/location_service.repository.dart';
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/features/map/repository/location_service.repository.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class EvacuationCenterLayer extends StatefulWidget {
   final MapController mapController;

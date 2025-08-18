@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/helpers/app.events.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart';
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/helpers/app.events.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class MessageRepository {
   static Future<void> addChat(

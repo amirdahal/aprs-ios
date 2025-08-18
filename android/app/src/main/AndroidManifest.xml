@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <application
-        android:label="Smart RF"
+        android:label="DRR Radio Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

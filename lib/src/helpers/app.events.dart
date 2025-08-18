@@ -1,6 +1,6 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/model/model.dart' show BeaconStore, DrrStore;
+import 'package:drr_radio_tracker/src/model/model.dart' show BeaconStore, DrrStore;
 
 EventBus eventBus = EventBus();
 

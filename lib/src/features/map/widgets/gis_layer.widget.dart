@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_geojson/flutter_map_geojson.dart';
-import 'package:smart_rf/src/features/map/repository/gis.repository.dart';
+import 'package:drr_radio_tracker/src/features/map/repository/gis.repository.dart';
 
 class GisLayer extends StatefulWidget {
   const GisLayer({super.key});

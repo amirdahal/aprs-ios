@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/aprs_log/repository/aprs-log.repository.dart';
-import 'package:smart_rf/src/features/aprs_log/repository/utils.dart';
-import 'package:smart_rf/src/features/aprs_log/screens/callsign_history.screen.dart';
-import 'package:smart_rf/src/features/aprs_log/widgets/packet-tile.widget.dart';
-import 'package:smart_rf/src/helpers/event_handler.dart';
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/aprs-log.repository.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/utils.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/screens/callsign_history.screen.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/widgets/packet-tile.widget.dart';
+import 'package:drr_radio_tracker/src/helpers/event_handler.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class AprsLogScreen extends StatefulWidget {
   const AprsLogScreen({super.key});

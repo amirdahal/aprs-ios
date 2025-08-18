@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/helpers/utils.dart' show formatTimestamp;
-import 'package:smart_rf/src/model/model.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart' show formatTimestamp;
+import 'package:drr_radio_tracker/src/model/model.dart';
 
 class MessageTile extends StatelessWidget {
   final MessageStore msg;

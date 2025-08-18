@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:smart_rf/src/features/bluetooth/screens/bluetooth_screen.dart';
-import 'package:smart_rf/src/widgets/buttons.dart';
+import 'package:drr_radio_tracker/src/features/bluetooth/screens/bluetooth_screen.dart';
+import 'package:drr_radio_tracker/src/widgets/buttons.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

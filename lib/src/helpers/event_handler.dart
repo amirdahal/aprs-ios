@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/aprs_log/repository/aprs-log.repository.dart'
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/aprs-log.repository.dart'
     show AprsLogRepository;
-import 'package:smart_rf/src/features/message/repository/message.repository.dart'
+import 'package:drr_radio_tracker/src/features/message/repository/message.repository.dart'
     show MessageRepository;
-import 'package:smart_rf/src/helpers/app.events.dart'
+import 'package:drr_radio_tracker/src/helpers/app.events.dart'
     show DeviceDisconnectedEvent, eventBus;
-import 'package:smart_rf/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
 
 enum AppEvents {
   newMessage,

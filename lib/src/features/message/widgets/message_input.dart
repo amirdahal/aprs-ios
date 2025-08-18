@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/message/repository/message.repository.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart';
-import 'package:smart_rf/src/helpers/theme.dart' show inputDecoration;
-import 'package:smart_rf/src/model/model.dart' show ChatStore;
+import 'package:drr_radio_tracker/src/features/message/repository/message.repository.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart' show inputDecoration;
+import 'package:drr_radio_tracker/src/model/model.dart' show ChatStore;
 
 class MessageInput extends StatefulWidget {
   final ChatStore currentChat;

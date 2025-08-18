@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/channel/repository/channel_repository.dart';
-import 'package:smart_rf/src/features/protect_app/screens/password_screen.dart';
-import 'package:smart_rf/src/helpers/event_handler.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart';
-import 'package:smart_rf/src/helpers/utils.dart';
+import 'package:drr_radio_tracker/src/features/channel/repository/channel_repository.dart';
+import 'package:drr_radio_tracker/src/features/protect_app/screens/password_screen.dart';
+import 'package:drr_radio_tracker/src/helpers/event_handler.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart';
 
 import '../screens/channel_detail_screen.dart';
 

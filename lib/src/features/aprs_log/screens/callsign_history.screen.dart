@@ -7,13 +7,13 @@ import 'package:latlong2/latlong.dart';
 import 'package:mbtiles/mbtiles.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:smart_rf/src/features/aprs_log/repository/aprs-log.repository.dart';
-import 'package:smart_rf/src/features/aprs_log/repository/utils.dart';
-import 'package:smart_rf/src/features/aprs_log/screens/packet-filter.screen.dart';
-import 'package:smart_rf/src/features/aprs_log/widgets/packet-tile.widget.dart';
-import 'package:smart_rf/src/features/map/repository/map_provider.dart';
-import 'package:smart_rf/src/model/model.dart';
-import 'package:smart_rf/src/widgets/aprs_symbol.widget.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/aprs-log.repository.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/repository/utils.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/screens/packet-filter.screen.dart';
+import 'package:drr_radio_tracker/src/features/aprs_log/widgets/packet-tile.widget.dart';
+import 'package:drr_radio_tracker/src/features/map/repository/map_provider.dart';
+import 'package:drr_radio_tracker/src/model/model.dart';
+import 'package:drr_radio_tracker/src/widgets/aprs_symbol.widget.dart';
 
 class CallsignPositionTrackerScreen extends StatefulWidget {
   final String callsign;

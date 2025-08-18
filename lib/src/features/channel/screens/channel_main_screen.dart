@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
-import 'package:smart_rf/src/features/channel/widgets/channel_tile.dart';
-import 'package:smart_rf/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:drr_radio_tracker/src/features/channel/widgets/channel_tile.dart';
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart' show RadioExtract;
 
 class ChannelMainScreen extends StatefulWidget {
   const ChannelMainScreen({super.key});

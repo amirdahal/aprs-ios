@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rf/src/features/splash_screen.dart';
-import 'package:smart_rf/src/helpers/theme.dart';
-import 'package:smart_rf/src/helpers/utils.dart';
+import 'package:drr_radio_tracker/src/features/splash_screen.dart';
+import 'package:drr_radio_tracker/src/helpers/theme.dart';
+import 'package:drr_radio_tracker/src/helpers/utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 const WindowOptions windowOptions = WindowOptions(
@@ -9,7 +9,7 @@ const WindowOptions windowOptions = WindowOptions(
   maximumSize: Size(800, 700),
   minimumSize: Size(800, 700),
   center: true,
-  title: 'Smart RF',
+  title: 'DRR Radio Tracker',
   // titleBarStyle: TitleBarStyle.hidden,
   fullScreen: false,
 );
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Smart RF',
+      title: 'DRR Radio Tracker',
       theme: greenTheme,
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
