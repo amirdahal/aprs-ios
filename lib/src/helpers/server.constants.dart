@@ -1,1 +1,1 @@
-const drrBaseUrl = '24.222.96.163:9060';
+const drrBaseUrl = 'drr.center';

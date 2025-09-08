@@ -10,8 +10,10 @@ import 'package:drr_radio_tracker/src/helpers/location_provider.dart'
 import 'package:drr_radio_tracker/src/helpers/utils.dart' show formatDateTime;
 import 'package:drr_radio_tracker/src/model/model.dart';
 
+import '../../../../helpers/server.constants.dart' show drrBaseUrl;
+
 class DrrRepository {
-  static String get drrUrl => '24.222.96.163:9060';
+  static String get drrUrl => drrBaseUrl;
 
   static StreamSubscription? allPacketsToDrrSubs;
 
