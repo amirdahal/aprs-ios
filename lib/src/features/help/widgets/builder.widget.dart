@@ -65,8 +65,8 @@ class BuildImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
               "assets/images/$imageName",
-              fit: BoxFit.contain,
-              height: 400,
+              // fit: BoxFit.contain,
+              // height: 400,
             ),
           ),
           const SizedBox(height: 6),
