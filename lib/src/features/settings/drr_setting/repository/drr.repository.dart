@@ -10,10 +10,8 @@ import 'package:drr_radio_tracker/src/helpers/location_provider.dart'
 import 'package:drr_radio_tracker/src/helpers/utils.dart' show formatDateTime;
 import 'package:drr_radio_tracker/src/model/model.dart';
 
-import '../../../../helpers/server.constants.dart' show drrBaseUrl;
-
 class DrrRepository {
-  static String get drrUrl => drrBaseUrl;
+  static String get drrUrl => 'drr.center';
 
   static StreamSubscription? allPacketsToDrrSubs;
 
@@ -81,7 +79,7 @@ class DrrRepository {
     DateTime now = DateTime.now();
 
     try {
-      var url = Uri.http(drrUrl, 'api/aprs-device-location/${drr.uuid}');
+      var url = Uri.https(drrUrl, 'api/aprs-device-location/${drr.uuid}');
 
       var response = await http.post(
         url,
@@ -136,7 +134,7 @@ class DrrRepository {
     dynamic payload = {"type": "FeatureCollection", "features": features};
 
     try {
-      var url = Uri.http(drrUrl, 'api/store-geojson');
+      var url = Uri.https(drrUrl, 'api/store-geojson');
 
       var response = await http.post(
         url,
