@@ -12,6 +12,7 @@ import 'package:drr_radio_tracker/src/widgets/scan_indicator.dart';
 import 'package:drr_radio_tracker/src/widgets/toast.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../help/screens/help.screen.dart';
 import '../repository/bonding.repository.dart';
 
 class BluetoothScreen extends StatefulWidget {
@@ -95,6 +96,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
             Text("DRR Radio Tracker"),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const HelpScreen())),
+          ),
+        ],
       ),
       body: isScanning || isConnecting
           ? Center(
