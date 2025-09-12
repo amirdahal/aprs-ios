@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:drr_radio_tracker/src/features/help/screens/help.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:drr_radio_tracker/src/features/aprs_log/screens/aprs_log_screen.dart'
     show AprsLogScreen;
@@ -220,6 +221,12 @@ class _HomeLayoutState extends State<HomeLayout> {
             },
             icon: Icon(Icons.power_settings_new_outlined),
             tooltip: 'Disconnect',
+          ),
+          IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const HelpScreen())),
           ),
         ],
       ),
