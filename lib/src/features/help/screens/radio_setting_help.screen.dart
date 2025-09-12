@@ -117,6 +117,114 @@ class RadioSettingHelpScreen extends StatelessWidget with HelpPageMixin {
               "Sets maximum transmission duration to prevent overheating or battery drain.\n"
               "Options range from 10 seconds to 5 minutes, with an 'Unlimited' option",
         ),
+
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "13. Tx hold time",
+          content:
+              "Sets delay (seconds) before releasing PTT after transmission. Off allows immediate PTT release, suitable for rapid APRS packets\n"
+              "Options range from 0.1 second to 1 minute, with an 'Off' option.",
+        ),
+
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "14. Headphone mode",
+          content:
+              "Configures Advanced Generic Hands-Free Profile (AGHFP) mode for Bluetooth audio/call functionality.\n"
+              "Available options:\n"
+              "- Voice mode\n"
+              "- Call mode",
+        ),
+
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "15. Keep headset connected",
+          content:
+              ": Maintains a persistent Bluetooth AGHFP connection. Disable to reduce power consumption for Bluetooth.",
+        ),
+
+        const SizedBox(height: 16),
+        BuildSection(
+          title: "16. Adaptive response",
+          content:
+              "Enables adaptive audio processing for dynamic environments.",
+        ),
+
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "17. Tone",
+          content: "CTCSS/DCS tone squelch for selective communication",
+        ),
+
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "18. Automatic shutdown",
+          content: "Sets auto power-off timer (e.g., minutes).",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "19. APRS channel",
+          content:
+              "Sets the APRS channel. By default, the APRS channel is configured in channel 29. Recommended not to change",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "20. Wired microphone speaker",
+          content: "Configures headset or external speaker.",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "21. Signaling preamble",
+          content: "Enables leading sync bits for digital modes",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "22. Digital mute",
+          content:
+              "Enable digital mute, allowing digital signals to not be heard.",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "23. Pairing at power on",
+          content: "Enables automatic Bluetooth pairing mode at power-on.",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "25. Channel data lock",
+          content: "Locks channel data to prevent changes.",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "26. Wx mode",
+          content:
+              "Configures weather (NOAA) mode."
+              "Available options:\n"
+              "- Off\n-Monitor\n-Alert",
+        ),
+        const SizedBox(height: 16),
+
+        BuildSection(
+          title: "26. Wx channel",
+          content: "Selects NOAA weather channel. Choose from given options.",
+        ),
+        const SizedBox(height: 20),
+
+        Text(
+          "*Note: The default settings applied in the 'Getting started' section enables the best suited configuration for your radio. Do not change any setting unless you know what you're doing. Always go back to radio settings tab and click on 'Use default setting' if things don't work as expected.",
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
       ],
     );
   }

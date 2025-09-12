@@ -286,7 +286,7 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
                     onChanged: editingEnabled
                         ? (bool value) {
                             setState(() {
-                              pttReleaseSendBssUserId = value;
+                              pttReleaseSendIdInfo = value;
                             });
                           }
                         : null,
