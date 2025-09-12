@@ -28,7 +28,18 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close_rounded),
+            tooltip: 'Close help',
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
       drawer: HelpDrawer(onHelpSelect: handleHelpSelect),
       body: currentScreen,
     );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData greenTheme = ThemeData(
-  fontFamily: 'Trispace',
-
+  // fontFamily: 'Trispace',
   colorScheme: ColorScheme.fromSeed(
     seedColor: Colors.green,
     brightness: Brightness.light,

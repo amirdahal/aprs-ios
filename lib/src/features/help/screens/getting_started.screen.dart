@@ -36,6 +36,10 @@ class GettingStartedHelpScreen extends StatelessWidget with HelpPageMixin {
               "The first tab is Radio Settings. Scroll down to the bottom "
               "of the screen until you see the button labeled 'Use default setting'.",
         ),
+        BuildImage(
+          imageName: "default_setting_button.png",
+          caption: "Default Setting Button",
+        ),
 
         const SizedBox(height: 32),
 
@@ -47,6 +51,7 @@ class GettingStartedHelpScreen extends StatelessWidget with HelpPageMixin {
               "- Enter the password (default: 123456).\n"
               "- If the password is correct, the system will continue.",
         ),
+        BuildImage(imageName: "authenticate.png", caption: "Validation Prompt"),
 
         const SizedBox(height: 32),
         BuildSection(
