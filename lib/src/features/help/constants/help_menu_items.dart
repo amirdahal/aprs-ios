@@ -6,6 +6,7 @@ import 'package:drr_radio_tracker/src/features/help/screens/messaging_help.scree
 import 'package:flutter/material.dart';
 
 import '../screens/home.screen.dart';
+import '../screens/setting_help.screen.dart';
 
 class HelpMenuItems {
   String label;
@@ -49,5 +50,10 @@ final List<HelpMenuItems> helpMenuItems = [
     label: "Logging and tracking",
     iconData: Icons.list_alt_outlined,
     helpScreen: LogHelperScreen(),
+  ),
+  HelpMenuItems(
+    label: "Settings",
+    iconData: Icons.settings,
+    helpScreen: SettingHelpScreen(),
   ),
 ];
