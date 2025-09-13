@@ -1,3 +1,4 @@
+import 'package:drr_radio_tracker/src/features/help/screens/channel_help.screen.dart';
 import 'package:drr_radio_tracker/src/features/help/screens/connectivity.screen.dart';
 import 'package:drr_radio_tracker/src/features/help/screens/getting_started.screen.dart';
 import 'package:drr_radio_tracker/src/features/help/screens/log_helper.screen.dart';
@@ -56,4 +57,5 @@ final List<HelpMenuItems> helpMenuItems = [
     iconData: Icons.settings,
     helpScreen: SettingHelpScreen(),
   ),
+  HelpMenuItems(label: "Channels", iconData: Icons.radio, helpScreen: ChannelHelpScreen())
 ];
