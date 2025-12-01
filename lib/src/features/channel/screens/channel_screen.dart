@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 import 'package:drr_radio_tracker/src/features/channel/widgets/channel_tile.dart';
@@ -17,6 +18,14 @@ class _ChannelScreenState extends State<ChannelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (kDebugMode) {
+      print('Building ChannelScreen with ${_channels.length} channels.');
+      for (var channelId in [0, 1, 2]) {
+        print(_channels[channelId].toMap());
+      }
+      print('Radio Setting: ${_radioSetting.toMap()}');
+      print('APRS setting: ${RadioExtract.radio.aprsSetting.toMap()}');
+    }
     return Drawer(
       semanticLabel: 'Channels',
       width: isLargeScreen ? 450 : MediaQuery.of(context).size.width / 1.2,

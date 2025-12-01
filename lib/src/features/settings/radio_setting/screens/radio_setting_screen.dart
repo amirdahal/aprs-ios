@@ -1,3 +1,4 @@
+import 'package:drr_radio_tracker/src/features/settings/repository/default.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 import 'package:drr_radio_tracker/src/features/protect_app/screens/password_screen.dart';
@@ -59,11 +60,11 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
 
   Future<void> _updateRadioSetting() async {
     RadioSetting newSetting = RadioSetting(
-      channelA: channelA,
-      channelB: channelB,
+      channelA: audioRelay ? 1 : 0,
+      channelB: defaultRadioSetting.channelB,
       scan: scan,
       aghfpCallMode: headphoneMode,
-      doubleChannel: doubleChannel,
+      doubleChannel: 0,
       squelchLevel: squelchLevel,
       tailElim: tailElimination,
       autoRelayEn: audioRelay,
@@ -78,7 +79,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
       disTone: !tone,
       powerSavingMode: powerSavingMode,
       autoPowerOff: autoPowerOff,
-      autoShareLocCh: autoShareLocationChannel,
+      autoShareLocCh: defaultRadioSetting.autoShareLocCh,
       hmSpeaker: wiredMicrophoneSpeaker,
       positioningSystem: currentSetting.positioningSystem,
       timeOffset: currentSetting.timeOffset,
@@ -133,7 +134,7 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
       autoPowerOff = currentSetting.autoPowerOff;
       autoShareLocationChannel =
           currentSetting.autoShareLocCh >= deviceInfo.channelCount
-          ? 29
+          ? 3
           : currentSetting.autoShareLocCh;
       wiredMicrophoneSpeaker = currentSetting.hmSpeaker;
       signalingPreamble = currentSetting.leadingSyncBitEn;
@@ -212,22 +213,22 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                         : null,
                   ),
                 ),
-                ListTile(
-                  title: DropDown(
-                    onChanged: editingEnabled
-                        ? (val) {
-                            setState(() {
-                              doubleChannel = doubleChanOptions[val]!;
-                            });
-                          }
-                        : null,
-                    options: doubleChanOptions.keys.toList(),
-                    selectedValue: doubleChanOptions.entries
-                        .firstWhere((entry) => entry.value == doubleChannel)
-                        .key,
-                    label: 'Double channel',
-                  ),
-                ),
+                // ListTile(
+                //   title: DropDown(
+                //     onChanged: editingEnabled
+                //         ? (val) {
+                //             setState(() {
+                //               doubleChannel = doubleChanOptions[val]!;
+                //             });
+                //           }
+                //         : null,
+                //     options: doubleChanOptions.keys.toList(),
+                //     selectedValue: doubleChanOptions.entries
+                //         .firstWhere((entry) => entry.value == doubleChannel)
+                //         .key,
+                //     label: 'Double channel',
+                //   ),
+                // ),
                 ListTile(
                   title: const Text("Power saving mode"),
                   trailing: Switch(
@@ -262,40 +263,40 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                         : null,
                   ),
                 ),
-                ListTile(
-                  title: DropDown(
-                    onChanged: editingEnabled
-                        ? (value) {
-                            int id = int.parse(
-                              value!.trim().split('Channel ')[1],
-                            );
-                            setState(() {
-                              channelA = id;
-                            });
-                          }
-                        : null,
-                    options: channelOptions,
-                    selectedValue: 'Channel $channelA',
-                    label: 'Channel A',
-                  ),
-                ),
-                ListTile(
-                  title: DropDown(
-                    onChanged: editingEnabled
-                        ? (value) {
-                            int id = int.parse(
-                              value!.trim().split('Channel ')[1],
-                            );
-                            setState(() {
-                              channelB = id;
-                            });
-                          }
-                        : null,
-                    options: channelOptions,
-                    selectedValue: 'Channel $channelB',
-                    label: 'Channel B',
-                  ),
-                ),
+                // ListTile(
+                //   title: DropDown(
+                //     onChanged: editingEnabled
+                //         ? (value) {
+                //             int id = int.parse(
+                //               value!.trim().split('Channel ')[1],
+                //             );
+                //             setState(() {
+                //               channelA = id;
+                //             });
+                //           }
+                //         : null,
+                //     options: channelOptions,
+                //     selectedValue: 'Channel $channelA',
+                //     label: 'Channel A',
+                //   ),
+                // ),
+                // ListTile(
+                //   title: DropDown(
+                //     onChanged: editingEnabled
+                //         ? (value) {
+                //             int id = int.parse(
+                //               value!.trim().split('Channel ')[1],
+                //             );
+                //             setState(() {
+                //               channelB = id;
+                //             });
+                //           }
+                //         : null,
+                //     options: channelOptions,
+                //     selectedValue: 'Channel $channelB',
+                //     label: 'Channel B',
+                //   ),
+                // ),
                 ListTile(
                   title: const Text("Enable BT mic"),
                   trailing: Switch(
@@ -497,23 +498,23 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
                     label: 'Automatic shut-down',
                   ),
                 ),
-                ListTile(
-                  title: DropDown(
-                    onChanged: editingEnabled
-                        ? (value) {
-                            int id = int.parse(
-                              value!.trim().split('Channel ')[1],
-                            );
-                            setState(() {
-                              autoShareLocationChannel = id;
-                            });
-                          }
-                        : null,
-                    options: channelOptions,
-                    selectedValue: 'Channel $autoShareLocationChannel',
-                    label: 'Auto share location channel (APRS channel)',
-                  ),
-                ),
+                // ListTile(
+                //   title: DropDown(
+                //     onChanged: editingEnabled
+                //         ? (value) {
+                //             int id = int.parse(
+                //               value!.trim().split('Channel ')[1],
+                //             );
+                //             setState(() {
+                //               autoShareLocationChannel = id;
+                //             });
+                //           }
+                //         : null,
+                //     options: channelOptions,
+                //     selectedValue: 'Channel ${autoShareLocationChannel + 1}',
+                //     label: 'Auto share location channel (APRS channel)',
+                //   ),
+                // ),
                 ListTile(
                   title: DropDown(
                     onChanged: editingEnabled

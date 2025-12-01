@@ -47,7 +47,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
               TextFormField(
                 controller: _callsignController,
                 autovalidateMode: AutovalidateMode.onUnfocus,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: inputDecoration(
                   'Callsign',
                 ).copyWith(hintText: "ALL for broadcast"),

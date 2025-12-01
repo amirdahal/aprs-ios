@@ -1,11 +1,13 @@
 import 'package:drr_radio_tracker/src/features/protect_app/screens/password_screen.dart'
     show PasswordScreen;
 import 'package:drr_radio_tracker/src/features/settings/repository/constants.dart';
-import 'package:drr_radio_tracker/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart'
+    show RadioExtract;
 import 'package:drr_radio_tracker/src/helpers/theme.dart';
 import 'package:drr_radio_tracker/src/widgets/buttons.dart' show Button;
 import 'package:drr_radio_tracker/src/widgets/dropdown.dart';
 import 'package:drr_radio_tracker/src/widgets/toast.dart' show showSnackBar;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:radio/radio.dart';
@@ -24,10 +26,10 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
 
   bool editingEnabled = false;
 
-  TextEditingController callsign = TextEditingController();
-  TextEditingController bssUserId = TextEditingController();
-  TextEditingController beaconMessage = TextEditingController();
-  TextEditingController pttReleaseIdInfo = TextEditingController();
+  TextEditingController callsign = TextEditingController(text: '');
+  TextEditingController bssUserId = TextEditingController(text: '');
+  TextEditingController beaconMessage = TextEditingController(text: '');
+  TextEditingController pttReleaseIdInfo = TextEditingController(text: '');
 
   PacketFormat packetFormat = PacketFormat.aprs;
   int ssid = 1;
@@ -54,6 +56,11 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
     callsign.text = currentSetting.aprsCallsign;
     ssid = currentSetting.aprsSsid;
 
+    // Ensure ssid is within valid range (1-15)
+    if (ssid < 1 || ssid > 15) {
+      ssid = 1;
+    }
+
     beaconMessage.text = currentSetting.beaconMessage;
 
     allowPositionCheck = currentSetting.allowPositionCheck;
@@ -71,8 +78,8 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
 
   Future<void> _updateAprsSetting() async {
     AprsSetting newSetting = AprsSetting(
-      maxFwdTimes: 1,
-      timeToLive: 3,
+      maxFwdTimes: 0,
+      timeToLive: 0,
       pttReleaseSendLocation: pttReleaseSendLocation,
       pttReleaseSendIdInfo: pttReleaseSendIdInfo,
       pttReleaseSendBssUserId: pttReleaseSendBssUserId,
@@ -151,6 +158,9 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
                     ? (value) {
                         setState(() {
                           packetFormat = packetFormatOptions[value]!;
+                          if (kDebugMode) {
+                            print(ssidOptions);
+                          }
                         });
                       }
                     : null,
@@ -171,11 +181,15 @@ class _AprsSettingScreenState extends State<AprsSettingScreen> {
                 DropDown(
                   onChanged: editingEnabled
                       ? (value) {
-                          ssid = int.parse(value!);
+                          setState(() {
+                            ssid = int.parse(value!);
+                          });
                         }
                       : null,
+                  selectedValue: ssidOptions.contains(ssid.toString())
+                      ? ssid.toString()
+                      : '1',
                   options: ssidOptions,
-                  selectedValue: ssid.toString(),
                   label: 'Aprs ssid',
                 ),
 

@@ -61,7 +61,7 @@ void determineGeoPosition() async {
     });
   } catch (e) {
     if (kDebugMode) {
-      print(e);
+      print("Geo position get error: $e");
     }
   }
 }
@@ -95,26 +95,38 @@ Future<Position> handleGeoPositionPermission() async {
 }
 
 Future<void> getPosition() async {
-  RadioPosition? position = await RadioExtract.radio.position();
-  if (position != null) {
-    myLocationProvider.value = MyLocationProvider(
-      latitude: position.latitude,
-      longitude: position.longitude,
-      altitude: position.altitude?.toDouble(),
-      timestamp: position.time,
-    );
+  try {
+    RadioPosition? position = await RadioExtract.radio.position();
     if (kDebugMode) {
-      print(
-        "Position determined from radio: ${myLocationProvider.value?.toMap()}",
-      );
+      print("Radio position: $position");
     }
-  } else {
+    if (position != null) {
+      myLocationProvider.value = MyLocationProvider(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        altitude: position.altitude?.toDouble(),
+        timestamp: position.time,
+      );
+      if (kDebugMode) {
+        print(
+          "Position determined from radio: ${myLocationProvider.value?.toMap()}",
+        );
+      }
+    } else {
+      if (kDebugMode) {
+        print("Unable to determine position from radio.");
+      }
+      determineGeoPosition();
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print("Error getting position from radio: $e");
+    }
     determineGeoPosition();
   }
 }
 
 void determineRadioPosition() async {
-  await handleGeoPositionPermission();
   await getPosition();
   Timer.periodic(const Duration(minutes: 1), (timer) async {
     await getPosition();

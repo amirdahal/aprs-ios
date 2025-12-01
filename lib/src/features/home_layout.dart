@@ -16,7 +16,8 @@ import 'package:drr_radio_tracker/src/helpers/event_handler.dart'
 import 'package:drr_radio_tracker/src/helpers/location_provider.dart'
     show runLocationProviderResolver;
 import 'package:drr_radio_tracker/src/helpers/my_position.util.dart';
-import 'package:drr_radio_tracker/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart'
+    show RadioExtract;
 import 'package:drr_radio_tracker/src/widgets/battery_level.widget.dart'
     show BatteryIndicator;
 import 'package:drr_radio_tracker/src/widgets/buttons.dart' show Button;

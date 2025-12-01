@@ -1,11 +1,12 @@
 // Radio Settings
 import 'package:radio/radio.dart';
-import 'package:drr_radio_tracker/src/helpers/radio_extract.dart' show RadioExtract;
+import 'package:drr_radio_tracker/src/helpers/radio_extract.dart'
+    show RadioExtract;
 
 final Map<String, int> doubleChanOptions = {"Off": 0, "A": 1, "B": 2};
 final List<String> channelOptions = List.generate(
   RadioExtract.radio.deviceInfo.channelCount,
-  (i) => 'Channel $i',
+  (i) => 'Channel ${i + 1}',
 );
 final Map<String, int> callModeOptions = {"Enabled": 1, "Disabled": 0};
 final Map<String, int> micGainOptions = {"Low": 2, "Medium": 3, "High": 4};
