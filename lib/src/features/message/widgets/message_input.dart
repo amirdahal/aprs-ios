@@ -1,3 +1,4 @@
+import 'package:drr_radio_tracker/src/features/settings/repository/default.dart';
 import 'package:flutter/material.dart';
 import 'package:radio/radio.dart';
 import 'package:drr_radio_tracker/src/features/message/repository/message.repository.dart';
@@ -53,6 +54,9 @@ class _MessageInputState extends State<MessageInput> {
         recipient: widget.currentChat.callsign!,
         message: message,
         messageId: messageId,
+        aprsChannelId: RadioExtract.radio.channels
+            .firstWhere((channel) => channel.nameStr.toLowerCase() == 'aprs')
+            .channelId,
       );
 
       addMessage();

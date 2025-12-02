@@ -61,10 +61,10 @@ class _RadioSettingScreenState extends State<RadioSettingScreen> {
   Future<void> _updateRadioSetting() async {
     RadioSetting newSetting = RadioSetting(
       channelA: audioRelay ? 1 : 0,
-      channelB: defaultRadioSetting.channelB,
+      channelB: 2,
       scan: scan,
       aghfpCallMode: headphoneMode,
-      doubleChannel: 0,
+      doubleChannel: 1,
       squelchLevel: squelchLevel,
       tailElim: tailElimination,
       autoRelayEn: audioRelay,
