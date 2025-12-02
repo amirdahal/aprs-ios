@@ -64,22 +64,34 @@ class _AprsLogScreenState extends State<AprsLogScreen> {
                 var packet = beaconStoreToPositionPacket(
                   _storedPositions[index],
                 );
-                return PacketTile(
-                  packet: packet,
-                  minTitle: true,
-                  trailing: IconButton(
-                    tooltip: 'See all packets from ${packet.source}',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CallsignPositionTrackerScreen(
-                            callsign: packet.source,
-                          ),
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CallsignPositionTrackerScreen(
+                          callsign: packet.source,
                         ),
-                      );
-                    },
-                    icon: Icon(Icons.history),
+                      ),
+                    );
+                  },
+                  child: PacketTile(
+                    packet: packet,
+                    minTitle: true,
+                    // trailing: IconButton(
+                    //   tooltip: 'See all packets from ${packet.source}',
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => CallsignPositionTrackerScreen(
+                    //           callsign: packet.source,
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    //   icon: Icon(Icons.history),
+                    // ),
                   ),
                 );
               },

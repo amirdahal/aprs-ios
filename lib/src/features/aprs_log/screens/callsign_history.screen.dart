@@ -128,7 +128,9 @@ class _CallsignPositionTrackerScreenState
                     ),
                     interactionOptions: const InteractionOptions(
                       flags:
-                          InteractiveFlag.drag | InteractiveFlag.flingAnimation,
+                          InteractiveFlag.drag |
+                          InteractiveFlag.flingAnimation |
+                          InteractiveFlag.pinchZoom,
                     ),
                   ),
                   children: [

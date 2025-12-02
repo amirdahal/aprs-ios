@@ -47,13 +47,13 @@ class PacketTile extends StatelessWidget {
       ),
       subtitle: Row(
         children: [
-          Text('Latitude: ', style: Theme.of(context).textTheme.labelLarge),
+          Text('Lat: ', style: Theme.of(context).textTheme.labelLarge),
           Text(packet.latitude.toStringAsFixed(3)),
           const SizedBox(width: 10),
-          Text('Longitude: ', style: Theme.of(context).textTheme.labelLarge),
+          Text('Lng: ', style: Theme.of(context).textTheme.labelLarge),
           Text(packet.longitude.toStringAsFixed(3)),
           const SizedBox(width: 10),
-          Text('Comment: ', style: Theme.of(context).textTheme.labelLarge),
+          Text(':', style: Theme.of(context).textTheme.labelLarge),
           Text(packet.comment),
         ],
       ),

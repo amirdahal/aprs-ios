@@ -93,7 +93,10 @@ class _MapScreenState extends State<MapScreen> {
                 122.36676560910182,
               ),
               interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.drag | InteractiveFlag.flingAnimation,
+                flags:
+                    InteractiveFlag.drag |
+                    InteractiveFlag.flingAnimation |
+                    InteractiveFlag.pinchZoom,
               ),
             ),
             children: [
