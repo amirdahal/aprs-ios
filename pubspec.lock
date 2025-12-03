@@ -870,7 +870,7 @@ packages:
       path: "."
       ref: main
       resolved-ref: "48e2d1a039a842babecbcf8166f8bf5383c03804"
-      url: "https://neuro-pm.com/git/CSSI/RadioLibraryFlutter.git"
+      url: "https://github.com/amirdahal/radio-lib.git"
     source: git
     version: "1.0.0"
   screen_retriever:
